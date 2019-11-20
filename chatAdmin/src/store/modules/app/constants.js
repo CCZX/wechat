@@ -1,0 +1,1 @@
+export const TOGGLE_LOADING = 'APP/TOGGLE_LOADING'

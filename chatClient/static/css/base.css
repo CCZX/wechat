@@ -1,0 +1,45 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  height: 100%;
+}
+
+* {
+  overflow: hidden;
+}
+
+.avatar {
+  box-sizing: border-box;
+  margin-right: 20px;
+  width: 50px;
+  height: 50px;
+  border: 1px solid DCDFE6;
+  border-radius: 50%;
+  background-color: #ffffff;
+  background-size: contain;
+}
+
+.ellipsis{
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+
+.primary-font {
+  color: #303133;
+  font-size: 16px;
+}
+
+.secondary-font {
+  color: #909399;
+  font-size: 12px;
+}
+
+.bottom-line {
+  border-bottom: 1px solid #E4E7ED;
+}

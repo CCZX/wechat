@@ -1,0 +1,26 @@
+// some color
+$primarycolor: #409EFF;
+$successcolor: #67C23A;
+$warningcolor: #E6A23C;
+$dangercolor: #F56C6C;
+$infocolor: #909399;
+
+$normalwhite: #ffffff;
+
+// some font color
+$primaryfont: #303133;
+$normalfont: #606266;
+$secondaryfont: #909399;
+$seatfont: #C0C4CC;
+
+// border
+$border1: #DCDFE6;
+$border2: #E4E7ED;
+$border3: #EBEEF5;
+$border4: #F2F6FC;
+
+// box-shadow
+.basics-box-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+}
+

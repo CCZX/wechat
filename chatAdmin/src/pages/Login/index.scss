@@ -1,0 +1,32 @@
+.login-page {
+  $color: #fff;
+  position: relative;
+  height: 100%;
+  background-image: url('/images/bg1.jpg');
+  background-size: 100% 100%;
+  * {
+    background-color: transparent !important;
+    color: $color !important;
+  }
+  .wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    padding: 30px;
+    background: linear-gradient(230deg,rgba(53,57,74,0),#000);
+    transform: translate(-50%, -50%);
+    .form-item {
+      margin: 10px 0;
+    }
+    .form-item.cvcode {
+      display: flex;
+      input {
+        width: 70%;
+      }
+      div {
+        width: 30%;
+      }
+    }
+  }
+}
