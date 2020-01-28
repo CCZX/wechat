@@ -14,12 +14,16 @@ cd chatServer
 npm install
 node app.js
 ```
+运行地址：`localhost:3333`
+
 - 启动客户端
 ```javascript
 cd chatClient
 npm install
 npm run dev
 ```
+运行地址：`localhost:8080`
+
 - 启动管理员端
 ```javascript
 cd chatAdmin
