@@ -24,13 +24,8 @@ export default {
       userInfo: {}
     }
   },
-  // computed: {
-  //   userInfo() {
-  //     return JSON.parse(this.$store.state.user.userInfo)
-  //   }
-  // },
   created() {
-    this.userInfo = JSON.parse(this.$store.state.user.userInfo)
+    this.userInfo = this.$store.state.user.userInfo
   },
 }
 </script>

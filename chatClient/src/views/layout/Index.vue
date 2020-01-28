@@ -5,10 +5,9 @@
       <my-header></my-header>
       <el-main>
         <router-view></router-view>
-        <div class="right-layout">
+        <!-- <div class="right-layout">
           <div class="chat">
-            chat
-            <el-button @click="clickBtn"></el-button>
+            <chat-view></chat-view>
           </div>
           <div class="weather">
             weather
@@ -16,15 +15,16 @@
           <div class="todo-list">
             todo
           </div>
-        </div>
+        </div> -->
       </el-main>
-      
     </main>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import myHeader from './components/Header'
+// import chatView from '@/views/chat'
 import bgImgUrl from './../../../static/image/bg.jpg'
 export default {
   name: 'Layout',
@@ -33,8 +33,24 @@ export default {
       bgImgUrl
     }
   },
+  computed: {
+    ...mapState('user', {
+      userInfo: 'userInfo'
+    })
+  },
+  watch: {
+    userInfo: {
+      handler(newVal, oldVal) {
+        console.log('usergoonlie', newVal, oldVal)
+        this.userGoOnline()
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   components: {
-    myHeader
+    myHeader,
+    // chatView
   },
   sockets: {//将（socket.on）绑定事件放在sockets中
     connect: function () {
@@ -42,12 +58,14 @@ export default {
     },
     customEmit: function (data) {
       console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)',data)
+    },
+    onlineUser(data) {
+      console.log('onlineuser', data)
     }
   },
   methods: {
-    clickBtn(data) {
-      console.log(data)
-      this.$socket.emit('toggle', data)
+    userGoOnline() {
+      this.$socket.emit('goOnline', this.userInfo)
     }
   },
   mounted() {
@@ -66,13 +84,14 @@ export default {
   .layout-main {
     // filter: none;
     box-sizing: border-box;
-    // height: 100%;
-    padding: 0 100px;
+    height: 100%;
+    // padding: 0 100px;
     .el-main {
-      height: 100%;
+      height: calc(100vh - 60px);
       background-color: #f8f8f9;
       color: #333;
       display: flex;
+      padding: 0;
       // text-align: center;
       // line-height: 160px;
       .right-layout {
@@ -83,17 +102,17 @@ export default {
         padding: 0 0 0 30px;
         flex-grow: 1;
         .chat {
-          width: 70%;
+          width: 100%;
           height: 400px;
           @extend .basics-box-shadow;
         }
         .weather {
           width: 28%;
-          height: 400px;
+          height: 230px;
           @extend .basics-box-shadow;
         }
         .todo-list {
-          width: 100%;
+          width: 70%;
           height: 230px;
           @extend .basics-box-shadow;
         }

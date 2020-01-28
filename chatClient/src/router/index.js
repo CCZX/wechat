@@ -20,11 +20,19 @@ const router = new Router({
       path: '/',
       name: 'Layout',
       component: () => import('@/views/layout'),
-      redirect: '/main',
+      // redirect: '/main',
       meta: {
         requiresAuth: true
       },
       children: [
+        {
+          path: '/index',
+          name: 'Index',
+          component: () => import('@/views/Index'),
+          meta: {
+            requiresAuth: true
+          },
+        },
         {
           path: '/main',
           name: 'MainBox',

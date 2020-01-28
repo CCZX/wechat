@@ -21,7 +21,7 @@ export default {
     ChatItem
   },
   created() {
-    let id = JSON.parse(this.$store.state.user.userInfo)._id
+    let id = this.$store.state.user.userInfo._id
     this.$http.getMyFriends(id).then(res => {
       let { data, status } = res.data
       if (res.status === 200 && status === 2000) {

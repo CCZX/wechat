@@ -6,8 +6,12 @@
         <span class="logo-img"></span>
       </div>
       <div class="user-info">
-        <div class="avatar" :style='"background-image:url(http://localhost:3333"+userInfo.photo+");"'>
-        </div>
+        <el-avatar size="large"
+          :src="'http://localhost:3333' + userInfo.photo"
+          @error="() => true"
+        >
+          <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt="" srcset="">
+        </el-avatar>
         <div class="name-sigin">
           <span class="name">{{userInfo.nickname}}</span>
           <span class="sigin">{{userInfo.signature}}</span>
@@ -25,13 +29,8 @@ export default {
       userInfo: {}
     }
   },
-  // computed: {
-  //   userInfo() {
-  //     return JSON.parse(this.$store.state.user.userInfo)
-  //   }
-  // },
   created() {
-    this.userInfo = JSON.parse(this.$store.state.user.userInfo)
+    this.userInfo = this.$store.state.user.userInfo
   },
 }
 </script>

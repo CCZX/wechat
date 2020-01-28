@@ -21,8 +21,32 @@ export function getFirstScrollElement(el, direction = "vertical") {
 }
 
 // 格式化时间
-export function formatTime(time) {
-  
+export function fromatTime(time, full = true) { //
+  const y = formatNumber(time.getFullYear())
+  const m = formatNumber(time.getMonth() + 1)
+  const d = formatNumber(time.getDate())
+  const h = formatNumber(time.getHours())
+  const mm = formatNumber(time.getMinutes())
+  const s = formatNumber(time.getSeconds())
+  if (full) {
+    return `${y}-${m}-${d} ${h}:${mm}:${s}`
+  } else {
+    return `${y}-${m}-${d}`
+  }
+}
+
+// 格式化数字 '1' => '01'
+function formatNumber(num) {
+  let isNumber = isType('Number')
+  if (!isNumber(num)) return
+  return num >= 10 ? String(num) : '0' + String(num)
+}
+
+// 判断数据类型
+function isType(type) {
+  return (arg) => {
+    return Object.prototype.toString.call(arg) === `[object ${type}]`
+  }
 }
 
 export function isProduction() {

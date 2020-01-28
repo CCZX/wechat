@@ -2,7 +2,7 @@ import userApi from '@/api/modules/user'
 
 const state = {
   isLogin: false || window.sessionStorage.getItem('isLogin'),
-  userInfo: '' || window.sessionStorage.getItem('userInfo')
+  userInfo: '' || JSON.parse(window.sessionStorage.getItem('userInfo'))
 }
 
 const mutations = {
@@ -12,6 +12,7 @@ const mutations = {
     let dataString = JSON.stringify(data)
     window.sessionStorage.setItem('userInfo', dataString)
     window.sessionStorage.setItem('isLogin', true)
+    console.log('Vuex set')
   },
   logout(state) {
     state.isLogin = false,
@@ -31,6 +32,7 @@ const actions = {
 }
 
 export default {
+  namespaced: true,
   state,
   mutations,
   actions

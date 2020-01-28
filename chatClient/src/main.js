@@ -11,10 +11,12 @@ import router from './router'
 import Toast from './components/toast/main.js'
 import axios from './api'
 import store from './store'
+import directives from './directives'
 import './../static/css/base.css'
 
 Vue.use(ElementUI)
-// Vue.use(VueSocketIO, socketIO(process.env.SOCKETIO))
+
+// socket连接
 Vue.use(new VueSocketIO({
   // debug: true,
   // connection: socketIO('http://localhost:3333'),
@@ -25,6 +27,9 @@ Vue.use(new VueSocketIO({
   //   mutationPrefix: "SOCKET_"
   // }
 }))
+
+// 注册全局指令
+Object.keys(directives).forEach(i => Vue.directive(i, directives[i]))
 
 Vue.config.productionTip = false
 Vue.prototype.$toast = Toast
