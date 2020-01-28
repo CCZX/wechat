@@ -14,7 +14,7 @@ const friendlySchema = new Schema({
   createDate: { type: Date, default: Date.now() }, // 加好友时间
 })
 
-friendlySchema.statics.findFriendByUserM = function (userId, cb) {
+friendlySchema.statics.findFriendByUserM = function (userId, cb) { // 联表查询
   return this
         .find({userM: userId}).populate({path: 'userY', select: 'signature photo nickname'})
         .exec(cb)

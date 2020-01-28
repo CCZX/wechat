@@ -249,6 +249,26 @@ const getUserBySignUpTime = (req, res) => {
   })
 }
 
+// 更改用户的状态(status)
+const changeUserStatus = (req, res) => {
+  const { id, state } = req.body
+  USER.findByIdAndUpdate({'_id': id}, {
+    'status': state
+  }).then(doc => {
+    res.json({
+      status: 2000,
+      data: doc,
+      msg: 'success'
+    })
+  }).catch(err => {
+    return res.json({
+      status: 2003,
+      dataL: err,
+      msg: '服务器错误，请稍后重试！'
+    })
+  })
+}
+
 module.exports = {
   login,
   generatorCode,
@@ -256,5 +276,6 @@ module.exports = {
   getUserInfo,
   preFetchUser,
   getAllUser,
-  getUserBySignUpTime
+  getUserBySignUpTime,
+  changeUserStatus
 }

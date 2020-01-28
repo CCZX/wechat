@@ -1,5 +1,6 @@
 const FRIEND = require('./../models/friendly')
 
+// 查询我的好友列表
 const getMyFriends = (req, res) => {
   let { id } = req.query
   FRIEND.findFriendByUserM(id).then(userM => {

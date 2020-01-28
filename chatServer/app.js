@@ -11,6 +11,7 @@ let io = require('socket.io')(server)
 let user = require('./routes/user')
 let friendly = require('./routes/friendly')
 let group = require('./routes/group')
+const news = require('./routes/news')
 
 // const socketHandler = require('./utils/socket')
 
@@ -57,24 +58,33 @@ app.use(session({
 app.use(`${API_VERSION}/user`, user)
 app.use(`${API_VERSION}/friendly`, friendly)
 app.use(`${API_VERSION}/group`, group)
+app.use(`${API_VERSION}/news`, news)
 
+const insertNewNews = require('./controller/news').insertNewNews
 
+const onLineUser = []
+const conversationList = {}
 io.on('connection', (socket) => {
   console.log('连接成功')
-  socket.on('toggle',value => {
-    console.log(value)
-    socket.emit('customEmit', 'this is server data')
+  socket.on('goOnline', val => {
+    const userItem = {_id: val._id, name: val.name, nickname: val.nickname, code: val.code}
+    onLineUser.push(userItem)
+    socket.broadcast.emit('onlineUser', onLineUser)
+  })
+  socket.on('join', val => {
+    const { roomid } = val
+    socket.join(roomid, () => {
+      conversationList[roomid] = socket.id
+      io.in(roomid).emit('conversationList', conversationList)
+    })
+  })
+  socket.on('sendNewMessage', news => {
+    console.log('newmessage',news)
+    insertNewNews(news)
+    socket.to(news.roomid).emit('receiveMessage', news)
+    console.log('end')
   })
 })
-
-// app.use(`${API_VERSION}/user`, (req, res, next) => {
-//   res.json({
-//     status: 4000,
-//     data: [1,2,3],
-//     msg: 'success'
-//   })
-// })
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
