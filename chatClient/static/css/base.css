@@ -11,7 +11,7 @@ html, body {
   overflow: hidden;
 }
 
-.avatar {
+/* .avatar {
   box-sizing: border-box;
   margin-right: 20px;
   width: 50px;
@@ -20,7 +20,7 @@ html, body {
   border-radius: 50%;
   background-color: #ffffff;
   background-size: contain;
-}
+} */
 
 .ellipsis{
   display: inline-block;
@@ -43,3 +43,71 @@ html, body {
 .bottom-line {
   border-bottom: 1px solid #E4E7ED;
 }
+
+/* --lns-color-purple: hsla(230,84%,63%,1);
+    --lns-color-salmon: hsla(359,98%,68%,1);
+    --lns-color-green: hsla(149,78%,53%,1);
+    --lns-color-blue: hsla(201,100%,55%,1);
+    --lns-color-red: hsla(356,86%,55%,1);
+    --lns-color-yellow: hsla(40,100%,66%,1);
+    --lns-color-grey8: hsla(230,11%,19%,1);
+    --lns-color-grey7: hsla(230,10%,30%,1);
+    --lns-color-grey6: hsla(230,9%,45%,1);
+    --lns-color-grey5: hsla(230,8%,60%,1);
+    --lns-color-grey4: hsla(230,7%,75%,1);
+    --lns-color-grey3: hsla(230,7%,84%,1);
+    --lns-color-grey2: hsla(230,7%,92%,1);
+    --lns-color-grey1: hsla(230,7%,97%,1);
+    --lns-color-white: hsla(230,7%,100%,1);
+    --lns-themeLight-color-body: hsla(230,11%,19%,1);
+    --lns-themeLight-color-bodyDimmed: hsla(230,40%,19%,0.6);
+    --lns-themeLight-color-background: hsla(230,7%,100%,1);
+    --lns-themeLight-color-overlay: hsla(230,7%,100%,1);
+    --lns-themeLight-color-primary: hsla(230,84%,63%,1);
+    --lns-themeLight-color-focusRing: hsla(230,84%,63%,0.5);
+    --lns-themeLight-color-border: hsla(230,9%,45%,0.2);
+    --lns-themeLight-color-disabledContent: hsla(230,8%,60%,1);
+    --lns-themeLight-color-disabledBackground: hsla(230,7%,92%,1);
+    --lns-themeLight-color-backdrop: hsla(230,11%,19%,0.5);
+    --lns-themeLight-color-formFieldBorder: hsla(230,7%,84%,1);
+    --lns-themeLight-color-formFieldBackground: hsla(230,7%,100%,1);
+    --lns-themeDark-color-body: hsla(230,7%,97%,1);
+    --lns-themeDark-color-bodyDimmed: hsla(230,40%,97%,0.6);
+    --lns-themeDark-color-background: hsla(230,11%,19%,1);
+    --lns-themeDark-color-overlay: hsla(230,10%,30%,1);
+    --lns-themeDark-color-primary: hsla(230,84%,63%,1);
+    --lns-themeDark-color-focusRing: hsla(230,84%,63%,0.5);
+    --lns-themeDark-color-border: hsla(230,7%,75%,0.2);
+    --lns-themeDark-color-disabledContent: hsla(230,8%,60%,1);
+    --lns-themeDark-color-disabledBackground: hsla(230,10%,30%,1);
+    --lns-themeDark-color-backdrop: hsla(230,11%,19%,0.5);
+    --lns-themeDark-color-formFieldBorder: hsla(230,9%,45%,1);
+    --lns-themeDark-color-formFieldBackground: hsla(230,11%,19%,1);
+    --lns-fontSize-small: 12px;
+    --lns-lineHeight-small: 18px;
+    --lns-fontSize-medium: 14px;
+    --lns-lineHeight-medium: 22px;
+    --lns-fontSize-large: 18px;
+    --lns-lineHeight-large: 26px;
+    --lns-fontSize-xlarge: 22px;
+    --lns-lineHeight-xlarge: 32px;
+    --lns-fontSize-xxlarge: 32px;
+    --lns-lineHeight-xxlarge: 38px;
+    --lns-fontWeight-normal: 400;
+Show All Properties (11 more)
+}
+<style>
+:root, .theme-light {
+    --lns-color-body: var(--lns-themeLight-color-body);
+    --lns-color-bodyDimmed: var(--lns-themeLight-color-bodyDimmed);
+    --lns-color-background: var(--lns-themeLight-color-background);
+    --lns-color-overlay: var(--lns-themeLight-color-overlay);
+    --lns-color-primary: var(--lns-themeLight-color-primary);
+    --lns-color-focusRing: var(--lns-themeLight-color-focusRing);
+    --lns-color-border: var(--lns-themeLight-color-border);
+    --lns-color-disabledContent: var(--lns-themeLight-color-disabledContent);
+    --lns-color-disabledBackground: var(--lns-themeLight-color-disabledBackground);
+    --lns-color-backdrop: var(--lns-themeLight-color-backdrop);
+    --lns-color-formFieldBorder: var(--lns-themeLight-color-formFieldBorder);
+    --lns-color-formFieldBackground: var(--lns-themeLight-color-formFieldBackground);
+} */
