@@ -129,3 +129,18 @@ GET：`/api/v1/user/getuserbysigntime`
 // 不必传递参数，后期可能会有改动
 ```
 
+#### 7、改变用户状态
+
+> 描述：
+
+POST：`/api/v1/user/changestatus`
+
+> 传参
+
+```javascript
+{
+    id: String // 用户唯一标识符
+    state: Number // 将要改变的状态
+}
+```
+
