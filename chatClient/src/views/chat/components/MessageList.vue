@@ -24,9 +24,9 @@ export default {
           setTimeout(() => {
             this.$refs['msglist'].scrollTop = this.$refs['msglist'].scrollHeight + 200
             setTimeout(() => {
-              this.$refs['tips'].style.display = "block"
-            }, 200);
-          }, 1000);
+              this.$refs['tips'].style.opacity = "1"
+            }, 100);
+          }, 0);
         })
       },
       deep: true,
@@ -39,7 +39,7 @@ export default {
 <style lang="scss">
 .chat-area__message-list__com {
   .tips {
-    display: none;
+    opacity: 0;
     text-align: center;
   }
   box-sizing: border-box;

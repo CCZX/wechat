@@ -1,7 +1,8 @@
 <template>
   <div
     class="chat-area__message-item__com"
-    :style="messageitem.senderId === userInfo._id ? {'flex-direction': 'row-reverse', 'margin-left': 'calc(100% - 200px)'} : ''">
+    :style="messageitem.senderId === userInfo._id ? {'flex-direction': 'row-reverse', 'margin-left': 'calc(100% - 200px)'} : ''"
+  >
     <el-avatar
       class="avatar"
       size="large"
@@ -11,12 +12,17 @@
       <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt srcset>
     </el-avatar>
     <div class="message-info">
-      <span class="secondary-font time">{{messageitem.time}}</span>
+      <span class="secondary-font time">
+        <span
+          :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
+        >{{messageitem.time}}</span>
+      </span>
       <div
-        class="content"
-        :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)'} : {}"
+        :class="messageitem.senderId === userInfo._id ? 'content isme' : 'content'"
       >
-        <span class="primary-font">{{messageitem.message}}</span>
+        <span
+          :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
+          class="primary-font text">{{messageitem.message}}</span>
       </div>
     </div>
   </div>
@@ -37,34 +43,54 @@ export default {
 <style lang="scss">
 .chat-area__message-item__com {
   display: flex;
-  position: relative;
   width: 200px;
   justify-content: space-between;
   margin-bottom: 10px;
   .avatar {
     margin-top: 10px;
-    // position: absolute;
   }
   .message-info {
     width: 150px;
+    .time {
+      display: block;
+      overflow: hidden;
+    }
     .content {
       margin-top: 50px;
       position: relative;
       margin: 5px 0 0 0;
       white-space: wrap;
       word-break: break-word;
-      background-color: hsla(201, 100%, 55%, 1);
-      padding: 5px;
-      border-radius: 10px;
-      flex-grow: 0;
-      // width: 30px;
+      .text {
+        display: inline-block;
+        border-radius: 10px;
+        padding: 5px;
+        background-color: hsla(201, 100%, 55%, 1);
+      }
       &::before {
         content: "";
-        display: inline-block;
         position: absolute;
-        border: 10px solid red;
         right: 100%;
-        z-index: 99999;
+        top: 7px;
+        width: 0px;
+        border-bottom: 5px solid transparent;
+        border-right: 5px solid hsla(201, 100%, 55%, 1);
+        border-top: 5px solid transparent;
+      }
+    }
+    .content.isme {
+      &::before {
+        display: none;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        left: 100%;
+        top: 7px;
+        width: 0px;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid hsla(149, 78%, 53%, 1);
+        border-top: 5px solid transparent;
       }
     }
   }

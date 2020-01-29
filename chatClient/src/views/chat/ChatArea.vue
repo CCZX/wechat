@@ -15,9 +15,8 @@
       </div>
       <textarea
         class="textarea"
-        type="textarea"
         v-model="messageText"
-        resize="none"
+        maxlength="200"
         @keyup.enter="send($event)"
       >
       </textarea>
@@ -149,12 +148,12 @@ export default {
       right: 2px;
     }
     .textarea {
-      height: calc(100% - 25px);
+      box-sizing: border-box;
+      height: calc(100% - 30px);
       width: 100%;
       outline: none;
       border: none;
       padding: 0 10px;
-      height: 100%;
     }
   }
 }
