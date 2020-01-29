@@ -4,5 +4,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  IMG_URL: '"http://localhost:3333"'
+  IMG_URL: '"http://localhost:3333/"'
 })
