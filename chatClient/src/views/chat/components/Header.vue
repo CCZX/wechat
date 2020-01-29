@@ -1,13 +1,13 @@
 <template>
   <div class="chat-area__header">
-    <span>{{currentConverssation.nickname}}</span>
+    <span>{{currentConversation.isGroup ? currentConversation.groupId.title : currentConversation.nickname}}</span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    currentConverssation: Object
+    currentConversation: Object
   }
 }
 </script>

@@ -1,14 +1,14 @@
 <template>
   <div class="index-page">
     <div class="conversation-list">
-      <user-list
-        :currentConverssation="currentConverssation"
+      <conversation-list
+        :currentConversation="currentConversation"
         @setCurrentConversation="setCurrentConversation"
       />
     </div>
     <div class="conversation-chat-area" v-loading="loading">
       <chat-area
-        :currentConverssation="currentConverssation"
+        :currentConversation="currentConversation"
         :setLoading="setLoading"
       />
     </div>
@@ -17,26 +17,47 @@
 </template>
 
 <script>
-import UserList from '@/views/user/UserList'
+import ConversationList from '@/views/conversation/ConversationList'
 import ChatArea from '@/views/chat/ChatArea'
+import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 export default {
   name: 'Index',
   data() {
     return {
-      currentConverssation: {},
+      currentConversation: {},
       loading: true
+    }
+  },
+  sockets: {
+    receiveMessage(news) {
+      this.$store.dispatch('news/SET_UNREAD_NEWS', {
+        roomid: news.roomid,
+        count: 1,
+        type: 'ADD'
+      })
+    },
+  },
+  watch: {
+    currentConversation: {
+      handler(newVal) {
+        newVal.roomid && this.$store.dispatch('news/SET_UNREAD_NEWS', {
+          roomid: this.currentConversation.roomid,
+          count: 0,
+          type: SET_UNREAD_NEWS_TYPE_MAP.clear
+        })
+      }, deep: true, immediate: true
     }
   },
   methods: {
     setCurrentConversation(data) {
-      this.currentConverssation = data
+      this.currentConversation = data
     },
     setLoading(flag) {
       this.loading = flag
     }
   },
   components: {
-    UserList,
+    ConversationList,
     ChatArea
   }
 }

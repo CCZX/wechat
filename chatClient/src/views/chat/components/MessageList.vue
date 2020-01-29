@@ -1,10 +1,12 @@
 <template>
   <div class="chat-area__message-list__com" ref="msglist">
+    <div class="tips" ref="tips" :key="Date.now()">
+      <span>没有更多消息了</span>
+    </div>
     <transition-group appear name="slipOut">
       <message-item v-for="(item, index) in messagelist" :key="index" :messageitem="item"/>
     </transition-group>
-      <div class="flag">123123</div>
-
+    <div class="flag"></div>
   </div>
 </template>
 
@@ -20,7 +22,10 @@ export default {
       handler() {
         this.$nextTick(() =>{
           setTimeout(() => {
-            this.$refs['msglist'].scrollTop = this.$refs['msglist'].scrollHeight + 200;
+            this.$refs['msglist'].scrollTop = this.$refs['msglist'].scrollHeight + 200
+            setTimeout(() => {
+              this.$refs['tips'].style.display = "block"
+            }, 200);
           }, 1000);
         })
       },
@@ -33,6 +38,10 @@ export default {
 
 <style lang="scss">
 .chat-area__message-list__com {
+  .tips {
+    display: none;
+    text-align: center;
+  }
   box-sizing: border-box;
   height: 100%;
   overflow-y: scroll;

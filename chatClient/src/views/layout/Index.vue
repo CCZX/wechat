@@ -41,7 +41,6 @@ export default {
   watch: {
     userInfo: {
       handler(newVal, oldVal) {
-        console.log('usergoonlie', newVal, oldVal)
         this.userGoOnline()
       },
       deep: true,

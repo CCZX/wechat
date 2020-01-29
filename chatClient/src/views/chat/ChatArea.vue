@@ -1,6 +1,6 @@
 <template>
   <div class="chat-area__com">
-    <chat-header :currentConverssation="currentConverssation" />
+    <chat-header :currentConversation="currentConversation" />
     <div class="message-list-container">
       <message-list :messagelist="messagesOutcome" />
     </div>
@@ -30,9 +30,10 @@ import { mapState } from 'vuex'
 import { fromatTime } from '@/utils'
 import chatHeader from './components/Header'
 import messageList from './components/MessageList'
+import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 export default {
   props: {
-    currentConverssation: Object,
+    currentConversation: Object,
     setLoading: Function
   },
   data() {
@@ -47,14 +48,24 @@ export default {
     }),
     messagesOutcome() {
       return this.messages.filter(item => {
-        return item.roomid === this.currentConverssation.roomid
+        return item.roomid === this.currentConversation.roomid
       })
     }
   },
   sockets: {
-    receiveMessage(data) {
-      console.log('收到新的消息', data)
-      this.messages = [...this.messages, data]
+    receiveMessage(news) {
+      console.log('收到新的消息', news)
+      this.messages = [...this.messages, news]
+      if (news.roomid === this.currentConversation.roomid) {
+        console.log("清除当前未读消息")
+        setTimeout(() => {
+          this.$store.dispatch('news/SET_UNREAD_NEWS', {
+          roomid: news.roomid,
+          count: 0,
+          type: SET_UNREAD_NEWS_TYPE_MAP.clear
+        })
+        }, 0);
+      }
     },
     conversationList(list) {
       console.log('当前会话列表', list)
@@ -67,26 +78,27 @@ export default {
         return
       }
       const newMessage = {
-        // read: [this.userInfo.name],
-        roomid: this.currentConverssation.roomid,
+        roomid: this.currentConversation.roomid,
         senderId: this.userInfo._id,
         snderName: this.userInfo.name,
         senderNickname: this.userInfo.nickname,
         senderAvatar: this.userInfo.photo,
         time: fromatTime(new Date()),
         message: this.messageText,
-        messageType: "text"
+        messageType: "text",
+        isReadUser: [this.userInfo.name]
       }
       this.messages = [...this.messages, newMessage]
       this.$socket.emit('sendNewMessage', newMessage)
       this.messageText = ''
     },
     joinChatRoom() {
-      this.$socket.emit('join', this.currentConverssation)
+      this.$socket.emit('join', this.currentConversation)
     },
     async getRecentNews() {
+      // this.setLoading(false)
       this.setLoading(true)
-      const { roomid } = this.currentConverssation
+      const { roomid } = this.currentConversation
       const { data, status } = await this.$http.getRecentNews({roomid})
       this.setLoading(false)
       if (data.status === 2000 && status === 200) {
@@ -99,7 +111,7 @@ export default {
     messageList
   },
   watch: {
-    currentConverssation(newVal, oldVal) {
+    currentConversation(newVal, oldVal) {
       if (newVal !== oldVal) {
         this.setLoading(true)
         this.messageText = ''
