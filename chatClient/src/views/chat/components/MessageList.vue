@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-area__message-list__com" ref="msglist">
+  <div class="chat-area__message-list__com" ref="msglist" :key="Date.now()">
     <div class="tips" ref="tips" :key="Date.now()">
       <span>没有更多消息了</span>
     </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import messageItem from "./MessageItem";
+import messageItem from "./MessageItem"
 export default {
   props: ["messagelist"],
   components: {

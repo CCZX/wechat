@@ -21,6 +21,7 @@
 import { mapState } from 'vuex'
 import conversationItem from './ConversationItem'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
+import { conversationTypes } from '@/const'
 export default {
   name: "ConversationListComponent",
   props: {
@@ -36,8 +37,9 @@ export default {
     changeCurrentConversation(item) {
       this.$emit('setCurrentConversation', item)
     },
-    joinChatRoom() {
+    joinChatRoom() { // 发送websocket消息，将会话列表加入房间
       this.conversationList.forEach(item => {
+        console.log('join', item)
         this.$socket.emit("join", item)
       })
     }
@@ -47,37 +49,39 @@ export default {
     conversationList: {
       handler() {
         this.joinChatRoom()
-      },
-      deep: true,
-      immediate: true
+      }, deep: true, immediate: true
     }
   },
   components: {
     conversationItem
   },
   async created() {
-    let id = this.$store.state.user.userInfo._id
-    this.$http.getMyFriends(id).then(res => {
-      let { data, status } = res.data
-      if (res.status === 200 && status === 2000) {
-        this.conversationList = data
-        this.changeCurrentConversation(this.conversationList[0])
-      }
-    })
+    const id = this.$store.state.user.userInfo._id
+    {const { data, status } = await this.$http.getMyFriends(id)
+    if (data.status === 2000 && (100 <= status <= 400)) {
+      const { data: friendList } = data
+      friendList.forEach(item => {
+        item.conversationType = conversationTypes.friend
+      })
+      this.conversationList = data.data
+      this.changeCurrentConversation(this.conversationList[0])
+    }}
 
     /**
-     * 以下是获取用户的群聊会话列表
+     * 以下是获取用户的群聊会话列表，默认是优先加载user会话后加载group会话
      */
-    // let userName = this.$store.state.user.userInfo.name
-    // const { data, status } = await this.$http.getMyGroup({userName})
-    // console.log('gorup success123')
-    // if (data.status === 2000 && status === 200) {
-    //   const { data: groupList } = data
-    //   groupList.forEach(item => {
-    //     item.isGroup = true
-    //   })
-    //   this.conversationList = [...this.conversationList, ...groupList]
-    // }
+    const userName = this.$store.state.user.userInfo.name
+    const { data, status } = await this.$http.getMyGroup({userName})
+    if (data.status === 2000 && (100 <= status <= 400)) {
+      console.log('gorup success12233', data.data)
+      const { data: groupList } = data
+      groupList.forEach(item => {
+        item.conversationType = conversationTypes.group
+        item.isGroup = true
+        item.roomid = item.groupId._id
+      })
+      this.conversationList = [...this.conversationList, ...groupList]
+    }
   }
 }
 </script>

@@ -5,7 +5,11 @@
     <template v-if="conversationInfo.isGroup">
       <div class="conversation-info">
         <div class="wrapper">
-          <el-badge :value="unreadnewsNum" class="item el-badge">
+          <el-badge
+            :value="unreadNews[conversationInfo.roomid]"
+            :hidden="unreadNews[conversationInfo.roomid] === 0"
+            class="item el-badge"
+          >
             <el-avatar
               size="large"
               :src="'http://localhost:3333' + conversationInfo.groupId.img"
@@ -18,6 +22,7 @@
           </el-badge>
           
           <div class="conversation-detail">
+            <!-- <i class="icon-qun iconfont"></i> -->
             <span class="primary-font detail-item">{{conversationInfo.groupId.title}}</span>
             <span class="ellipsis secondary-font detail-item">{{conversationInfo.groupId.desc}}</span>
           </div>
@@ -64,6 +69,7 @@ const conversationObj = {
   roomid: ""
 };
 import { mapState } from 'vuex'
+import './../../../static/iconfont/iconfont.css'
 export default {
   name: "ConversationItemComponent",
   props: {
