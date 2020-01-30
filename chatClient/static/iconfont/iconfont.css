@@ -1,0 +1,25 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1580382103008'); /* IE9 */
+  src: url('iconfont.eot?t=1580382103008#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAPIAAsAAAAACAwAAAN8AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDBgqDdIM8ATYCJAMMCwgABCAFhG0HNRsBB8gekqRjohTQDMDhujEhRPC1X9lvZvYfgkOS57k8ggROhNtIIKHQRajIEzo25dmIPfLPfjabI11KqoiK9Evu/KVSOFhXR+Rrc2SiXq7HWWhuoZAfoeX/495p0xKYDyiXvxqLxt4cdQHGAQU01qYtXJQVhglxw9iVF7GYQKthytDG9uHDE1EYrQJxx7NHTySlUGrSQ7NQlQws4gPQaE4vSUcA3vvPj/+gGfQktczouHmxuXjmv1h+vcf1/3U+LgmI8XRgw8hYBApxXmo45A8Di7BWRRqoj68UIY3l/t/Ax1VxZf7hkQRRMVLbwSwKJn6x2Hgsew/5Z71QBhXa8BXADzAY/SpWal0dHd3s3MzMff53LuO7FCnUQWy3rsSh/fo4u4rQi5XSJWFoXg5IbOVSNQRQr+eZ1kE5k0qMpbEHjK3fxgG+69U2togdcSNKXbrGhImHZa7L3HtHEfo4EUgQbhSK+/W169VVliV2CdDkLxCETymxrGmd5Vm+/qbMaqebudeuvEoHBFHjYFm/ANT1sbDKf4awxXbjVyDbbV4XtjaggOWXalzitxKCEne2dyAQt9sA7uFk/6/OK87+fVPI1ZettEZmzXzhM2T9J6ufG7X5vVucV32babe06ixb/iavJVgg65PZtjrJFghqka7g32yZ/OdPWTYRF3WEcVbbK6MOTKViKOrAKBTiDu3ZVqn9qpH19TC9dyPS+hTDiPX6SEGawSXqHyCb+wfkB7B5YIBZNkIAo2l+SzoFaKzlJ2z+W99jZcL1cZ82/krPVMBPD2qNb2usFe2SPZolWhM/kWiZV1SBocxFxm1cd2ZnfpQuAVGu0UCWXo/9TQMg1oVmTkBImgxB1mySXOiLUNNmCSrNlqHVArvhbfok8YvSgnkFAEK3UUg6PUHW7Zhc6A9QM+gLVLoDQ6v94JqwzXRExqw0PBp4gSAXIs+kMJbaiAXpb8ia0lFLCnzmF2o67wYNVfVseIcKamN0SbbYXorBQJhGMtiC5VCSCBI0EvBstCIM4zpUUwsrO1ErmGRPzDoNOjKgCxDEBSKdEQXjFjfEco9/g1gmyZFWk1Ph/YI0Or58oEGVegvyTqq0yrmWY5JZWD0pDAwQRkNkwBbokGQGCEgorydAZ4aWiB6+qyE1VCisrbQ1v1x+viXQypgpR4ocRX5uKsFQmQTe4wE=') format('woff2'),
+  url('iconfont.woff?t=1580382103008') format('woff'),
+  url('iconfont.ttf?t=1580382103008') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1580382103008#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-qun:before {
+  content: "\e6e8";
+}
+
+.icon-emoji:before {
+  content: "\e60d";
+}
+

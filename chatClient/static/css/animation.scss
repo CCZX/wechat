@@ -32,3 +32,18 @@
   position: absolute;
   opacity: 0;
 }
+
+.roll-enter {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.roll-leave-to {
+  opacity: 0;
+  transform: translateY(-30px)
+}
+
+.roll-enter-active,
+.roll-leave-active {
+  transition: all 0.6s ease;
+}

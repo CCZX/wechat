@@ -7,9 +7,9 @@ html, body {
   height: 100%;
 }
 
-* {
+/* * {
   overflow: hidden;
-}
+} */
 
 /* .avatar {
   box-sizing: border-box;

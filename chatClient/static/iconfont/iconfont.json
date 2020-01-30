@@ -1,0 +1,23 @@
+{
+  "id": "1623558",
+  "name": "chat",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3405347",
+      "name": "群",
+      "font_class": "qun",
+      "unicode": "e6e8",
+      "unicode_decimal": 59112
+    },
+    {
+      "icon_id": "12215082",
+      "name": "emoji",
+      "font_class": "emoji",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    }
+  ]
+}
