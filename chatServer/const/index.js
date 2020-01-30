@@ -12,8 +12,13 @@ const nickNameList = ["加菲猫", "流氓兔", "柯南", "小新", "樱木花�
 "撒加", "忍者神龟", "芭比", "高达", "孙悟空", "贝吉塔", "特兰克斯", "布欧", "孙悟天",
 "扬羽", "明日香", "雪代巴", "斑点狗", "乱马", "犬夜叉", "黑猫警长", "秦博士",
 "浦饭幽助", "PUCCA"]
+const conversationTypes = {
+  friend: 'FRIEND',
+  group: 'GROUP'
+}
 module.exports = {
   API_VERSION,
   cvCodeList,
-  nickNameList
+  nickNameList,
+  conversationTypes
 }

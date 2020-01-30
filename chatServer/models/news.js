@@ -41,12 +41,12 @@ const newsSchema = new Schema({
   time: String, // 消息发送时间
   message: String, // 消息内容
   messageType: String, // 消息的类型：emoji/text/img/file
-  isReadUser: { // 判断已经读取的用户，在发送消息的时候默认发送发已经读取
+  isReadUser: { // 判断已经读取的用户，在发送消息的时候默认发送发已经读取，在单独会话中Array值只有两个
     type: Array,
     required: true
   }
 })
 
-const message = DB.model('new', newsSchema)
+const news = DB.model('new', newsSchema)
 
-module.exports = message
+module.exports = news

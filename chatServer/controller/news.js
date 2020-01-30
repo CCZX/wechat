@@ -10,7 +10,7 @@ const getRecentNews = async (req, res) => {
   try {
     const data = await NEWS.find({
       roomid: roomid
-    })
+    }).limit(30)
     return res.json({
       status: 2000,
       data,

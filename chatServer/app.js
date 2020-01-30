@@ -8,10 +8,11 @@ let session = require('express-session')
 let server = require('http').createServer(app)
 let io = require('socket.io')(server)
 
-let user = require('./routes/user')
-let friendly = require('./routes/friendly')
-let group = require('./routes/group')
+const user = require('./routes/user')
+const friendly = require('./routes/friendly')
+const group = require('./routes/group')
 const news = require('./routes/news')
+const groupNews = require('./routes/groupNews')
 
 // const socketHandler = require('./utils/socket')
 
@@ -59,8 +60,11 @@ app.use(`${API_VERSION}/user`, user)
 app.use(`${API_VERSION}/friendly`, friendly)
 app.use(`${API_VERSION}/group`, group)
 app.use(`${API_VERSION}/news`, news)
+app.use(`${API_VERSION}/groupnews`, groupNews)
 
 const insertNewNews = require('./controller/news').insertNewNews
+const insertNewGropNews = require('./controller/groupNews').insertNewGroupNews
+const conversationTypes = require('./const').conversationTypes
 
 const onLineUser = []
 const conversationList = {}
@@ -73,6 +77,7 @@ io.on('connection', (socket) => {
   })
   socket.on('join', val => {
     const { roomid } = val
+    console.log('join', val)
     socket.join(roomid, () => {
       conversationList[roomid] = socket.id
       io.in(roomid).emit('conversationList', conversationList)
@@ -80,7 +85,18 @@ io.on('connection', (socket) => {
   })
   socket.on('sendNewMessage', news => {
     console.log('newmessage',news)
-    insertNewNews(news)
+    /**
+     * 接收到新的消息对消息类型所属的会话进行判断
+     */
+    if (news.conversationType === conversationTypes.friend) {
+      console.log('friend')
+      delete news['conversationType']
+      insertNewNews(news)
+    } else if (news.conversationType === conversationTypes.group) {
+      console.log('group')
+      delete news['conversationType']
+      insertNewGropNews(news)
+    }
     socket.to(news.roomid).emit('receiveMessage', news)
     console.log('end')
   })
