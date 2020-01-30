@@ -16,5 +16,16 @@ export default {
   getGroupInfo(data) {
     let { id } = data
     return request.get(`/group/groupinfo?id=${id}`)
+  },
+  /**
+   * ------------------华丽分界线，以下是和群组消息有关的API------------------------
+   */
+  /**
+   * 
+   * @param {data} Object
+   */
+  getRecentGroupNews(data) {
+    const { roomid } = data
+    return request.get(`/groupnews/recentnews?roomid=${roomid}`)
   }
 }
