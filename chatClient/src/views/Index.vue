@@ -6,7 +6,7 @@
         @setCurrentConversation="setCurrentConversation"
       />
     </div>
-    <div class="conversation-chat-area" v-loading="loading">
+    <div class="conversation-chat-area" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.8)">
       <chat-area
         :currentConversation="currentConversation"
         :setLoading="setLoading"
@@ -67,6 +67,7 @@ export default {
 .index-page {
   display: flex;
   width: 100%;
+  height: calc(100vh - 60px);
   .conversation-list {
     width: 25%;
     border-right: 1px solid #cccccc;
