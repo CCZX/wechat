@@ -247,7 +247,7 @@ export default {
       padding: 0 10px;
       border: 0;
       border-radius: 5px;
-      background-color: rgba(241, 241, 241, 0.98);
+      background-color: #e9ebee;
       padding: 10px;
       resize: none;
     }
