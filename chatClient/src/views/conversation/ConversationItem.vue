@@ -37,15 +37,17 @@
             :hidden="unreadNews[conversationInfo.roomid] === 0"
             class="item el-badge"
           >
-            <el-avatar
-              size="large"
-              :src="'http://localhost:3333' + conversationInfo.photo"
-              @error="() => true"
-            >
-              <img
-                src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+            <router-link :to="`/user/${conversationInfo._id}`">
+              <el-avatar
+                size="large"
+                :src="'http://localhost:3333' + conversationInfo.photo"
+                @error="() => true"
               >
-            </el-avatar>
+                <img
+                  src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                >
+              </el-avatar>
+            </router-link>
           </el-badge>
           
           <div class="conversation-detail">
@@ -105,8 +107,7 @@ export default {
   position: relative;
   height: 60px;
   display: flex;
-  // margin-top: 10px;
-  padding: 5px 0;
+  margin: 5px 0;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
