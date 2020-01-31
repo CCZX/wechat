@@ -1,14 +1,46 @@
 <template>
   <div class="chat-area__com">
     <chat-header :currentConversation="currentConversation"/>
-    <div class="message-list-container">
-      <message-list :messagelist="messagesOutcome"/>
+    <div
+       :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'"
+    >
+      <div class="message-list-container">
+        <message-list :messagelist="messagesOutcome"/>
+      </div>
+      <div class="group-desc" v-if="currentConversation.conversationType === 'GROUP'">
+        <group-desc :currentConversation="currentConversation" />
+      </div>
     </div>
     <div class="message-edit-container">
       <div class="send-type">
         <i class="item iconfont icon-emoji" @click.stop="showEmojiCom = !showEmojiCom"></i>
-        <i class="item el-icon-folder"></i>
-        <i class="item el-icon-picture"></i>
+        <label for="upimg">
+          <el-tooltip class="item" effect="dark" content="只能上传小于 2M 的图片" placement="top">
+            <i class="item el-icon-picture">
+              <input
+                id="upimg"
+                class="img-inp upload"
+                type="file"
+                title="选择图片"
+                accept="image/png, image/jpeg, image/gif, image/jpg"
+                @change="imgInpChange"
+              >
+            </i>
+          </el-tooltip>
+        </label>
+        <label for="upfile">
+          <el-tooltip class="item" effect="dark" content="只能上传小于 2M 的文件" placement="top">
+            <i class="item el-icon-folder">
+              <input
+                id="upfile"
+                class="file-inp upload"
+                type="file"
+                title="选择文件"
+                @change="fileInpChange"
+              >
+            </i>
+          </el-tooltip>
+        </label>
       </div>
       <div class="operation">
         <el-button @click="send" type="success" size="small" round>发送</el-button>
@@ -30,6 +62,7 @@ import messageList from "./components/MessageList"
 import { SET_UNREAD_NEWS_TYPE_MAP } from "@/store/constants"
 import { conversationTypes } from '@/const'
 import customEmoji from '@/components/customEmoji'
+import groupDesc from './components/GroupDesc'
 export default {
   props: {
     currentConversation: Object,
@@ -71,8 +104,16 @@ export default {
     }
   },
   methods: {
+    imgInpChange(e) {
+      console.log(e)
+      const [file] = e.target.files
+      console.log(URL.createObjectURL(file))
+    },
+    fileInpChange(e) {
+
+    },
     addEmoji(emoji = '') {
-      this.messageText = this.messageText + emoji
+      this.messageText += emoji
     },
     send(e) {
       e.preventDefault()
@@ -125,7 +166,8 @@ export default {
   components: {
     chatHeader,
     messageList,
-    customEmoji
+    customEmoji,
+    groupDesc
   },
   watch: {
     currentConversation(newVal, oldVal) {
@@ -150,8 +192,28 @@ export default {
 @import './../../../static/css/animation.scss';
 .chat-area__com {
   height: 100%;
-  .message-list-container {
+  .main {
+    display: flex;
     height: calc(100% - 210px);
+    width: 100%;
+    .message-list-container {
+      height: 100%;
+      width: 75%;
+    }
+    .group-desc {
+      height: 100%;
+      width: 25%;
+    }
+    
+  }
+  .main.no-group {
+    .message-list-container {
+      height: 100%;
+      width: 100%;
+    }
+    .group-desc {
+      width: 0%;
+    } 
   }
   .message-edit-container {
     box-sizing: border-box;
@@ -165,6 +227,10 @@ export default {
         cursor: pointer;
         font-size: 20px;
         margin-right: 10px;
+        .upload {
+          display: none;
+          border: none;
+        }
       }
     }
     .operation {
@@ -187,7 +253,7 @@ export default {
     }
     .emoji-component {
       position: absolute;
-      bottom: 100%;
+      bottom: 101%;
     }
   }
 }

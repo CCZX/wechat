@@ -64,7 +64,7 @@ export default {
       .text {
         display: inline-block;
         border-radius: 10px;
-        padding: 5px;
+        padding: 5px 10px;
         background-color: hsla(201, 100%, 55%, 1);
       }
       &::before {

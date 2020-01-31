@@ -46,22 +46,20 @@ export default {
   height: 100%;
   overflow-y: scroll;
   padding: 10px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  .slipOut-enter {
-    opacity: 0;
-    transform: translateY(300px);
-  }
 
-  .slipOut-leave-to {
-    opacity: 0;
-  }
+  // .slipOut-enter {
+  //   opacity: 0;
+  //   transform: translateY(300px);
+  // }
 
-  .slipOut-enter-active,
-  .slipOut-leave-active {
-    transition: all 0.6s ease;
-  }
+  // .slipOut-leave-to {
+  //   opacity: 0;
+  // }
+
+  // .slipOut-enter-active,
+  // .slipOut-leave-active {
+  //   transition: all 0.6s ease;
+  // }
   // .slipOut-enter-active:nth-child(5n + 2) {
   //   transition-delay: 0.3s;
   // }
