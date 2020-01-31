@@ -4,18 +4,8 @@
     <main class="layout-main">
       <my-header></my-header>
       <el-main class="el-main">
+        <audio :src="NotifyAudio" ref="audio">123</audio>
         <router-view></router-view>
-        <!-- <div class="right-layout">
-          <div class="chat">
-            <chat-view></chat-view>
-          </div>
-          <div class="weather">
-            weather
-          </div>
-          <div class="todo-list">
-            todo
-          </div>
-        </div> -->
       </el-main>
     </main>
   </div>
@@ -27,11 +17,13 @@ import myHeader from './components/Header'
 // import chatView from '@/views/chat'
 import bgImgUrl from './../../../static/image/bg.jpg'
 import { APP_VERSION } from '@/const'
+import NotifyAudio from './../../../static/audio/notify.mp3'
 export default {
   name: 'Layout',
   data() {
     return {
-      bgImgUrl
+      bgImgUrl,
+      NotifyAudio
     }
   },
   computed: {
@@ -52,16 +44,28 @@ export default {
     myHeader,
     // chatView
   },
-  sockets: {//将（socket.on）绑定事件放在sockets中
+  sockets: {
     connect: function () {
       console.log('socket connected', this.$socket.id)
     },
-    customEmit: function (data) {
-      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)',data)
-    },
     onlineUser(data) {
       console.log('onlineuser', data)
-    }
+    },
+    receiveMessage(news) {
+      this.$refs['audio'].play()
+      console.log('收到新消息', news)
+      const message = news.message ? news.message.slice(0, 10) : ''
+      this.$notify({
+        title: '收到新消息',
+        message,
+        type: 'success'
+      })
+      this.$store.dispatch('news/SET_UNREAD_NEWS', {
+        roomid: news.roomid,
+        count: 1,
+        type: 'ADD'
+      })
+    },
   },
   methods: {
     userGoOnline() {
@@ -87,43 +91,15 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   background-color: #e9ebee;
-  // filter: blur(3px);
   .layout-main {
-    // filter: none;
     box-sizing: border-box;
     min-height: 100%;
-    // padding: 0 100px;
     .el-main {
       min-height: calc(100vh - 60px);
       background-color: #e9ebee;
       color: #333;
       display: flex;
       padding: 0;
-      // text-align: center;
-      // line-height: 160px;
-      // .right-layout {
-      //   display: flex;
-      //   justify-content: space-between;
-      //   align-content: space-between;
-      //   flex-wrap: wrap;
-      //   padding: 0 0 0 30px;
-      //   flex-grow: 1;
-      //   .chat {
-      //     width: 100%;
-      //     height: 400px;
-      //     @extend .basics-box-shadow;
-      //   }
-      //   .weather {
-      //     width: 28%;
-      //     height: 230px;
-      //     @extend .basics-box-shadow;
-      //   }
-      //   .todo-list {
-      //     width: 70%;
-      //     height: 230px;
-      //     @extend .basics-box-shadow;
-      //   }
-      // }
     }
   }
 }
