@@ -1,15 +1,15 @@
 html, body {
-  height: 100%;
+  min-height: 100%;
   width: 100%;
 }
 
 #app {
-  height: 100%;
+  min-height: 100%;
 }
 
-/* * {
-  overflow: hidden;
-} */
+* {
+  box-sizing: border-box;
+}
 
 /* .avatar {
   box-sizing: border-box;
@@ -42,6 +42,26 @@ html, body {
 
 .bottom-line {
   border-bottom: 1px solid #E4E7ED;
+}
+
+/* 美化滚动条 */
+*::-webkit-scrollbar{
+width:4px;
+height:4px;
+}
+*::-webkit-scrollbar-track{
+background: #e9ebee;
+border-radius:2px;
+}
+*::-webkit-scrollbar-thumb{
+background: #aaa;
+border-radius:2px;
+}
+*::-webkit-scrollbar-thumb:hover{
+background: #747474;
+}
+*::-webkit-scrollbar-corner{
+background: #f6f6f6;
 }
 
 /* --lns-color-purple: hsla(230,84%,63%,1);

@@ -6,11 +6,53 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1089346",
+      "name": "笑脸",
+      "font_class": "buoumaotubiao49",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "1444564",
+      "name": "food",
+      "font_class": "food",
+      "unicode": "e750",
+      "unicode_decimal": 59216
+    },
+    {
       "icon_id": "3405347",
       "name": "群",
       "font_class": "qun",
       "unicode": "e6e8",
       "unicode_decimal": 59112
+    },
+    {
+      "icon_id": "5113364",
+      "name": "animal",
+      "font_class": "icon-test",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "6798079",
+      "name": "动物骨骼分析",
+      "font_class": "dongwugugefenxi",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "11983890",
+      "name": "Cold drink, tea, coffee, b",
+      "font_class": "Colddrinkteacoffeeb",
+      "unicode": "ea1e",
+      "unicode_decimal": 59934
+    },
+    {
+      "icon_id": "12004358",
+      "name": "Heart",
+      "font_class": "Heart",
+      "unicode": "ea97",
+      "unicode_decimal": 60055
     },
     {
       "icon_id": "12215082",
