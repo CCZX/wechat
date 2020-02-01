@@ -34,6 +34,22 @@ const router = new Router({
           },
         },
         {
+          path: '/user/:id',
+          name: 'UserDetails',
+          component: () => import('@/views/UserDetails'),
+          meta: {
+            requiresAuth: true
+          },
+        },
+        {
+          path: '/add',
+          name: 'Add',
+          component: () => import('@/views/Add'),
+          meta: {
+            requiresAuth: true
+          },
+        },
+        {
           path: '/main',
           name: 'MainBox',
           component: () => import('@/views/MainBox'),

@@ -5,6 +5,18 @@
         WeChats
         <span class="logo-img"></span>
       </div>
+      <div class="operation">
+        <span class="item">
+          <router-link to="/add" tag="span">
+            加好友 <i class="el-icon-plus"></i>
+          </router-link>
+        </span>
+        <span class="item">
+          <router-link to="/add" tag="span">
+            发动态 <i class="el-icon-plus"></i>
+          </router-link>
+        </span>
+      </div>
       <div class="user-info">
         <el-avatar size="large"
           :src="'http://localhost:3333' + userInfo.photo"
@@ -42,7 +54,7 @@ export default {
   .el-header {
     display: flex;
     justify-content: space-between;
-    background-color: $primarycolor;
+    background-color: #3578E5;
     color: $normalwhite;
     line-height: 60px;
     .logo {
@@ -60,24 +72,31 @@ export default {
         background-size: contain;
       }
     }
+    .operation {
+      display: flex;
+      align-items: center;
+      .item {
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        border-radius: 10px;
+        padding: 0 7px;
+        &:hover {
+          background-color: #4267B2;
+        }
+        &:hover {
+          color: #2f2f2f;
+        }
+      }
+    }
     .user-info {
       display: flex;
       align-items: center;
-      .avatar {
-        box-sizing: border-box;
-        margin-right: 20px;
-        width: 50px;
-        height: 50px;
-        border: 1px solid $border1;
-        border-radius: 50%;
-        background-color: #ffffff;
-        background-size: contain;
-        // background-color: red;
-      }
       .name-sigin {
         display: flex;
         flex-direction: column;
         line-height: 20px;
+        margin-left: 10px;
         .name {
           font-size: 20px;
         }
