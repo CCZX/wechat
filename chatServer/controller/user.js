@@ -193,13 +193,11 @@ const getUserInfo = (req, res) => {
 
 // 预获取用户列表,在添加好友的时候根据查询字符获取
 const preFetchUser = (req, res) => {
-  let { type, q } = req.query
-  // console.log(type, q)
-  // let params = {type: q}
+  const { type, q, page, pageSize } = req.query
   const reg = new RegExp(q)
   USER.find({
     [type]: {$regex: reg}
-  }).limit(5).then(doc => {
+  }).limit(Number(pageSize)).skip(Number(page) * Number(pageSize)).then(doc => {
     return res.json({
       status: 2000,
       data: doc,
