@@ -14,7 +14,7 @@ export default {
     return request.get(`/user/userinfo?id=${id}`)
   },
   preFetchUser(data) {
-    let { type, q } = data
-    return request.get(`/user/prefetchuser?type=${type}&q=${q}`)
+    let { type, q, page, pageSize } = data
+    return request.get(`/user/prefetchuser?type=${type}&q=${q}&page=${page}&pageSize=${pageSize}`)
   } 
 }

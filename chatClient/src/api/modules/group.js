@@ -17,6 +17,10 @@ export default {
     let { id } = data
     return request.get(`/group/groupinfo?id=${id}`)
   },
+  preFetchGroup(data) {
+    const { type, q, page, pageSize } = data // type可以是title以及code
+    return request.get(`/group/prefetchgroup?type=${type}&q=${q}&page=${page}&pageSize=${pageSize}`)
+  },
   /**
    * ------------------华丽分界线，以下是和群组消息有关的API------------------------
    */
