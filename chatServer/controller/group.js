@@ -46,7 +46,29 @@ const getGroupInfo = (req, res) => { // 获取群聊详情
   })
 }
 
+const preFetchGroup = async (req, res) => { // 在客户端搜索群聊
+  const { type, q, page, pageSize } = req.query
+  const reg = new RegExp(q)
+  try {
+    const data = await GROUP.find({
+      [type]: {$regex: reg}
+    }).limit(Number(pageSize)).skip(Number(page) * Number(pageSize))
+    return res.json({
+      status: 2000,
+      data: data,
+      msg: '获取成功！'
+    })
+  } catch (error) {
+    return res.json({
+      status: 2003,
+      data: err,
+      msg: '服务器错误，请稍后重试！'
+    })
+  }
+}
+
 module.exports = {
   getMyGroup,
-  getGroupInfo
+  getGroupInfo,
+  preFetchGroup
 }
