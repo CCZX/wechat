@@ -24,3 +24,25 @@ GET：`/api/v1/group/groupinfo`
 }
 ```
 
+#### 2、在搜索时获取群聊
+
+GET：`/api/v1/group/prefetchgroup`
+
+> 传递参数
+
+```javascript
+{
+    type: String, // 搜索的类型，比如群聊号（对应code字段），群聊名称（对应title字段）
+    q: String, // keyWord
+    page: Number, // 页码
+    pageSize: Number
+}
+```
+> 返回数据
+
+```javascript
+{
+    status: Number,
+    data: [],
+    msg: ''
+}

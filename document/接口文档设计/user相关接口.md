@@ -98,8 +98,10 @@ GET：`/api/v1/user/prefetchuser`
 
 ```javascript
 {
-    type: '', // 搜索的类型，比如根据code、nickname等搜索
-    q: '' // 搜索的关键字
+    type: '', // 搜索的类型，比如根据账号（对应code字段）、昵称（对应nickname字段）等
+    q: '', // 搜索的关键字
+    page: Number,
+    pageSize: Number
 }
 ```
 
