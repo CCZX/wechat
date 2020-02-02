@@ -14,9 +14,9 @@
 <script>
 import { mapState } from 'vuex'
 import myHeader from './components/Header'
-// import chatView from '@/views/chat'
 import bgImgUrl from './../../../static/image/bg.jpg'
 import { APP_VERSION } from '@/const'
+import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import NotifyAudio from './../../../static/audio/notify.mp3'
 export default {
   name: 'Layout',
@@ -66,14 +66,40 @@ export default {
         type: 'ADD'
       })
     },
+    receiveValidateMessage(news) {
+      this.$refs['audio'].play()
+      console.log('收到新的验证消息', news)
+      this.$store.dispatch('news/SET_UNREAD_NEWS', {
+        roomid: news.roomid,
+        count: 1,
+        type: SET_UNREAD_NEWS_TYPE_MAP.add
+      })
+    },
+    conversationList(list) {
+      console.log("当前会话列表", list)
+    }
   },
   methods: {
     userGoOnline() {
       this.$socket.emit('goOnline', this.userInfo)
+    },
+    async sysUserJoinSocket() {
+      const { data } = await this.$http.getSysUsers()
+      const { data: sysUserList, status } = data
+      if (status === 2000) {
+        sysUserList.forEach(item => {
+          this.$store.dispatch('app/SET_SYS_USERS', sysUserList)
+          const val = {
+            roomid: item._id + '-' + this.userInfo._id
+          }
+          this.$socket.emit('join', val)
+        })
+      }
     }
   },
   mounted() {
     this.$socket.emit('connect')
+    this.sysUserJoinSocket()
     console.log(
       `%c Messger V${APP_VERSION} Started %c Contact: ccdebuging@gmail.com %c`,
       'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
