@@ -70,7 +70,6 @@ const conversationObj = {
   id: "",
   roomid: ""
 };
-import { mapState } from 'vuex'
 import './../../../static/iconfont/iconfont.css'
 export default {
   name: "ConversationItemComponent",

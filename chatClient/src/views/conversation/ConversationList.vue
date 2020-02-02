@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import conversationItem from './ConversationItem'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { conversationTypes } from '@/const'
+import { saveMyFriendsToLocalStorage } from '@/utils'
 export default {
   name: "ConversationListComponent",
   props: {
@@ -39,7 +39,6 @@ export default {
     },
     joinChatRoom() { // 发送websocket消息，将会话列表加入房间
       this.conversationList.forEach(item => {
-        console.log('join', item)
         this.$socket.emit("join", item)
       })
     }
@@ -63,8 +62,12 @@ export default {
       friendList.forEach(item => {
         item.conversationType = conversationTypes.friend
       })
-      this.conversationList = data.data
+      this.conversationList = friendList
       this.changeCurrentConversation(this.conversationList[0])
+      const saveLocalData = friendList.map(item => {
+        return item._id
+      })
+      saveMyFriendsToLocalStorage(saveLocalData)
     }}
 
     /**
@@ -73,7 +76,6 @@ export default {
     const userName = this.$store.state.user.userInfo.name
     const { data, status } = await this.$http.getMyGroup({userName})
     if (data.status === 2000 && (100 <= status <= 400)) {
-      console.log('gorup success12233', data.data)
       const { data: groupList } = data
       groupList.forEach(item => {
         item.conversationType = conversationTypes.group
