@@ -13,6 +13,7 @@ const friendly = require('./routes/friendly')
 const group = require('./routes/group')
 const news = require('./routes/news')
 const groupNews = require('./routes/groupNews')
+const system = require('./routes/sys')
 
 // const socketHandler = require('./utils/socket')
 
@@ -61,6 +62,7 @@ app.use(`${API_VERSION}/friendly`, friendly)
 app.use(`${API_VERSION}/group`, group)
 app.use(`${API_VERSION}/news`, news)
 app.use(`${API_VERSION}/groupnews`, groupNews)
+app.use(`${API_VERSION}/sys`, system)
 
 const insertNewNews = require('./controller/news').insertNewNews
 const insertNewGropNews = require('./controller/groupNews').insertNewGroupNews
@@ -77,14 +79,14 @@ io.on('connection', (socket) => {
   })
   socket.on('join', val => {
     const { roomid } = val
-    console.log('join', val)
+    // console.log('join', val)
     socket.join(roomid, () => {
       conversationList[roomid] = socket.id
       io.in(roomid).emit('conversationList', conversationList)
     })
   })
   socket.on('sendNewMessage', news => {
-    console.log('newmessage',news)
+    // console.log('newmessage',news)
     /**
      * 接收到新的消息对消息类型所属的会话进行判断
      */
@@ -98,7 +100,10 @@ io.on('connection', (socket) => {
       insertNewGropNews(news)
     }
     socket.to(news.roomid).emit('receiveMessage', news)
-    console.log('end')
+  })
+  socket.on('sendValidateMessage', news => {
+    console.log(news)
+    socket.to(news.roomid).emit('receiveValidateMessage', news)
   })
 })
 
