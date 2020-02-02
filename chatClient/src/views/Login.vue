@@ -162,7 +162,7 @@ export default {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 50%);
     .title {
       text-align: center;
       padding: 0 0 20px ;
