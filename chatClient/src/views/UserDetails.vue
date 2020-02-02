@@ -13,7 +13,7 @@
           <el-avatar
             class="avatar"
             size="large"
-            :src="IMG_URL + avatar"
+            :src="userDetails.avatar"
             @error="() => true"
           >
             <img
@@ -67,7 +67,6 @@ export default {
   name: 'UserDetails',
   data() {
     return {
-      avatar: '',
       userDetails: {},
       IMG_URL: process.env.IMG_URL
     }
@@ -77,7 +76,7 @@ export default {
     const { data } = await this.$http.getUserInfo(id)
     const { data: userDetails, status } = data
     if (status === 2000) {
-      this.avatar = userDetails.photo
+      userDetails.avatar = this.IMG_URL + userDetails.photo
       this.userDetails = userDetails
     }
   },
