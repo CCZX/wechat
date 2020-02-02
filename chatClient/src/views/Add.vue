@@ -29,7 +29,7 @@
       </div>
       <div class="condition-list">
         <el-tag type="danger">当前搜索条件：</el-tag>
-        <el-tag v-if="searchKey">{{searchKey}}</el-tag>
+        <el-tag v-if="searchKey" closable @close="handleTagClose">{{searchKey}}</el-tag>
         <el-tag v-if="searchObject">{{searchObject}}</el-tag>
         <el-tag v-if="searchType">{{searchType}}</el-tag>
       </div>
@@ -123,14 +123,24 @@ export default {
         this.isFetch = false
       }
     },
+    handleTagClose() {
+      this.searchKey = ''
+      this.fetch()
+    },
     fetch(loadMore = false, initPage = false) {
-      if (!this.searchKey) return
+      if (!this.searchKey) {
+        this.isFetch = true
+        setTimeout(() => {
+          this.searchList = []
+          this.isFetch = false
+        }, 500)
+        return
+      }
       if (initPage) {
         this.page = 0
         this.hasMore = true
       }
       this.isFetch = true
-      console.log('start fetch')
       const params = {type: this.searchType, q: this.searchKey, pageSize: this.pageSize, page: this.page}
       if (this.searchObject === 'friend') {
         this.fetchUser(params, loadMore)        
