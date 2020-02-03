@@ -4,10 +4,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="static/image/favicon.ico" />
-    <title>聊天室</title>
+    <title>Messager</title>
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+  <script>
+    const UserAgent = navigator.userAgent
+    const OSInfo = UserAgent.substring(UserAgent.indexOf('(')+1,UserAgent.indexOf(';'))
+    const Browser = UserAgent.slice(81, 90)
+    console.log(
+      '%c OS：' + OSInfo + ' %c Browser：' + Browser + ' %c ',
+      'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+      'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+      'background:transparent'
+    )
+    console.log(
+      '%c IP：' + returnCitySN["cip"] + ' %c Country：' + returnCitySN["cname"] + ' %c ',
+      'background:#409EFF ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+      'background:#3578E5 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+      'background:transparent'
+    )
+  </script>
 </html>
