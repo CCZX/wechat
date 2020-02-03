@@ -6,13 +6,27 @@
         @setCurrentConversation="setCurrentConversation"
       />
     </div>
-    <div class="conversation-chat-area" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+    <div class="conversation-chat-area" v-loading="loading">
       <chat-area
+        v-if="currentConversation && currentConversation._id"
         :currentConversation="currentConversation"
         :setLoading="setLoading"
       />
+      <div class="no-conversation" v-else>
+        没有数据
+      </div>
     </div>
-    <div class="detail"></div>
+    <div class="detail">
+      <div class="todo">
+        <el-tag>标签一</el-tag>
+        <el-card class="box-card">
+          <div v-for="o in 4" :key="o" class="text item">
+            {{'列表内容 ' + o }}
+          </div>
+        </el-card>
+      </div>
+      <!-- <a-map /> -->
+    </div>
   </div>
 </template>
 
@@ -20,22 +34,14 @@
 import ConversationList from '@/views/conversation/ConversationList'
 import ChatArea from '@/views/chat/ChatArea'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
+// import AMap from '@/components/customMap'
 export default {
   name: 'Index',
   data() {
     return {
       currentConversation: {},
-      loading: true
+      loading: false
     }
-  },
-  sockets: {
-    receiveMessage(news) {
-      this.$store.dispatch('news/SET_UNREAD_NEWS', {
-        roomid: news.roomid,
-        count: 1,
-        type: 'ADD'
-      })
-    },
   },
   watch: {
     currentConversation: {
@@ -58,7 +64,8 @@ export default {
   },
   components: {
     ConversationList,
-    ChatArea
+    ChatArea,
+    // AMap
   }
 }
 </script>
@@ -73,12 +80,18 @@ export default {
     border-right: 1px solid #cccccc;
   }
   .conversation-chat-area {
-    width: 60%;
+    position: relative;
+    width: 55%;
     border-right: 1px solid #cccccc;
+    .no-conversation {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%)
+    }
   }
   .detail {
-    width: 15%
+    width: 20%
   }
 }
 </style>
-
