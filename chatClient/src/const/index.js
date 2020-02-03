@@ -23,3 +23,8 @@ export const searchTypes = {
     {id: 2, label: '名称', value: 'title'}
   ]
 }
+
+export const validateNewsTips = {
+  applyFriend: '请求添加你为好友',
+  applyGroup: '请求加入群聊'
+}
