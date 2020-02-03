@@ -89,7 +89,8 @@ export default {
         reveiverId: this.seleceItem._id,
         time: fromatTime(new Date()),
         additionMessage: this.additionMessage,
-        status: 0
+        status: 0,
+        validateType: 0
       }
       this.$socket.emit('sendValidateMessage', val)
     }
