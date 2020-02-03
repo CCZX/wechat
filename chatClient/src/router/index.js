@@ -6,7 +6,7 @@ Vue.use(Router)
 const router = new Router({
   routes: [{
       path: '/',
-      redirect: '/main',
+      // redirect: '/main',
       meta: {
         requiresAuth: true
       }
@@ -20,13 +20,13 @@ const router = new Router({
       path: '/',
       name: 'Layout',
       component: () => import('@/views/layout'),
-      // redirect: '/main',
+      redirect: 'index',
       meta: {
         requiresAuth: true
       },
       children: [
         {
-          path: '/index',
+          path: 'index',
           name: 'Index',
           component: () => import('@/views/Index'),
           meta: {
@@ -34,7 +34,7 @@ const router = new Router({
           },
         },
         {
-          path: '/user/:id',
+          path: 'user/:id',
           name: 'UserDetails',
           component: () => import('@/views/UserDetails'),
           meta: {
@@ -42,9 +42,33 @@ const router = new Router({
           },
         },
         {
-          path: '/add',
+          path: 'add',
           name: 'Add',
           component: () => import('@/views/Add'),
+          meta: {
+            requiresAuth: true
+          },
+        },
+        {
+          path: 'setting',
+          name: 'Setting',
+          component: () => import('@/views/Setting'),
+          meta: {
+            requiresAuth: true
+          },
+        },
+        {
+          path: 'system',
+          name: 'System',
+          component: () => import('@/views/SystemNews'),
+          meta: {
+            requiresAuth: true
+          },
+        },
+        {
+          path: 'mzone',
+          name: 'MZone',
+          component: () => import('@/views/mzone'),
           meta: {
             requiresAuth: true
           },
