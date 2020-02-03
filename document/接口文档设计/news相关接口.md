@@ -20,3 +20,23 @@ GET：`/api/v1/news/recent`
   msg: ''
 }
 ```
+
+### 2、获取用户的验证消息
+
+GET：`/api/v1/validate/myvalidatenews`
+
+> 传递参数
+
+```JavaScript
+{
+  id: String // 用户的id
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number,
+  data: [{}, {}],
+  msg: ''
+}
+```
