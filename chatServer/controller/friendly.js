@@ -1,4 +1,5 @@
 const FRIEND = require('./../models/friendly')
+const NEWS = require('./../models/news')
 
 // 查询我的好友列表
 const getMyFriends = (req, res) => {
@@ -41,6 +42,15 @@ const getMyFriends = (req, res) => {
   })
 }
 
+// 在同意之后添加好友
+const addFriend = (data) => {
+  FRIEND.insertMany(data)
+  const helloNews = {
+    
+  }
+}
+
 module.exports = {
-  getMyFriends
+  getMyFriends,
+  addFriend
 }
