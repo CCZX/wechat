@@ -4,7 +4,7 @@
     <main class="layout-main">
       <my-header></my-header>
       <el-main class="el-main">
-        <audio :src="NotifyAudio" ref="audio">123</audio>
+        <audio :src="NotifyAudio" ref="audio" muted>123</audio>
         <router-view></router-view>
       </el-main>
     </main>
@@ -74,6 +74,9 @@ export default {
         count: 1,
         type: SET_UNREAD_NEWS_TYPE_MAP.add
       })
+    },
+    receiveAgreeFriendValidate(data) {
+      console.log('receiveAgreeFriendValidate', data)
     },
     conversationList(list) {
       console.log("当前会话列表", list)
