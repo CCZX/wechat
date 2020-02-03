@@ -8,12 +8,15 @@ let session = require('express-session')
 let server = require('http').createServer(app)
 let io = require('socket.io')(server)
 
+const { fromatTime } = require('./utils')
+
 const user = require('./routes/user')
 const friendly = require('./routes/friendly')
 const group = require('./routes/group')
 const news = require('./routes/news')
 const groupNews = require('./routes/groupNews')
 const system = require('./routes/sys')
+const validate = require('./routes/validateNews')
 
 // const socketHandler = require('./utils/socket')
 
@@ -63,10 +66,13 @@ app.use(`${API_VERSION}/group`, group)
 app.use(`${API_VERSION}/news`, news)
 app.use(`${API_VERSION}/groupnews`, groupNews)
 app.use(`${API_VERSION}/sys`, system)
+app.use(`${API_VERSION}/validate`, validate)
 
-const insertNewNews = require('./controller/news').insertNewNews
-const insertNewGropNews = require('./controller/groupNews').insertNewGroupNews
-const conversationTypes = require('./const').conversationTypes
+const { insertNewNews } = require('./controller/news')
+const { insertValidateNews, changeValidateNewsStatus } = require('./controller/validateNews')
+const { insertNewGropNews } = require('./controller/groupNews')
+const { addFriend } = require('./controller/friendly')
+const { conversationTypes } = require('./const')
 
 const onLineUser = []
 const conversationList = {}
@@ -103,7 +109,20 @@ io.on('connection', (socket) => {
   })
   socket.on('sendValidateMessage', news => {
     console.log(news)
+    insertValidateNews(news)
     socket.to(news.roomid).emit('receiveValidateMessage', news)
+  })
+  socket.on('sendAgreeFriendValidate', data => {
+    const friendly = {
+      userM: data.senderId,
+      userY: data.reveiverId,
+      createDate: fromatTime(new Date(), false)
+    }
+    addFriend(friendly)
+    const { roomid, reveiverId, senderId } = data
+    const senderRoomId = roomid.replace(reveiverId, senderId)
+    socket.to(senderRoomId).emit('receiveAgreeFriendValidate', data)
+    changeValidateNewsStatus(data, 1)
   })
 })
 
