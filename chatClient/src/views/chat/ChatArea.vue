@@ -161,6 +161,9 @@ export default {
         }
       }
       
+    },
+    handlerShowEmoji() {
+      this.showEmojiCom = false
     }
   },
   components: {
@@ -171,7 +174,7 @@ export default {
   },
   watch: {
     currentConversation(newVal, oldVal) {
-      if (newVal !== oldVal) {
+      if (newVal && newVal._id) {
         this.setLoading(true)
         this.messageText = ""
         this.messages = []
@@ -181,9 +184,11 @@ export default {
     }
   },
   created() {
-    document.addEventListener('click', () => {
-      this.showEmojiCom = false
-    })
+    document.addEventListener('click', this.handlerShowEmoji)
+    this.getRecentNews()
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handlerShowEmoji)
   },
 };
 </script>
