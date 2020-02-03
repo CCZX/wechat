@@ -10,10 +10,13 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "area-data": "^5.0.6",
     "axios": "^0.18.0",
+    "cropperjs": "^1.5.6",
     "element-ui": "^2.12.0",
     "normalize.css": "^8.0.1",
     "vue": "^2.5.2",
+    "vue-amap": "^0.5.10",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7",
     "vuex": "^3.1.1"
