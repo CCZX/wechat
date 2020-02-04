@@ -14,20 +14,7 @@
     <div class="message-edit-container">
       <div class="send-type">
         <i class="item iconfont icon-emoji" @click.stop="showEmojiCom = !showEmojiCom"></i>
-        <label for="upimg">
-          <el-tooltip class="item" effect="dark" content="只能上传小于 2M 的图片" placement="top">
-            <i class="item el-icon-picture">
-              <input
-                id="upimg"
-                class="img-inp upload"
-                type="file"
-                title="选择图片"
-                accept="image/png, image/jpeg, image/gif, image/jpg"
-                @change="imgInpChange"
-              >
-            </i>
-          </el-tooltip>
-        </label>
+        <i class="item el-icon-picture" @click.stop="showUpImgCom = !showUpImgCom" />
         <label for="upfile">
           <el-tooltip class="item" effect="dark" content="只能上传小于 2M 的文件" placement="top">
             <i class="item el-icon-folder">
@@ -46,7 +33,10 @@
         <el-button @click="send" type="success" size="small" round>发送</el-button>
         <el-button @click="send" type="danger" size="small" round>清空</el-button>
       </div>
-      <textarea class="textarea" v-model="messageText" maxlength="200" @keyup.enter="send($event)"></textarea>
+      <textarea class="textarea" v-model="messageText" maxlength="200" @keydown.enter="send($event)"></textarea>
+      <transition name="roll">
+        <up-img class="emoji-component" v-if="showUpImgCom" :token="token" @getstatus="getImgUploadResult" :getstatus="getImgUploadResult" />
+      </transition>
       <transition name="roll">
         <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />        
       </transition>
@@ -60,8 +50,9 @@ import { fromatTime } from "@/utils"
 import chatHeader from "./components/Header"
 import messageList from "./components/MessageList"
 import { SET_UNREAD_NEWS_TYPE_MAP } from "@/store/constants"
-import { conversationTypes } from '@/const'
+import { conversationTypes, uploadImgStatusMap, qiniu_URL } from '@/const'
 import customEmoji from '@/components/customEmoji'
+import upImg from '@/components/customUploadImg'
 import groupDesc from './components/GroupDesc'
 export default {
   props: {
@@ -72,7 +63,9 @@ export default {
     return {
       messageText: "",
       messages: [],
-      showEmojiCom: false
+      showEmojiCom: false,
+      showUpImgCom: false,
+      token: ''
     }
   },
   computed: {
@@ -104,10 +97,36 @@ export default {
     }
   },
   methods: {
-    imgInpChange(e) {
-      console.log(e)
-      const [file] = e.target.files
-      console.log(URL.createObjectURL(file))
+    generatorMessageCommon() {
+      return {
+        roomid: this.currentConversation.roomid,
+        senderId: this.userInfo._id,
+        snderName: this.userInfo.name,
+        senderNickname: this.userInfo.nickname,
+        senderAvatar: this.userInfo.photo,
+        time: fromatTime(new Date()),
+        isReadUser: [this.userInfo.name],
+        conversationType: this.currentConversation.conversationType
+      }
+    },
+    getImgUploadResult(res) {
+      if (res.status === uploadImgStatusMap.error) {
+        this.$message.error('图片上传失败！')
+        return
+      }
+      if (res.status === uploadImgStatusMap.complete) {
+        const img_URL = qiniu_URL + res.data.key
+        console.log(img_URL)
+        const common = this.generatorMessageCommon()
+        const newMessage = {
+          ...common,
+          message: img_URL,
+          messageType: "img", // emoji/text/img/file/sys
+        }
+        this.messages = [...this.messages, newMessage]
+        this.$socket.emit("sendNewMessage", newMessage)
+        this.messageText = ""
+      }
     },
     fileInpChange(e) {
 
@@ -120,18 +139,12 @@ export default {
       if (!this.messageText) {
         return
       }
+      const common = this.generatorMessageCommon()
       const newMessage = {
-        roomid: this.currentConversation.roomid,
-        senderId: this.userInfo._id,
-        snderName: this.userInfo.name,
-        senderNickname: this.userInfo.nickname,
-        senderAvatar: this.userInfo.photo,
-        time: fromatTime(new Date()),
         // time: this.currentConversation.conversationType === conversationTypes.group ? fromatTime(new Date(), false) : fromatTime(new Date()),
+        ...common,
         message: this.messageText,
         messageType: "text",
-        isReadUser: [this.userInfo.name],
-        conversationType: this.currentConversation.conversationType
       }
       this.messages = [...this.messages, newMessage]
       this.$socket.emit("sendNewMessage", newMessage)
@@ -164,13 +177,15 @@ export default {
     },
     handlerShowEmoji() {
       this.showEmojiCom = false
+      this.showUpImgCom = false
     }
   },
   components: {
     chatHeader,
     messageList,
     customEmoji,
-    groupDesc
+    groupDesc,
+    upImg
   },
   watch: {
     currentConversation(newVal, oldVal) {
@@ -186,6 +201,10 @@ export default {
   created() {
     document.addEventListener('click', this.handlerShowEmoji)
     this.getRecentNews()
+    this.$http.getQiniuToken().then(res => {
+      const { data } = res
+      this.token = data.data
+    })
   },
   beforeDestroy() {
     document.removeEventListener('click', this.handlerShowEmoji)
