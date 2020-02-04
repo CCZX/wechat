@@ -17,6 +17,8 @@ const news = require('./routes/news')
 const groupNews = require('./routes/groupNews')
 const system = require('./routes/sys')
 const validate = require('./routes/validateNews')
+const pyq = require('./routes/pyq')
+const file = require('./routes/file')
 
 // const socketHandler = require('./utils/socket')
 
@@ -67,10 +69,12 @@ app.use(`${API_VERSION}/news`, news)
 app.use(`${API_VERSION}/groupnews`, groupNews)
 app.use(`${API_VERSION}/sys`, system)
 app.use(`${API_VERSION}/validate`, validate)
+app.use(`${API_VERSION}/pyq`, pyq)
+app.use(`${API_VERSION}/file`, file)
 
 const { insertNewNews } = require('./controller/news')
 const { insertValidateNews, changeValidateNewsStatus } = require('./controller/validateNews')
-const { insertNewGropNews } = require('./controller/groupNews')
+const { insertNewGroupNews } = require('./controller/groupNews')
 const { addFriend } = require('./controller/friendly')
 const { conversationTypes } = require('./const')
 
@@ -103,7 +107,7 @@ io.on('connection', (socket) => {
     } else if (news.conversationType === conversationTypes.group) {
       console.log('group')
       delete news['conversationType']
-      insertNewGropNews(news)
+      insertNewGroupNews(news)
     }
     socket.to(news.roomid).emit('receiveMessage', news)
   })
