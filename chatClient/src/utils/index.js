@@ -71,3 +71,15 @@ export function debounce(fn, wait) {
     },wait);
   }
 }
+
+export const saveMyFriendsToLocalStorage = (data) => {
+  data = JSON.stringify(data)
+  window.localStorage.setItem('friends', data)
+}
+
+export function imgRandomName() {
+  const timestamp = Date.now().toString(16)
+  const random = Math.floor(Math.random()*100)
+  const res = `cc-messger-${timestamp}-${random}`
+  return res
+}
