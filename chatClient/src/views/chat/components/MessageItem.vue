@@ -29,7 +29,7 @@
           v-else-if="messageitem.messageType === 'img'"
           :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
           class="primary-font text">
-          <img width="80" :src="messageitem.message" alt="图片">
+          <img width="200" :src="messageitem.message" alt="图片" @click="preview(messageitem.message)">
         </span>
       </div>
     </div>
@@ -44,7 +44,12 @@ export default {
     ...mapState("user", {
       userInfo: "userInfo"
     })
-  }
+  },
+  methods: {
+    preview(url) {
+      this.$emit('seturl', url)
+    }
+  },
 };
 </script>
 
