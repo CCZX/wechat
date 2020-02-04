@@ -21,8 +21,16 @@
         :class="messageitem.senderId === userInfo._id ? 'content isme' : 'content'"
       >
         <span
+          v-if="messageitem.messageType === 'text'"
           :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
-          class="primary-font text">{{messageitem.message}}</span>
+          class="primary-font text">{{messageitem.message}}
+        </span>
+        <span
+          v-else-if="messageitem.messageType === 'img'"
+          :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
+          class="primary-font text">
+          <img width="80" :src="messageitem.message" alt="图片">
+        </span>
       </div>
     </div>
   </div>
