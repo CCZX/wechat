@@ -19,3 +19,21 @@ GET：`/api/v1/sys/sysusers`
   msg: ''
 }
 ```
+### 2、获取七牛云Token
+
+GET：`/api/v1/sys/qiniutoken`
+
+> 传递参数
+
+```JavaScript
+{
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number,
+  data: 'dasdqweqweqwew',
+  msg: ''
+}
+```
