@@ -28,3 +28,11 @@ export const validateNewsTips = {
   applyFriend: '请求添加你为好友',
   applyGroup: '请求加入群聊'
 }
+
+export const qiniu_URL = 'http://blog.static.chenr.cn/'
+
+export const uploadImgStatusMap = {
+  error: 'error',
+  next: 'next',
+  complete: 'complete'
+}
