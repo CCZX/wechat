@@ -17,19 +17,18 @@ class ContentMain extends Component {
           <Layout style={{ padding: '0 24px 24px' }}>
             <CustomHeader />
             <CustomBreadcrumb />
-            <Spin className="global-loading" spinning={loading}>
-              <Content
-                style={{
-                  background: '#fff',
-                  padding: 24,
-                  margin: 0,
-                  minHeight: 280,
-                }}
-              >
+            <Content
+              style={{
+                background: '#fff',
+                padding: 24,
+                margin: 0,
+                minHeight: 280,
+              }}
+            >
+              <Spin spinning={loading}>
                 { this.props.children }
-              </Content>
-            </Spin>
-            
+              </Spin>
+            </Content>
           </Layout>
         </Layout>
       </div>
