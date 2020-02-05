@@ -14,13 +14,12 @@ export const menus = [
     ]
   },
   {
-    title: '导航组件',
-    icon: 'bars',
-    key: '/home/navigation',
+    title: '群组管理',
+    icon: 'team',
+    key: '/home/group',
     subs: [
-      {key: '/home/navigation/dropdown', title: '下拉菜单', icon: ''},
-      {key: '/home/navigation/menu', title: '导航菜单', icon: ''},
-      {key: '/home/navigation/steps', title: '步骤条', icon: ''},
+      {key: '/home/group/statistics', title: '查看群组', icon: ''},
+      {key: '/home/group/edit', title: '修改群组', icon: ''},
     ]
   },
   {
