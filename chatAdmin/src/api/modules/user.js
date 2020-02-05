@@ -9,5 +9,8 @@ export default {
   },
   getUserInfo(id) {
     return request.get(`/user/userinfo?id=${id}`)
+  },
+  changeUserStatus(data) { // 更改用户状态：0；正常，1：冻结，2：注销
+    return request.post(`/user/changestatus`, data)
   }
 }
