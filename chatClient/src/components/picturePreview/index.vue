@@ -1,10 +1,11 @@
 <template>
   <div class="picture-preview-com">
-    <el-image :src="imgurl">
-      <div slot="error" class="image-slot">
-        <i class="el-icon-picture-outline"></i>
-      </div>
-    </el-image>
+    <div class="img-wrapper hor-ver-center" v-if="!error">
+      <img :src="imgurl" alt="" srcset="" @error="handlerError">
+    </div>
+    <div class="img-error img-wrapper hor-ver-center" v-if="error">
+      图片加载失败
+    </div>
   </div>
 </template>
 
@@ -18,16 +19,25 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      error: false
+    }
+  },
   methods: {
-    handerClick() {
+    handlerClick() {
       this.$emit('setshow', false)
+    },
+    handlerError() {
+      console.log('error')
+      this.error = true
     }
   },
   created() {
-    document.addEventListener('click', this.handerClick)
+    document.addEventListener('click', this.handlerClick)
   },
   beforeDestroy() {
-    document.removeEventListener('click', this.handerClick)
+    document.removeEventListener('click', this.handlerClick)
   },
 }
 </script>
@@ -41,20 +51,16 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.2);
-  .el-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    .image-slot {
-      height: 500px;
-      text-align: center;
-      line-height: 500px;
-      font-size: 50px;
-      background-color: #f5f7fa;
-      color: #909399;
-    }
+  .img-wrapper {
+    display: inline-block;
+  }
+  .img-error {
+    width: 500px;
+    height: 300px;
+    background-color: #f5f7fa;
+    color: #909399;
+    text-align: center;
+    line-height: 300px;
   }
 }
 </style>
