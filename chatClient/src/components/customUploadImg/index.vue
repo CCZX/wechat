@@ -97,6 +97,7 @@ export default {
         height: 30px;
         line-height: 30px;
         text-align: center;
+        cursor: pointer;
         &::before {
           margin-right: 5px;
         }
