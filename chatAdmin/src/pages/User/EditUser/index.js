@@ -4,6 +4,8 @@ import { userApi } from './../../../api'
 import { formatTime, formatSex } from './../../../utils'
 import CustomModal from './components/Modal'
 
+const { changeUserStatus } = userApi
+
 class EditUser extends Component {
   constructor(props) {
     super(props)
@@ -61,7 +63,7 @@ class EditUser extends Component {
           key: 'signUpTime',
           width: 300,
           render:(text) => (
-            <span><Icon type="clock-circle" /> { formatTime(new Date(text)) }</span>
+            <span><Icon type="clock-circle" /> { formatTime(new Date(text), false) }</span>
           )
         },
         {
@@ -70,7 +72,7 @@ class EditUser extends Component {
           key: 'lastLoginTime',
           width: 300,
           render:(text) => (
-            <span><Icon type="clock-circle" /> { formatTime(new Date(text)) }</span>
+            <span><Icon type="clock-circle" /> { formatTime(new Date(text), false) }</span>
           )
         },
         {
@@ -121,7 +123,15 @@ class EditUser extends Component {
   handleChangeStatus = (record, index) => {
     const { userList } = this.state
     const originStatus = userList[index].status
+    const nowStatus = originStatus === 0 ? 1 : 0
     originStatus === 0 ? userList[index].status = 1 : userList[index].status = 0
+    const params = {
+      id: record._id,
+      state: nowStatus
+    }
+    changeUserStatus(params).then(res => {
+      console.log(res)
+    })
     this.setState({
       userList: userList
     })
