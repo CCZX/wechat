@@ -32,13 +32,13 @@ export default {
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
       if (fileSize > 1) {
-        this.$message.error('只能上传小于1M的图片');
+        this.$message.error('只能上传小于1M的图片！换一个小图片试试吧~~');
         return
       }
       const putExtra = {
         fname: "",
         params: "",
-        mineType: [] || null
+        mineType: ["image/png", "image/jpeg", "image/gif"]
       }
       const config = {
         useCdnDomain: true
