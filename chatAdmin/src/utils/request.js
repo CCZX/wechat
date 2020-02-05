@@ -23,6 +23,7 @@ instance.interceptors.response.use(
     return response
   },
   err => {
+    store.dispatch(actionCreators.toggleLoading(false))
     return Promise.reject(err)
   }
 )
