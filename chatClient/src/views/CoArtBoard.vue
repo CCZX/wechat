@@ -6,6 +6,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
+  <el-button @click="apply">连接</el-button>
     <div class="video-container">
       <div>
         <ul>
@@ -112,6 +113,23 @@ export default {
       n = n.toString();
       return n[1] ? n : "0" + n;
     },
+    send(arr) {
+      // 发送消息
+      if (arr[0] === "text") {
+        let params = {
+          account: this.account,
+          time: this.formatTime(new Date()),
+          mes: this.sendText,
+          type: "text"
+        };
+        this.channel.send(JSON.stringify(params));
+        this.messageList.push(params);
+        this.sendText = "";
+      } else {
+        console.log("send", arr);
+        this.channel.send(JSON.stringify(arr));
+      }
+    },
     initPalette() {
       this.palette = new Palette(this.$refs["canvas"], {
         drawColor: this.color,
@@ -157,12 +175,12 @@ export default {
       if (!this.account) return;
       this.isJoin = true;
       window.sessionStorage.account = this.account;
-      socket.emit("join", { roomid: this.roomid, account: this.account });
+      this.$socket.emit("join", { roomid: this.roomid, account: this.account });
     },
     initSocket() {},
     hangup() {
       // 挂断通话
-      socket.emit("1v1hangup", { account: this.isCall, self: this.account });
+      this.$socket.emit("1v1hangup", { account: this.isCall, self: this.account });
       this.clearState();
     },
     clearState() {
@@ -181,13 +199,11 @@ export default {
       this.loading = true;
       this.loadingText = "呼叫中";
       const data = this.$route.query
-      socket.emit("apply", data);
+      this.$socket.emit("apply", data);
     },
-    reply(account, type) {
-      socket.emit("reply", {
-        account: account,
-        self: this.account,
-        type: type
+    reply(data, type) {
+      this.$socket.emit("reply", {
+        ...data
       });
     },
     async createP2P(data) {
@@ -248,9 +264,8 @@ export default {
       // 监听ICE候选信息 如果收集到，就发送给对方
       this.peer.onicecandidate = event => {
         if (event.candidate) {
-          socket.emit("1v1ICE", {
-            account: data.self,
-            self: this.account,
+          this.$socket.emit("1v1ICE", {
+            ...data,
             sdp: event.candidate
           });
         }
@@ -264,9 +279,8 @@ export default {
         // 呼叫端设置本地 offer 描述
         await this.peer.setLocalDescription(offer);
         // 给对方发送 offer
-        socket.emit("1v1offer", {
-          account: data.self,
-          self: this.account,
+        this.$socket.emit("1v1offer", {
+          ...data,
           sdp: offer
         });
       } catch (e) {
@@ -283,9 +297,8 @@ export default {
         // 接收端设置本地 answer 描述
         await this.peer.setLocalDescription(answer);
         // 给对方发送 answer
-        socket.emit("1v1answer", {
-          account: data.self,
-          self: this.account,
+        this.$socket.emit("1v1answer", {
+          ...data,
           sdp: answer
         });
       } catch (e) {
@@ -314,29 +327,13 @@ export default {
       // 在发起请求后收到了对方的回复
       this.loading = false;
       // console.log(data);
-      switch (data.type) {
-        case "1": // 同意
-          this.isCall = data.self;
-          // 对方同意之后创建自己的 peer
-          await this.createP2P(data);
-          // 建立DataChannel
-          await this.createDataChannel();
-          // 并给对方发送 offer
-          this.createOffer(data);
-          break;
-        case "2": //拒绝
-          this.$message({
-            message: "对方拒绝了你的请求！",
-            type: "warning"
-          });
-          break;
-        case "3": // 正在通话中
-          this.$message({
-            message: "对方正在通话中！",
-            type: "warning"
-          });
-          break;
-      }
+      this.isCall = data.self;
+      // 对方同意之后创建自己的 peer
+      await this.createP2P(data);
+      // 建立DataChannel
+      await this.createDataChannel();
+      // 并给对方发送 offer
+      this.createOffer(data);
     },
     apply(data) {
       // 收到了对方的请求
@@ -348,11 +345,10 @@ export default {
         .then(async () => {
           await this.createP2P(data); // 同意之后创建自己的 peer 等待对方的 offer
           await this.onDataChannel(); // 接收 DataChannel
-          this.isCall = data.self;
-          this.reply(data.self, "1");
+          this.reply(data);
         })
         .catch(() => {
-          this.reply(data.self, "2");
+          this.reply(data);
         });
     },
     "1v1answer"(data) {
@@ -388,7 +384,6 @@ export default {
 .remote1 {
   width: 100%;
   height: 100%;
-  display: flex;
   justify-content: flex-start;
 }
 .shade {
