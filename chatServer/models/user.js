@@ -24,7 +24,11 @@ const userSchema = new Schema({
   cover: { type: Array, default: ['/img/cover.jpg', '/img/cover1.jpg'] }, // 封面展示
   emoji: Array, // 表情包
   status: { type: Number, default: 0 }, // 0：正常可用，1：冻结不可用，2：注销不可用
-  age: { type: String, default: '18' }
+  age: { type: String, default: '18' },
+  loginSetting: { // 存储用户登录的IP、浏览器、OS等信息
+    type: Object,
+    default: {}
+  }
 })
 const user = DB.model('user', userSchema)
 
