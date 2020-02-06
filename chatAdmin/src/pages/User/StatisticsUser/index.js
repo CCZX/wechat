@@ -1,20 +1,71 @@
 import React, { Component } from 'react'
 import { userApi } from './../../../api'
-import { Chart, Axis, Geom, Tooltip, Coord, Label, Legend } from 'bizcharts'
-import { Card, Row, Col } from 'antd'
+import { Card, Row, Col, Alert, DatePicker } from 'antd'
 import { View } from '@antv/data-set'
-import { formatTime, lastMonth } from './../../../utils'
+import moment from 'moment'
+import { formatDate, lastMonth } from './../../../utils'
 import MapGeo from './components/Map'
+import PieChar from './../../../components/BizChart/Pie'
+import Histogram from './../../../components/BizChart/Histogram'
+import LineChart from './../../../components/BizChart/Line'
 import './index.scss'
 
+const { MonthPicker } = DatePicker
+
+const defaultMonth = formatDate(new Date(), 'YYYY-MM')
+
+const signUserCardTitle = that => (
+  <div style={{'display': 'flex', 'justifyContent': 'space-between'}}>
+    <span>用户注册趋势</span>
+    <MonthPicker placeholder="Select Month" defaultValue={moment(defaultMonth)} onChange={(moment, date) => that.handlerMonthChange(date)} />
+  </div>
+)
 class StatisticsUser extends Component {
   constructor(props) {
     super(props)
     this.state = {
       sexPipeData: [],
       ageData: [],
-      signUpTimeData: []
+      signUpTimeData: [],
+      userNumTotal: 0,
+      selectMonth: defaultMonth
     }
+    this.signUserCardTitle = signUserCardTitle(this)
+  }
+  handlerMonthChange = (e) => {
+    this.setState({
+      selectMonth: e
+    }, () => {
+      this.getUserBySignTime()
+    })
+  }
+  getUserBySignTime = () => {
+    const { getUserBySignTime } = userApi
+    const { selectMonth } = this.state
+    const nextmonth = selectMonth.split('-')
+    const lt = nextmonth[1] === '12' ? Number(nextmonth[0]) + 1 + '-' + 1 : Number(nextmonth[0]) + '-' + (Number(nextmonth[1]) + 1)
+    const params = {
+      gt: selectMonth,
+      lt
+    }
+    getUserBySignTime(params).then(res => {
+      const { data, status } = res.data
+      if (status === 2000) {
+        const signUpTimeList = data.map(item => {
+          return formatDate(new Date(item.signUpTime), 'YYYY-MM-DD')
+        })
+        const lastMonthList = lastMonth(selectMonth)
+        signUpTimeList.forEach(item => {
+          let index = lastMonthList.findIndex(y => {
+            return y.time === item
+          })
+          index >= 0 && lastMonthList[index].count++
+        })
+        this.setState({
+          signUpTimeData: lastMonthList
+        })
+      }
+    })
   }
   render() {
     const sexDv = new View()
@@ -27,7 +78,7 @@ class StatisticsUser extends Component {
     const sexCols = {
       percent: {
         formatter: val => {
-          val = ( val * 100 ) + '%'
+          val = ( val * 100 ).toFixed(2) + '%'
           return val
         }
       }
@@ -49,78 +100,27 @@ class StatisticsUser extends Component {
     }
     return (
       <div className="user-statistics-page">
+        <Alert message={`用户总量：${this.state.userNumTotal}`} type="success" />
         <Row gutter={10}>
           <Col span={12}>
             <Card title="用户性别分布图" className='card-item'>
-              <Chart height={400} data={sexDv} scale={sexCols} forceFit padding={[80, 100, 80, 80]}>
-                <Coord type='theta' radius={0.75}/>
-                <Axis name="percent"/>
-                {/*<Legend position='right' offsetY={-80} offsetX={-100}/>*/}
-                <Legend position='right' offsetY={-80}/>
-                <Tooltip
-                  showTitle={false}
-                  itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
-                />
-                <Geom
-                  type="intervalStack"
-                  position="percent"
-                  color='item'
-                  tooltip={['item*percent', (item, percent) => {
-                    percent = percent * 100 + '%'
-                    return {
-                      name: item,
-                      value: percent
-                    }
-                  }]}
-                  style={{lineWidth: 1, stroke: '#fff'}}
-                >
-                  <Label content='percent' formatter={(val, item) => {
-                    return item.point.item + ': ' + val
-                  }}/>
-                </Geom>
-              </Chart>
+              <PieChar data={sexDv} scale={sexCols} />
             </Card>
           </Col>
           <Col span={12}>
             <Card title="用户年龄分布图" className="card-item">
-              <Chart height={400} data={ageData} scale={ageCols} forceFit>
-                <Axis name="age"></Axis>
-                <Axis name="count"></Axis>
-                <Tooltip 
-                  crosshairs={{
-                    type: "y"
-                  }}
-                ></Tooltip>
-                <Geom type="interval" position="age*count"></Geom>
-              </Chart>
+              <Histogram data={ageData} scale={ageCols} />
             </Card>
           </Col>
         </Row>
         <Row gutter={10}>
-          <Col span={12}>
-            <Card title="近一个月用户注册数量" className="card-item">
-              <Chart height={400} data={signData} scale={signCols} forceFit>
-                <Axis name="time"></Axis>
-                <Axis name="count"></Axis>
-                <Tooltip
-                  crosshairs={{
-                    type: "y"
-                  }}
-                />
-                <Geom type="line" position="time*count" size={2} />
-                <Geom
-                  type="point"
-                  position="time*count"
-                  size={4}
-                  shape={"circle"}
-                  style={{
-                    stroke: "#fff",
-                    lineWidth: 1
-                  }}
-                />
-              </Chart>
+          <Col span={24}>
+            <Card title={this.signUserCardTitle} className="card-item">
+              <LineChart data={signData} scale={signCols} />
             </Card>
           </Col>
+        </Row>
+        <Row gutter={10}>
           <Col span={12}>
             <Card title="用户地图分布" className="card-item">
               <MapGeo></MapGeo>
@@ -132,7 +132,7 @@ class StatisticsUser extends Component {
     )
   }
   componentDidMount() {
-    const { getAllUser, getUserBySignTime } = userApi
+    const { getAllUser } = userApi
     getAllUser().then(res => {
       const { data, status } = res.data
       if (status === 2000) {
@@ -175,28 +175,12 @@ class StatisticsUser extends Component {
         })
         this.setState({
           sexPipeData: sexRes,
-          ageData: ageRes
+          ageData: ageRes,
+          userNumTotal: data.length
         })
       }
     })
-    getUserBySignTime().then(res => {
-      const { data, status } = res.data
-      if (status === 2000) {
-        const signUpTimeList = data.map(item => {
-          return formatTime(new Date(item.signUpTime), false)
-        })
-        const lastMonthList = lastMonth()
-        signUpTimeList.forEach(item => {
-          let index = lastMonthList.findIndex(y => {
-            return y.time === item
-          })
-          lastMonthList[index].count++
-        })
-        this.setState({
-          signUpTimeData: lastMonthList
-        })
-      }
-    })
+    this.getUserBySignTime()
   }
 }
 
