@@ -4,8 +4,13 @@ export default {
   getAllUser() {
     return request.get(`/user/getalluser`)
   },
-  getUserBySignTime() {
-    return request.get(`/user/getuserbysigntime`)
+  /**
+   * 
+   * @param {*} month 表示获取哪一个月的用户注册数量
+   */
+  getUserBySignTime(month) {
+    const { gt, lt } = month
+    return request.get(`/user/getuserbysigntime?gt=${gt}&lt=${lt}`)
   },
   getUserInfo(id) {
     return request.get(`/user/userinfo?id=${id}`)
