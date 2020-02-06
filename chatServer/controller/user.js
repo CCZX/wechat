@@ -3,7 +3,7 @@ const ACCOUNTBASE = require('./../models/accountpool')
 const md5 = require('./../utils').md5
 const cvCode = require('./../utils/cvCode').cvCode
 const randomNickname = require('./../utils/index').randomNickname
-const monthAgo = require('./../utils/index').monthAgo
+const { monthAgo, nextMonth } = require('./../utils')
 let verificationCode = ''
 
 // 验证码
@@ -18,7 +18,7 @@ const generatorCode = (req, res) => {
 
 // 登录
 const login = (req, res) => {
-  let { account, password, cvCode } = req.body
+  let { account, password, cvCode, setting } = req.body
   if (cvCode.toLocaleUpperCase() !== verificationCode) {
     return res.json({
       status: 1002,
@@ -57,7 +57,8 @@ const login = (req, res) => {
         USER.update({
           $or: [{"name": account}, {"code": account}]
         }, {
-          lastLoginTime: Date.now()
+          lastLoginTime: Date.now(),
+          loginSetting: setting
         }).then(up => {
           console.log('upSuccess', up)
         })
@@ -231,8 +232,10 @@ const getAllUser = (req, res) => {
 
 // 根据注册时间获取用户
 const getUserBySignUpTime = (req, res) => {
-  const flag = monthAgo()
-  USER.find({'signUpTime': {$gte: flag}}).sort({'signUpTime': -1}).then(doc => {
+  const { gt, lt } = req.query
+  const gtDate = new Date(gt)
+  const ltDate = new Date(lt)
+  USER.find({'signUpTime': {$lte: ltDate ,$gte: gtDate}}).sort({'signUpTime': -1}).then(doc => {
     return res.json({
       status: 2000,
       data: doc,
