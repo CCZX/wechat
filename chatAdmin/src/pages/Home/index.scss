@@ -1,5 +1,12 @@
 .home-page {
   height: 100%;
+  .system-info {
+    display: flex;
+    .item {
+      width: 400px;
+      // flex: 1;
+    }
+  }
   .ant-carousel .slick-slide {
     text-align: center;
     height: 300px;
