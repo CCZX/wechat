@@ -5,12 +5,12 @@ export const menus = [
     key: '/home'
   },
   {
-    title: '用户管理',
+    title: '普通用户',
     icon: 'user',
     key: '/home/user',
     subs: [
-      {key: '/home/user/statistics', title: '查看用户', icon: 'area-chart',},
-      {key: '/home/user/edit', title: '修改用户', icon: 'edit',},
+      {key: '/home/user/statistics', title: '用户统计', icon: 'area-chart',},
+      {key: '/home/user/edit', title: '用户管理', icon: 'edit',},
     ]
   },
   {
