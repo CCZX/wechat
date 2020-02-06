@@ -1,14 +1,16 @@
-export function formatTime(time, full = true) { //
+export function formatDate(time, type = 'YYYY-MM-DD') { //
   const y = formatNumber(time.getFullYear())
   const m = formatNumber(time.getMonth() + 1)
   const d = formatNumber(time.getDate())
   const h = formatNumber(time.getHours())
   const mm = formatNumber(time.getMinutes())
   const s = formatNumber(time.getSeconds())
-  if (full) {
+  if (type === 'YYYY-MM-DD do') {
     return `${y}-${m}-${d} ${h}:${mm}:${s}`
-  } else {
+  } else if (type === 'YYYY-MM-DD') {
     return `${y}-${m}-${d}`
+  } else if (type === 'YYYY-MM') {
+    return `${y}-${m}`
   }
 }
 
@@ -26,14 +28,14 @@ function isType(type) {
   }
 }
 
-// 生成近三十天时间数组
-export function lastMonth(arr) {
+// 生成三十天时间数组
+export function lastMonth(date) {
   let res = []
   for(var i = 0;i<30;i++){
     res.unshift(
       {
-        time: formatTime(new Date(new Date()
-        .setDate(new Date().getDate()-i)), false),
+        time: formatDate(new Date(new Date(date)
+        .setDate(new Date(date).getDate() + i)), 'YYYY-MM-DD'),
         count: 0
       }
     )
