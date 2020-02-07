@@ -92,14 +92,16 @@ class CustomMenu extends Component {
   render() {
     const { menus } = this.props
     const {openKeys, selectedKeys} = this.state
+    const { collapsed } = this.props
+    const isCollapsed = collapsed ? {} : {openKeys, selectedKeys}
     return (
       <Menu
         mode="inline"
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         onClick={({key}) => this.setState({selectedKeys: [key]})}
-        openKeys={openKeys}
-        selectedKeys={selectedKeys}
+        onOpenChange={this.onOpenChange}
+        {...isCollapsed}
         style={{ height: '100%', borderRight: 0 }}
       >
         {
