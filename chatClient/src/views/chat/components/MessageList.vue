@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-area__message-list__com" ref="msglist" :key="Date.now()">
+  <div class="chat-area__message-list__com" ref="msglist">
     <div class="tips" ref="tips" :key="Date.now()">
       <span>没有更多消息了</span>
     </div>
@@ -7,7 +7,7 @@
       <message-item v-for="(item, index) in messagelist" :key="index" :messageitem="item" @seturl="setCurrentImgUrl" />
     </transition-group>
     <div class="flag"></div>
-    <transition name="scale">
+    <transition name="fade">
       <picture-preview :imgurl="currentImgUrl" @setshow="setshowPicturePreview" v-if="showPicturePreview" />      
     </transition>
   </div>
@@ -16,6 +16,7 @@
 <script>
 import messageItem from "./MessageItem"
 import picturePreview from '@/components/picturePreview'
+import { debounce } from '@/utils'
 export default {
   props: ["messagelist"],
   data() {
@@ -31,7 +32,10 @@ export default {
     },
     setshowPicturePreview(flag) {
       this.showPicturePreview = flag
-    }
+    },
+    handlerScroll: debounce(function () {
+      const scrollTop = this.$refs['msglist'].scrollTop
+    }, 500)
   },
   components: {
     messageItem,
@@ -48,10 +52,14 @@ export default {
             }, 100);
           }, 0);
         })
-      },
-      deep: true,
-      immediate: true
+      }, deep: true, immediate: true
     }
+  },
+  mounted() {
+    this.$refs['msglist'].addEventListener('scroll', this.handlerScroll)
+  },
+  beforeDestroy() {
+    this.$refs['msglist'].removeEventListener('scroll', this.handlerScroll)
   },
 };
 </script>
@@ -67,20 +75,6 @@ export default {
   height: 100%;
   overflow-y: scroll;
   padding: 10px;
-
-  .scale-enter {
-    opacity: 0;
-    transform: translateY(300px);
-  }
-
-  .scale-leave-to {
-    opacity: 0;
-  }
-
-  .scale-enter-active,
-  .scale-leave-active {
-    transition: all 0.6s ease;
-  }
 
   // .slipOut-enter {
   //   opacity: 0;

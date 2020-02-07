@@ -71,13 +71,13 @@ export default {
     .content {
       margin-top: 50px;
       position: relative;
-      margin: 5px 0 0 0;
+      margin-top: 5px;
       white-space: wrap;
       word-break: break-word;
       .text {
         display: inline-block;
         border-radius: 10px;
-        padding: 5px 10px;
+        padding: 10px;
         background-color: hsla(201, 100%, 55%, 1);
       }
       &::before {

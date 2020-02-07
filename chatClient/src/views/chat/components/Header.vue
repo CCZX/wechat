@@ -26,11 +26,6 @@ export default {
   props: {
     currentConversation: Object
   },
-  data() {
-    return {
-      
-    }
-  },
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
