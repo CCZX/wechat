@@ -9,6 +9,7 @@ let server = require('http').createServer(app)
 let io = require('socket.io')(server)
 
 const { fromatTime } = require('./utils')
+const onLineUser = {}
 
 const user = require('./routes/user')
 const friendly = require('./routes/friendly')
@@ -18,7 +19,6 @@ const groupNews = require('./routes/groupNews')
 const system = require('./routes/sys')
 const validate = require('./routes/validateNews')
 const pyq = require('./routes/pyq')
-const file = require('./routes/file')
 
 // const socketHandler = require('./utils/socket')
 
@@ -62,6 +62,13 @@ app.use(session({
 //     }
 //   }
 // })
+app.get(`${API_VERSION}/user/onlineusers`, (req, res) => {
+  return res.json({
+    status: 2000,
+    data: onLineUser,
+    msg: '获取在线用户成功'
+  })
+})
 app.use(`${API_VERSION}/user`, user)
 app.use(`${API_VERSION}/friendly`, friendly)
 app.use(`${API_VERSION}/group`, group)
@@ -70,7 +77,6 @@ app.use(`${API_VERSION}/groupnews`, groupNews)
 app.use(`${API_VERSION}/sys`, system)
 app.use(`${API_VERSION}/validate`, validate)
 app.use(`${API_VERSION}/pyq`, pyq)
-app.use(`${API_VERSION}/file`, file)
 
 const { insertNewNews } = require('./controller/news')
 const { insertValidateNews, changeValidateNewsStatus } = require('./controller/validateNews')
@@ -78,13 +84,13 @@ const { insertNewGroupNews } = require('./controller/groupNews')
 const { addFriend } = require('./controller/friendly')
 const { conversationTypes } = require('./const')
 
-const onLineUser = []
 const conversationList = {}
 io.on('connection', (socket) => {
   console.log('连接成功')
   socket.on('goOnline', val => {
-    const userItem = {_id: val._id, name: val.name, nickname: val.nickname, code: val.code}
-    onLineUser.push(userItem)
+    if (Object.keys(onLineUser).length < 200) {
+      onLineUser[socket.id] = val
+    }
     socket.broadcast.emit('onlineUser', onLineUser)
   })
   socket.on('join', val => {
@@ -128,6 +134,36 @@ io.on('connection', (socket) => {
     socket.to(senderRoomId).emit('receiveAgreeFriendValidate', data)
     changeValidateNewsStatus(data, 1)
   })
+  socket.on('apply', data=>{ // 转发申请
+    console.log('apply user to', data)
+    // sockS[data.account].emit('apply', data);
+    socket.to(data.roomid).emit('apply', data);
+  })
+  socket.on('reply', data=>{ // 转发回复
+    console.log('reply', data)
+    socket.to(data.roomid).emit('reply', data)
+  })
+  socket.on('1v1answer', data=>{ // 转发 answer
+    console.log('1v1anwser', data)
+    socket.to(data.roomid).emit('1v1answer', data)
+  })
+  socket.on('1v1ICE', data=>{ // 转发 ICE
+    console.log('1v1ICE', data)
+    socket.to(data.roomid).emit('1v1ICE', data)
+  })
+  socket.on('1v1offer', data=>{ // 转发 Offer
+    console.log('1v1offer', data)
+    socket.to(data.roomid).emit('1v1offer', data)
+  })
+  socket.on('1v1hangup', data=>{ // 转发 hangup
+    console.log('1v1hangup', data)
+    socket.to(data.roomid).emit('1v1hangup', data)
+  })
+  socket.on('disconnect', (val) => {
+    console.log('disconnection user', val)
+    const id = socket.id
+    delete onLineUser[id]
+  })
 })
 
 // catch 404 and forward to error handler
@@ -147,7 +183,7 @@ app.use(function(err, req, res, next) {
 });
 
 server.listen(3333, () => {
-  console.log('服务器在3333启动')
+  console.log('node.js服务在3333端口成功启动')
 });
 
 module.exports = app;
