@@ -6,11 +6,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-    
     <div class="co-artboard-main">
-      <div class="action">
-        <el-button @click="apply" type="danger">连接</el-button>
-      </div>
       <div class="drawingarea">
         <div class="select-list">
           <div v-for="v in handleList" :key="v.type" class="select-item">
@@ -60,79 +56,46 @@
           <canvas width="900" height="500" ref="canvas"></canvas>
         </div>
       </div>
-      <!-- <div class="chat-area"></div> -->
     </div>
   </div>
 </template>
 
 <script>
-// import socket from "../../utils/socket";
-import Palette from "@/utils/artboard";
+import Palette from "@/utils/artboard"
+import { coArtBoardHandleOption } from "@/const"
+const offerOption = {
+  offerToReceiveAudio: 1,
+  offerToReceiveVideo: 1
+}
+
 export default {
   name: "ArtBoardPage",
+  props: ["currentconversation", "state"],
   data() {
     return {
       account: window.sessionStorage.account || "",
       isCall: false, // 正在通话的对象
       loading: false,
-      loadingText: "呼叫中",
+      loadingText: "呼叫中，请耐心等待...",
       isToPeer: false, // 是否建立了 P2P 连接
       peer: null,
-      offerOption: {
-        offerToReceiveAudio: 1,
-        offerToReceiveVideo: 1
-      },
-      handleList: [
-        { name: "圆", type: "arc" },
-        { name: "线条", type: "line" },
-        { name: "矩形", type: "rect" },
-        { name: "多边形", type: "polygon" },
-        { name: "橡皮擦", type: "eraser" },
-        { name: "撤回", type: "cancel" },
-        { name: "前进", type: "go" },
-        { name: "清屏", type: "clear" },
-        { name: "线宽", type: "lineWidth" },
-        { name: "颜色", type: "color" }
-      ],
-      color: "rgba(19, 206, 102, 1)",
+      handleList: coArtBoardHandleOption,
+      color: "rgb(0, 0, 0)",
       currHandle: "line",
       lineWidth: 5,
       palette: null, // 画板
-      allowCancel: true,
-      allowGo: true,
-      sides: 3,
+      allowCancel: true, // 画板undo
+      allowGo: true, // 画板redo
+      sides: 3, // 多边形边的条数
       channel: null,
-      messageList: [],
-      sendText: ""
+      messageList: []
     };
   },
   methods: {
-    formatTime(date) {
-      const hour = date.getHours();
-      const minute = date.getMinutes();
-      const second = date.getSeconds();
-      return [hour, minute, second].map(this.formatNumber).join(":");
-    },
-    formatNumber(n) {
-      n = n.toString();
-      return n[1] ? n : "0" + n;
-    },
     send(arr) {
-      // 发送消息
-      if (arr[0] === "text") {
-        let params = {
-          account: this.account,
-          time: this.formatTime(new Date()),
-          mes: this.sendText,
-          type: "text"
-        };
-        this.channel.send(JSON.stringify(params));
-        this.messageList.push(params);
-        this.sendText = "";
-      } else {
-        console.log("send", arr);
-        this.channel.send(JSON.stringify(arr));
-      }
+      // 发送白板消息
+      console.log("send", arr);
+      this.channel.send(JSON.stringify(arr));
     },
     initPalette() {
       this.palette = new Palette(this.$refs["canvas"], {
@@ -145,7 +108,6 @@ export default {
     },
     moveCallback(...arr) {
       // 同步到对方
-      // console.log('moveCallback', arr);
       this.send(arr);
     },
     allowCallback(cancel, go) {
@@ -191,17 +153,14 @@ export default {
       this.isToPeer = false;
       this.isCall = false;
     },
-    apply(account) {
-      // account 对方account  self 是自己的account
-      this.loading = true;
-      this.loadingText = "呼叫中";
-      const data = this.$route.query
-      this.$socket.emit("apply", data);
+    apply() {
+      this.loading = true
+      this.loadingText = "呼叫中，请耐心等待..."
+      const data = this.currentconversation
+      this.$socket.emit("apply", data)
     },
-    reply(data, type) {
-      this.$socket.emit("reply", {
-        ...data
-      });
+    reply(type) {
+      this.$socket.emit("reply", this.currentconversation)
     },
     async createP2P(data) {
       this.loading = true;
@@ -317,6 +276,13 @@ export default {
       } catch (e) {
         console.log("onAnswer: ", e);
       }
+    },
+    handlerResize() {
+      const drawArea = document.querySelector('.draw')
+      const H = getComputedStyle(drawArea).height.replace('px', '')
+      const W = getComputedStyle(drawArea).width.replace('px', '')
+      this.$refs['canvas'].width = W
+      this.$refs['canvas'].height = H
     }
   },
   sockets: {
@@ -331,22 +297,6 @@ export default {
       await this.createDataChannel();
       // 并给对方发送 offer
       this.createOffer(data);
-    },
-    apply(data) {
-      // 收到了对方的请求
-      this.$confirm("你有新的协作请求, 是否同意?", "提示", {
-        confirmButtonText: "同意",
-        cancelButtonText: "拒绝",
-        type: "warning"
-      })
-        .then(async () => {
-          await this.createP2P(data); // 同意之后创建自己的 peer 等待对方的 offer
-          await this.onDataChannel(); // 接收 DataChannel
-          this.reply(data);
-        })
-        .catch(() => {
-          this.reply(data);
-        });
     },
     "1v1answer"(data) {
       // 接收到 answer
@@ -369,21 +319,16 @@ export default {
       });
     }
   },
-  mounted() {
-    // this.$confirm('是否与此用户建立连接?', '提示', {
-    //   confirmButtonText: '确定',
-    //   cancelButtonText: '取消',
-    //   type: 'warning'
-    // }).then(() => {
-    //   this.apply()
-    // }).catch(() => {
-    //   this.$router.go(-1)         
-    // });
-    // const drawArea = document.querySelector('.draw')
-    // const H = getComputedStyle(drawArea).height.replace('px', '')
-    // const W = getComputedStyle(drawArea).width.replace('px', '')
-    // this.$refs['canvas'].width = W - 50
-    // this.$refs['canvas'].height = H - 50
+  async mounted() {
+    this.handlerResize()
+    window.addEventListener('resize', this.handlerResize)
+    if (this.state === 'apply') { // 如果是主动请求就发起apply
+      this.apply()
+    } else if (this.state === 'reply') { // 如果是接收到请求就发起reply
+      await this.createP2P(this.currentconversation); // 同意之后创建自己的 peer 等待对方的 offer
+      await this.onDataChannel(); // 接收 DataChannel
+      this.reply()
+    }
   }
 };
 </script>
@@ -391,18 +336,13 @@ export default {
 <style lang="scss">
 .co-artboard {
   width: 100%;
-  height: calc(100vh - 60px);
+  height: 100%;
   
   .co-artboard-main {
-    padding: 10px;
-    // display: flex;
-    // justify-content: center;
     width: 100%;
     height: 100%;
-    .action {
-      height: 50px;
-    }
     .drawingarea {
+      height: 100%;
       .select-list {
         display: flex;
         align-items: center;
