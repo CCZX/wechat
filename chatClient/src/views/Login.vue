@@ -90,7 +90,16 @@ export default {
       if (!passwordReg.test(this.loginInfo.password)) {
         return this.$message.error('请输入6-64位由数字字母组成的密码')
       }
-      this.$http.login(this.loginInfo).then(res => {
+      const params = {
+        ...this.loginInfo,
+        setting: {
+          os: window.OSInfo,
+          browser: window.Browser,
+          ip: returnCitySN["cip"],
+          country: returnCitySN["cname"]
+        }
+      }
+      this.$http.login(params).then(res => {
         let { status, data, msg } = res.data
         if (status === 1002) { // 验证码错误重新获取验证码
           this.getCVCode()
