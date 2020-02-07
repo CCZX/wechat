@@ -59,15 +59,28 @@
         </div>
       </div>
     </el-header>
+    <transition name="fade">
+      <vue-draggable-resizable
+        v-if="isToCoArtBoard"
+        drag-cancel=".drawingarea"
+      >
+        <div class="co-art-board">
+          <co-art-board :currentconversation="currentConversation" :state="coArtBoardState" />
+        </div>
+      </vue-draggable-resizable>
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import vueDraggableResizable from 'vue-draggable-resizable'
+import CoArtBoard from '@/views/CoArtBoard'
+import { coArtBoardReplyTypes } from '@/const'
 export default {
   data() {
     return {
-      
+      coArtBoardState: 'apply' // 用于定义进入CoArtBoard组件时的状态，如果时apply就发起请求，如果是reply就回复
     }
   },
   computed: {
@@ -81,13 +94,68 @@ export default {
       const validateSysUser = this.$store.state.app.sysUsers.filter(item => item.code === '111111')[0]
       const key = validateSysUser._id + '-' + this.userInfo._id
       return this.unreadNews[key]
+    },
+    ...mapState('app', {
+      isToCoArtBoard: 'isToCoArtBoard',
+      currentConversation: 'currentConversation'
+    })
+  },
+  components: {
+    CoArtBoard,
+    vueDraggableResizable
+  },
+  sockets: {
+    apply(data) {
+      // 收到了对方的请求
+      console.log('收到协作请i去', data)
+      if (this.isToCoArtBoard) {
+        this.$socket.emit('reply', {...data, type: coArtBoardReplyTypes.busy})
+        return
+      } else {
+        this.$confirm(`您的好友${data.myNickname}请求与你进行白板协作, 是否同意?`, "提示", {
+          confirmButtonText: "同意",
+          cancelButtonText: "拒绝",
+          type: "warning"
+        })
+          .then(async () => {
+            console.log('ok')
+            this.coArtBoardState = 'reply'
+            this.$store.dispatch('app/SET_CURRENT_CONVERSATION', data)
+            this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+          })
+          .catch(() => {
+            this.$socket.emit('reply', {...data, type: coArtBoardReplyTypes.disagree})
+          })
+      }
+    },
+    reply(data) {
+      console.log("reply", data)
+      switch (data.type) {
+        case coArtBoardReplyTypes.disagree:
+          this.$message.error('对方拒绝了你的请求，发个消息试试吧')
+          this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+          break;
+        case coArtBoardReplyTypes.busy:
+          this.$message.error('对方忙线中请稍后重试...')
+          this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+          break;
+        case coArtBoardReplyTypes.agree:
+          this.$message({
+            message: '对方同意你的请求',
+            type: 'success'
+          })
+          this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+          break;
+        default:
+          break;
+      }
     }
   },
 }
 </script>
 
-
 <style lang="scss">
+@import './../../../../static/css/animation.scss';
 .user-menu-item {
   .link {
     text-decoration: none;
@@ -161,6 +229,14 @@ export default {
         }
       }
     }
+  }
+  .co-art-board {
+    position: absolute;
+    z-index: 1007;
+    padding: 10px;
+    width: 70vw;
+    height: 70vh;
+    background-color: #ffffff;
   }
 }
 </style>
