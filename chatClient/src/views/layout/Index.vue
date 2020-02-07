@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="layout-page" :style='"background-image:url(" + bgImgUrl + ")"'> -->
   <div class="layout-page">
     <main class="layout-main">
       <my-header></my-header>
@@ -49,7 +48,7 @@ export default {
       console.log('socket connected', this.$socket.id)
     },
     onlineUser(data) {
-      console.log('onlineuser', data)
+      console.log('当前在线用户列表', data)
     },
     receiveMessage(news) {
       this.$refs['audio'].play()
@@ -109,7 +108,7 @@ export default {
       'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
       'background:transparent'
     )
-  },
+  }
 }
 </script>
 
