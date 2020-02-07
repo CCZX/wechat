@@ -46,11 +46,14 @@ export default {
   watch: {
     currentConversation: {
       handler(newVal) {
-        newVal.roomid && this.$store.dispatch('news/SET_UNREAD_NEWS', {
-          roomid: this.currentConversation.roomid,
-          count: 0,
-          type: SET_UNREAD_NEWS_TYPE_MAP.clear
-        })
+        if(newVal.roomid) {
+          this.$store.dispatch('news/SET_UNREAD_NEWS', {
+            roomid: this.currentConversation.roomid,
+            count: 0,
+            type: SET_UNREAD_NEWS_TYPE_MAP.clear
+          })
+          this.$store.dispatch('app/SET_CURRENT_CONVERSATION', newVal)
+        }
       }, deep: true, immediate: true
     }
   },
