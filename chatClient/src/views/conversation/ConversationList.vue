@@ -33,6 +33,11 @@ export default {
       searchKeyWord: ''
     }
   },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo
+    }
+  },
   methods: {
     changeCurrentConversation(item) {
       this.$emit('setCurrentConversation', item)
@@ -61,6 +66,9 @@ export default {
       const { data: friendList } = data
       friendList.forEach(item => {
         item.conversationType = conversationTypes.friend
+        item.myNickname = this.userInfo.nickname
+        item.myId = this.userInfo._id
+        item.myAvatar = this.userInfo.photo
       })
       this.conversationList = friendList
       this.changeCurrentConversation(this.conversationList[0])
