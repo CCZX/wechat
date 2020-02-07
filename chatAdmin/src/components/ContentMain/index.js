@@ -8,14 +8,32 @@ import './index.scss'
 const { Content } = Layout
 
 class ContentMain extends Component {
+  state = {
+    collapsed: false
+  }
+  toggleCollapsed = () => {
+    const old = this.state.collapsed
+    this.setState({
+      collapsed: !old
+    }, () => {
+      window.localStorage.setItem('collapsed', this.state.collapsed)
+    })
+  }
+  componentWillMount() {
+    const collapsed = JSON.parse(window.localStorage.getItem('collapsed')) || false
+    this.setState({
+      collapsed: collapsed
+    })
+  }
   render() {
     const { loading } = this.props
+    const { collapsed } = this.state
     return (
       <div className="container">
         <Layout className="layout-main">
-          <SiderNav />
+          <SiderNav collapsed={collapsed} toggle={this.toggleCollapsed} />
           <Layout style={{ padding: '0 24px 24px' }}>
-            <CustomHeader />
+            <CustomHeader collapsed={collapsed} toggle={this.toggleCollapsed} />
             <CustomBreadcrumb />
             <Content
               style={{

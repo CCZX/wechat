@@ -6,9 +6,10 @@ const { Sider } = Layout
 
 class SiderNav extends Component {
   render() {
+    const { collapsed } = this.props
     return (
-      <Sider>
-        <CustomMenu menus={menus} />
+      <Sider collapsible collapsed={collapsed}>
+        <CustomMenu menus={menus} collapsed={collapsed} />
       </Sider>
     )
   }
