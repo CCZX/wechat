@@ -1,16 +1,19 @@
 <template>
   <div
-    class="remote1"
+    class="co-artboard"
     v-loading="loading"
     :element-loading-text="loadingText"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-  <el-button @click="apply">连接</el-button>
-    <div class="video-container">
-      <div>
-        <ul>
-          <li v-for="v in handleList" :key="v.type">
+    
+    <div class="co-artboard-main">
+      <div class="action">
+        <el-button @click="apply" type="danger">连接</el-button>
+      </div>
+      <div class="drawingarea">
+        <div class="select-list">
+          <div v-for="v in handleList" :key="v.type" class="select-item">
             <el-color-picker
               v-model="color"
               show-alpha
@@ -19,9 +22,9 @@
               :disabled="!isToPeer"
             ></el-color-picker>
             <button
-              :disabled="v.type === 'cancel' ? !isToPeer || allowCancel:
-                            v.type === 'go' ? !isToPeer || allowGo
-                            :!isToPeer"
+              :disabled="v.type === 'cancel' ? 
+              !isToPeer || allowCancel : v.type === 'go' ? !isToPeer || allowGo
+              :!isToPeer"
               @click="handleClick(v)"
               v-if="!['color', 'lineWidth', 'polygon'].includes(v.type)"
               :class="{active: currHandle === v.type}"
@@ -48,16 +51,20 @@
                 <i>{{lineWidth + 'px'}}</i>
               </button>
             </el-popover>
-          </li>
-        </ul>
-        <div>
-          <h5>画板</h5>
-          <canvas width="400" height="300" ref="canvas"></canvas>
+          </div>
+          <div>
+          <a href="" download="test" id="download">下载</a>
+          </div>
+        </div>
+        <div class="draw">
+          <canvas width="900" height="500" ref="canvas"></canvas>
         </div>
       </div>
+      <!-- <div class="chat-area"></div> -->
     </div>
   </div>
 </template>
+
 <script>
 // import socket from "../../utils/socket";
 import Palette from "@/utils/artboard";
@@ -66,9 +73,6 @@ export default {
   data() {
     return {
       account: window.sessionStorage.account || "",
-      isJoin: false,
-      userList: [],
-      roomid: "palette", // 指定房间ID
       isCall: false, // 正在通话的对象
       loading: false,
       loadingText: "呼叫中",
@@ -171,13 +175,6 @@ export default {
       if (["color", "lineWidth"].includes(v.type)) return;
       this.currHandle = v.type;
     },
-    join() {
-      if (!this.account) return;
-      this.isJoin = true;
-      window.sessionStorage.account = this.account;
-      this.$socket.emit("join", { roomid: this.roomid, account: this.account });
-    },
-    initSocket() {},
     hangup() {
       // 挂断通话
       this.$socket.emit("1v1hangup", { account: this.isCall, self: this.account });
@@ -337,7 +334,7 @@ export default {
     },
     apply(data) {
       // 收到了对方的请求
-      this.$confirm(data.self + " 向你请求视频通话, 是否同意?", "提示", {
+      this.$confirm("你有新的协作请求, 是否同意?", "提示", {
         confirmButtonText: "同意",
         cancelButtonText: "拒绝",
         type: "warning"
@@ -373,117 +370,58 @@ export default {
     }
   },
   mounted() {
-    this.initSocket();
-    if (this.account) {
-      this.join();
-    }
+    // this.$confirm('是否与此用户建立连接?', '提示', {
+    //   confirmButtonText: '确定',
+    //   cancelButtonText: '取消',
+    //   type: 'warning'
+    // }).then(() => {
+    //   this.apply()
+    // }).catch(() => {
+    //   this.$router.go(-1)         
+    // });
+    // const drawArea = document.querySelector('.draw')
+    // const H = getComputedStyle(drawArea).height.replace('px', '')
+    // const W = getComputedStyle(drawArea).width.replace('px', '')
+    // this.$refs['canvas'].width = W - 50
+    // this.$refs['canvas'].height = H - 50
   }
 };
 </script>
-<style lang="scss" scoped>
-.remote1 {
+
+<style lang="scss">
+.co-artboard {
   width: 100%;
-  height: 100%;
-  justify-content: flex-start;
-}
-.shade {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  left: 0;
-  top: 0;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.9);
-  .input-container {
-    position: absolute;
-    left: 50%;
-    top: 30%;
-    transform: translate(-50%, 50%);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    input {
-      margin: 0;
+  height: calc(100vh - 60px);
+  
+  .co-artboard-main {
+    padding: 10px;
+    // display: flex;
+    // justify-content: center;
+    width: 100%;
+    height: 100%;
+    .action {
+      height: 50px;
     }
-  }
-}
-.userList {
-  border: 1px solid #ddd;
-  margin-right: 50px;
-  h5 {
-    text-align: left;
-    margin-bottom: 5px;
-  }
-  p {
-    border-bottom: 1px solid #ddd;
-    line-height: 32px;
-    width: 200px;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    span {
-      position: absolute;
-      left: 0;
-      top: 100%;
-      background-color: #1fbeca;
-      color: #fff;
-      height: 100%;
-      transition: top 0.2s;
-      display: block;
-      width: 100%;
-    }
-    i {
-      font-style: normal;
-      font-size: 11px;
-      border: 1px solid #1fbeca;
-      color: #27cac7;
-      border-radius: 2px;
-      line-height: 1;
-      display: block;
-      position: absolute;
-      padding: 1px 2px;
-      right: 5px;
-      top: 5px;
-    }
-  }
-  p:last-child {
-    border-bottom: none;
-  }
-  p:hover span {
-    top: 0;
-  }
-}
-.video-container {
-  display: flex;
-  justify-content: center;
-  > div:first-child {
-    display: flex;
-    justify-content: flex-start;
-    margin-right: 50px;
-    canvas {
-      border: 1px solid #000;
-    }
-    ul {
-      text-align: left;
-    }
-  }
-  > div:last-child {
-    .chat {
-      width: 500px;
-      height: 260px;
-      border: 1px solid #000;
-      text-align: left;
-      padding: 5px;
-      box-sizing: border-box;
-      .mes {
-        font-size: 14px;
+    .drawingarea {
+      .select-list {
+        display: flex;
+        align-items: center;
+        height: 45px;
+        .select-item {
+          margin-left: 10px;
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+      .draw {
+        height: calc(100% - 45px);
+        canvas {
+          border: 1px solid black;
+        }
       }
     }
-    textarea {
-      width: 500px;
-      height: 60px;
-      resize: none;
-    }
   }
 }
+
 </style>
