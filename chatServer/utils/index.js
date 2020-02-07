@@ -59,13 +59,24 @@ function monthAgo() {
   return new Date(`${y}-${m}-${d}`)
 }
 
+/**
+ * 
+ * @param {Array} arr 
+ * @param {String} item 
+ */
+function mapArrIncludesItem(arr, id) {
+  const index = arr.findIndex(item => item._id === id)
+  return index >= 0
+}
+
 module.exports = {
   fromatTime,
   formatNumber,
   randomName,
   md5,
   randomNickname,
-  monthAgo
+  monthAgo,
+  mapArrIncludesItem
 }
 
 
