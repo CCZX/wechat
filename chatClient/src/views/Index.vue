@@ -18,12 +18,32 @@
     </div>
     <div class="detail">
       <div class="todo">
-        <el-tag>标签一</el-tag>
-        <el-card class="box-card">
-          <div v-for="o in 4" :key="o" class="text item">
-            {{'列表内容 ' + o }}
+        <el-alert
+          :title="todos > 2 ? '今日代办事项（最多）' : '今日代办事项'"
+          type="success"
+          :closable="false">
+        </el-alert>
+        <el-card class="box-card"  v-for="(item, index) in todos" :key="index">
+          <div class="content">
+            <span class="item">待办事项：{{ item.title }}</span>
+            <span class="item">开始时间：{{ item.start }}</span>
+            <span class="item">结束时间：{{ item.end ? item.end : item.start }}</span>
+            <span class="item">事件类型：<el-tag :type="item.cssClass" effect="dark" size="mini">{{ matterLevelMap[item.cssClass] }}</el-tag></span>
           </div>
         </el-card>
+        <el-button type="primary" icon="el-icon-arrow-right">
+          <router-link to="/schedule">
+            前往日程查看更多
+          </router-link>
+        </el-button>
+        <!-- <el-alert
+          title=""
+          type="info"
+          center
+          :closable="false"
+          close-text="知道了"
+          show-icon>
+        </el-alert> -->
       </div>
       <!-- <a-map /> -->
     </div>
@@ -34,13 +54,21 @@
 import ConversationList from '@/views/conversation/ConversationList'
 import ChatArea from '@/views/chat/ChatArea'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
+import { fromatTime } from '@/utils'
 // import AMap from '@/components/customMap'
 export default {
   name: 'Index',
   data() {
     return {
       currentConversation: {},
-      loading: false
+      loading: false,
+      todos: [],
+      matterLevelMap: { 
+        'danger': '紧急事项' ,
+        'warning': '重要事项' ,
+        'normal': '一般事项' ,
+        'info': '不重要事项'
+      }
     }
   },
   watch: {
@@ -69,7 +97,29 @@ export default {
     ConversationList,
     ChatArea,
     // AMap
-  }
+  },
+  mounted() {
+    const allTodos = JSON.parse(window.localStorage.getItem('todo')) || []
+    const todayTodos = allTodos.map(item => {
+      if (!item.end || new Date(item.end) === new Date(item.start)) {
+        if (fromatTime(new Date(item.start), false) === fromatTime(new Date(), false)) {
+          item.start = fromatTime(new Date(item.start), false)
+          item.end ? item.end = fromatTime(new Date(item.end), false) : ''
+          console.log(item)
+          return item
+        }
+      } else if (new Date(item.end) > new Date(item.start)) {
+        if (fromatTime(new Date(item.start), false) < fromatTime(new Date(), false) && fromatTime(new Date(item.end), false) > fromatTime(new Date(), false)) {
+          item.start = fromatTime(new Date(item.start), false)
+          item.end = fromatTime(new Date(item.end), false)
+          console.log(item)
+          return item
+        }
+      }
+    }).filter(item => item)
+    this.todos = todayTodos
+    console.log('todayTodos todayTodos', todayTodos)
+  },
 }
 </script>
 
@@ -94,7 +144,24 @@ export default {
     }
   }
   .detail {
-    width: 20%
+    width: 20%;
+    .todo {
+      height: 60%;
+      text-align: center;
+      .box-card {
+        .content {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          .item {
+            padding-top: 10px;
+            &:first-child {
+              padding-top: 0;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>
