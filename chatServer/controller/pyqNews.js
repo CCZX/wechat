@@ -24,7 +24,7 @@ const publishPyqNews = async (req, res) => {
 }
 
 const getMyFriendPyqNews = async (req, res) => {
-  const { id } = req.query
+  const { id, page, pageSize } = req.query
   const friendlyList = []
   FRIEND.findFriendByUserM(id).then(userM => {
     FRIEND.findFriendByUserY(id).then(userY => {
@@ -40,7 +40,7 @@ const getMyFriendPyqNews = async (req, res) => {
       })
       const friendlyIdList = friendlyList.map(item => item._id)
       friendlyIdList.push(id)
-      PYQ_NEWS.findUserPyq(id, friendlyIdList).then(doc => {
+      PYQ_NEWS.findUserPyq(id, friendlyIdList, page, pageSize).then(doc => {
         return res.json({
           status: 2000,
           data: doc,

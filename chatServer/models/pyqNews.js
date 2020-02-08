@@ -29,11 +29,11 @@ const pyqNewsSchema = new Schema({
   }
 })
 
-pyqNewsSchema.statics.findUserPyq = function (userId, ids) {
+pyqNewsSchema.statics.findUserPyq = function (userId, ids, page, pageSize) {
   return this
         .find({
           userId: {$in: ids}
-        }).populate({path: 'userId', select: 'nickname photo signature'}).sort({_id: -1})
+        }).populate({path: 'userId', select: 'nickname photo signature'}).skip(Number(page*pageSize)).limit(Number(pageSize)).sort({_id: -1})
 }
 
 const pyqNews = DB.model('pyqNews', pyqNewsSchema)
