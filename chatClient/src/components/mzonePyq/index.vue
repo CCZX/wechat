@@ -1,31 +1,36 @@
 <template>
   <div class="pyq-com">
     <div class="pyq-com-wrapper">
-      <div class="item">
+      <div class="item" v-for="item in pyqList" :key="item._id">
         <div class="header">
-          <el-avatar :size="60" src="Iitem.senderAvatar" @error="()=>true">
+          <el-avatar :size="60" :src="IMG_URL + item.userId.photo" @error="()=>true">
             <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
           </el-avatar>
           <div class="info">
             <div class="nickname">
-              <span>chenchao</span>
+              <span>{{item.userId.nickname}}</span>
             </div>
             <div class="time secondary-font">
-              <span>2010-12-12 12:12</span>
+              <span>{{item.createDate}}</span>
             </div>
           </div>
         </div>
         <div class="body">
-          <span>
-            [SiriYang's Blog | AppWishList for iOS] 网页链接 
-           许是为了促使用户立马买下中意的App，AppStore从iOS 11取消了愿望单系统，
-            从此没有了类似Steam那样的应用关注和收藏功能。很多时候喜欢的应用打折也不
-            能及时得知，或者是看到有意思的App过段时间想用时又想不起名字找不到了。
-          </span>
+          <div class="content">
+            <span>{{item.content}}</span>
+          </div>
+          <div class="pictures">
+            <span class="picture-item" v-for="(imgSrc, index) in item.pictures" :key="index">
+              <img class="img" :src="imgSrc" alt="" srcset="">
+            </span>
+            <span class="picture-item" v-for="(imgSrc, index) in item.pictures" :key="index">
+              <img class="img" :src="imgSrc" alt="" srcset="">
+            </span>
+          </div>
         </div>
         <div class="info">
           <div class="read">
-            <span class="secondary-font">阅读：12次</span>
+            <span class="secondary-font">阅读：{{item.readCount ? item.readCount : 0}}次</span>
           </div>
           <div class="operation">
             <i class="item iconfont icon-pinglun1 comment"></i>
@@ -48,7 +53,25 @@
 <script>
 import './../../../static/iconfont/iconfont.css'
 export default {
-  
+  data() {
+    return {
+      pyqList: [],
+      IMG_URL: process.env.IMG_URL,
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo
+    }
+  },
+  created() {
+    this.$http.getFriendlyPyq(this.userInfo._id).then(res => {
+      const { data, status } = res.data
+      if (status === 2000 && res.status < 400) {
+        this.pyqList = data
+      }
+    })
+  },
 }
 </script>
 
@@ -58,6 +81,7 @@ export default {
     .item {
       background-color: #fff;
       padding: 10px;
+      margin-bottom: 10px;
       .header {
         display: flex;
         align-items: center;
@@ -75,6 +99,17 @@ export default {
       }
       .body {
         padding: 10px 0;
+        .content {
+          margin-bottom: 8px;
+          font-size: 20px;
+        }
+        .pictures {
+          .picture-item {
+            .img {
+              width: 270px;
+            }
+          }
+        }
       }
       .info {
         display: flex;
