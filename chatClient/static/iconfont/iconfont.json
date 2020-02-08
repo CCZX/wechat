@@ -6,11 +6,39 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "398906",
+      "name": "评论",
+      "font_class": "pinglun",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "579286",
+      "name": "点赞",
+      "font_class": "dianzan",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "993873",
+      "name": "语音",
+      "font_class": "yuyin",
+      "unicode": "e6e1",
+      "unicode_decimal": 59105
+    },
+    {
       "icon_id": "1089346",
       "name": "笑脸",
       "font_class": "buoumaotubiao49",
       "unicode": "e62c",
       "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "1240750",
+      "name": "评论",
+      "font_class": "pinglun1",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
     },
     {
       "icon_id": "1444564",
@@ -20,11 +48,25 @@
       "unicode_decimal": 59216
     },
     {
+      "icon_id": "1929167",
+      "name": "转发",
+      "font_class": "zhuanfa",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
       "icon_id": "3405347",
       "name": "群",
       "font_class": "qun",
       "unicode": "e6e8",
       "unicode_decimal": 59112
+    },
+    {
+      "icon_id": "3889354",
+      "name": "画板",
+      "font_class": "huaban",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
     },
     {
       "icon_id": "5113364",
@@ -39,6 +81,27 @@
       "font_class": "dongwugugefenxi",
       "unicode": "e66e",
       "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "8351885",
+      "name": "相机",
+      "font_class": "xiangji",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "8361833",
+      "name": "视频",
+      "font_class": "shipin",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "11742030",
+      "name": "画板",
+      "font_class": "tubiaozhizuomoban",
+      "unicode": "e630",
+      "unicode_decimal": 58928
     },
     {
       "icon_id": "11983890",
