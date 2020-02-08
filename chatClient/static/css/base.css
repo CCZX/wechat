@@ -5,6 +5,7 @@ html, body {
 
 #app {
   min-height: 100%;
+  min-width: 1120px;
 }
 
 * {
@@ -42,6 +43,13 @@ html, body {
 
 .bottom-line {
   border-bottom: 1px solid #E4E7ED;
+}
+
+.hor-ver-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* 美化滚动条 */

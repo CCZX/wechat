@@ -13,24 +13,17 @@
   }
 }
 
-.fade-enter-active {
-  // transition: all .3s ease;
-  transition: all .8s ease-out;
-}
-.fade-leave-active {
-  // transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-  transition: all .8s ease-out;
-}
-.fade-enter
-  /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateY(200px);
-  position: absolute;
+.fade-enter {
   opacity: 0;
 }
+
 .fade-leave-to {
-  transform: translateY(-2000px);
-  position: absolute;
   opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.6s ease;
 }
 
 .roll-enter {
