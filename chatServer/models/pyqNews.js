@@ -33,7 +33,7 @@ pyqNewsSchema.statics.findUserPyq = function (userId, ids) {
   return this
         .find({
           userId: {$in: ids}
-        }).populate({path: 'userId', select: 'nickname photo signature'})
+        }).populate({path: 'userId', select: 'nickname photo signature'}).sort({_id: -1})
 }
 
 const pyqNews = DB.model('pyqNews', pyqNewsSchema)
