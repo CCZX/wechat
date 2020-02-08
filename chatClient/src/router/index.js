@@ -6,7 +6,7 @@ Vue.use(Router)
 const router = new Router({
   routes: [{
       path: '/',
-      // redirect: '/main',
+      redirect: '/index',
       meta: {
         requiresAuth: true
       }
@@ -69,6 +69,14 @@ const router = new Router({
           path: 'mzone',
           name: 'MZone',
           component: () => import('@/views/mzone'),
+          meta: {
+            requiresAuth: true
+          },
+        },
+        {
+          path: 'schedule',
+          name: 'Schedule',
+          component: () => import('@/views/Schedule'),
           meta: {
             requiresAuth: true
           },
