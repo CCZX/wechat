@@ -17,45 +17,122 @@
     <transition name="roll">
       <div class="footer" v-if="showFotter">
         <div class="poster-attach">
-          <i class="item iconfont icon-emoji" @click.stop="showEmoji = !showEmoji"></i>
+          <i class="item iconfont icon-emoji" @click.stop="handlerShowEmoji"></i>
+          <i :style="pictures.length >= 2 ? {'cursor': 'not-allowed'}: {}" class="item el-icon-picture" @click.stop="handleShowUplodImg"></i>
         </div>
-        <div class="poster-sync"></div>
+        <div class="poster-sync">
+          仅好友可见
+        </div>
         <div class="send">
-          <el-button type="success" size="small">发表</el-button>
+          <el-button type="success" size="small" @click="send">发表</el-button>
         </div>
+        <transition name="roll">
+          <div class="emoji-com" v-show="showEmoji">
+            <custom-emoji @addemoji="addEmoji" />
+          </div>
+        </transition>
+        <transition name="roll">
+          <div class="emoji-com" v-show="showUploadImg">
+            <upload-img @addemoji="addEmoji" :token="token" :getstatus="getPictureStatus" />
+          </div>
+        </transition>
       </div>
     </transition>
     <transition name="roll">
-      <div class="emoji-com" v-show="showEmoji">
-        <custom-emoji @addemoji="addEmoji" />
+      <div class="picture-view-area" v-show="pictures.length">
+        <picture-view :size="pictureLimit" :pitures="pictures" @deleteItem="deletePictureItem" />
       </div>
     </transition>
+    
   </div>
 </template>
 
 <script>
+const PICTURE_LIMIT = 2
 import customEmoji from '@/components/customEmoji'
+import uploadImg from '@/components/customUploadImg'
+import pictureView from '@/components/customPictureView'
+import { fromatTime } from '@/utils'
+import { uploadImgStatusMap, qiniu_URL } from '@/const'
 export default {
   data() {
     return {
       content: '',
+      pictures: [],
       showFotter: false,
-      showEmoji: false
+      showEmoji: false,
+      showUploadImg: false,
+      pictureLimit: PICTURE_LIMIT,
+      token: ''
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo
     }
   },
   methods: {
+    async send() {
+      if (!this.content) {
+        this.$message.error('说点什么吧？')
+        return
+      }
+      const data = {
+        userId: this.userInfo._id,
+        content: this.content,
+        createDate: fromatTime(new Date()),
+        pictures: this.pictures
+      }
+      const res = await this.$http.publishPyqNews(data)
+      console.log(res)
+    },
+    getPictureStatus(res) {
+      if (res.status === uploadImgStatusMap.error) {
+        this.$message.error('图片上传失败！')
+        return
+      }
+      if (res.status === uploadImgStatusMap.complete) {
+        const IMG_URL = qiniu_URL + res.data.key
+        this.pictures = [...this.pictures, IMG_URL]
+      }
+    },
+    deletePictureItem(index) {
+      this.pictures.splice(index, 1)
+    },
     addEmoji(item) {
       this.content += item
     },
     handlerShowEmoji() {
+      this.showEmoji = !this.showEmoji
+      this.showUploadImg = false
+    },
+    handleShowUplodImg() {
+      if (this.pictures.length >= 2) {
+        this.$message({
+          message: `最多只能上传${this.pictureLimit}张图片哟~`,
+          type: 'warning'
+        });
+      } else {
+        this.showUploadImg = !this.showUploadImg
+      }
       this.showEmoji = false
+    },
+    documentHandlerClick() {
+      this.showEmoji = false
+      this.showUploadImg = false
     }
   },
   components: {
-    customEmoji
+    customEmoji,
+    uploadImg,
+    pictureView
   },
   created() {
-    document.addEventListener('click', this.handlerShowEmoji)
+    document.addEventListener('click', this.documentHandlerClick)
+    this.$http.getQiniuToken().then(res => {
+      const { data } = res
+      this.token = data.data
+    })
   },
 }
 </script>
@@ -101,20 +178,29 @@ export default {
     }
   }
   .footer {
+    position: relative;
     padding: 7px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all .5s ease;
     .poster-attach {
       .item {
+        // cursor: not-allowed;
+        margin-right: 10px;
         font-size: 20px;
+        color: #c35673;
       }
     }
+  }
+  .picture-view-area {
+    padding: 10px;
   }
   .emoji-com {
     width: 100px;
     position: absolute;
     top: 100%;
+    z-index: 1002;
   }
 }
 </style>
