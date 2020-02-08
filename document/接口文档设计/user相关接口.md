@@ -121,14 +121,17 @@ GET：`/api/v1/user/getalluser`
 
 #### 6、根据注册时间获取用户
 
-> 描述：应用在Amind端
+> 描述：应用在Amind端。目前获取的是指定的某个月中用户的注册数量
 
 GET：`/api/v1/user/getuserbysigntime`
 
 > 传递参数
 
 ```javascript
-// 不必传递参数，后期可能会有改动
+{
+    lt: String, // 截至 exp: '2020-01'
+    gt: String // 开始 exp: '2020-02'
+}
 ```
 
 #### 7、改变用户状态
@@ -146,3 +149,16 @@ POST：`/api/v1/user/changestatus`
 }
 ```
 
+### 8、获取在线用户
+
+> 描述：获取当前的在线用户
+
+GET: `/api/v1/user/onlineusers`
+
+> 传参
+
+```javascript
+{
+    // none
+}
+```
