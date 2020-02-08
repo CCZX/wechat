@@ -7,7 +7,7 @@
           <i class="icon-qun iconfont iconic iconic-group" v-if="currentConversation.conversationType === 'GROUP'"></i>
           <i class="el-icon-user-solid iconic " v-else></i>
         </div>
-        <div class="header-operation">
+        <div class="header-operation" v-if="!currentConversation.isGroup">
           <el-tooltip class="item" effect="dark" content="白板协作需要良好的网络环境" placement="top">
             <i class="operation-item iconfont icon-huaban" @click="enterArtBoard"></i>
           </el-tooltip>
@@ -43,7 +43,7 @@ export default {
 .chat-area__header {
   box-sizing: border-box;
   height: 60px;
-  padding: 0 10px;
+  padding: 0 20px;
   line-height: 60px;
   border-bottom: 1px solid #cccccc;
   .header-wrapper {
