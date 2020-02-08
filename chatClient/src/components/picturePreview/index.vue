@@ -1,7 +1,7 @@
 <template>
   <div class="picture-preview-com">
     <div class="img-wrapper hor-ver-center" v-if="!error">
-      <img :src="imgurl" alt="" srcset="" @error="handlerError">
+      <img :src="imgurl" class="img-content" alt="图片" @error="handlerError">
     </div>
     <div class="img-error img-wrapper hor-ver-center" v-if="error">
       图片加载失败
@@ -53,6 +53,10 @@ export default {
   background-color: rgba(0, 0, 0, 0.2);
   .img-wrapper {
     display: inline-block;
+    height: 88%;
+    .img-content {
+      max-height: 100%;
+    }
   }
   .img-error {
     width: 500px;
