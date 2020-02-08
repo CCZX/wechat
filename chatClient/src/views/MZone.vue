@@ -2,7 +2,7 @@
   <div class="mzone-page">
     <div class="mzone-wrapper">
       <div class="mzone-top">
-        <div class="carousel" :style="'backgroundImage:url(' + IMG_URL + userInfo.wallpaper + ')'">
+        <div class="carousel" :style="'backgroundImage:url(' + IMG_URL + userInfo.cover [0] + ')'">
           
         </div>
         <div class="info">
@@ -17,7 +17,6 @@
             >
           </el-avatar>
           <span class="nickname">{{userDetails.nickname}}</span>
-          <el-button type="primary">不是好友加好友！</el-button>
         </div>
       </div>
       <div class="mzone-nav">
