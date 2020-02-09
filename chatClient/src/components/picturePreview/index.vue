@@ -54,6 +54,7 @@ export default {
   .img-wrapper {
     display: inline-block;
     height: 88%;
+    cursor: zoom-out;
     .img-content {
       max-height: 100%;
     }
