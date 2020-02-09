@@ -46,9 +46,47 @@ export default {
       this.conversationList.forEach(item => {
         this.$socket.emit("join", item)
       })
+    },
+    async getMyFriends() {
+      const id = this.$store.state.user.userInfo._id
+      const { data, status } = await this.$http.getMyFriends(id)
+      if (data.status === 2000 && (100 <= status <= 400)) {
+        const { data: friendList } = data
+        friendList.forEach(item => {
+          item.conversationType = conversationTypes.friend
+          item.myNickname = this.userInfo.nickname
+          item.myId = this.userInfo._id
+          item.myAvatar = this.userInfo.photo
+        })
+        this.conversationList = friendList
+        this.changeCurrentConversation(this.conversationList[0])
+        const saveLocalData = friendList.map(item => {
+          return item._id
+        })
+        saveMyFriendsToLocalStorage(saveLocalData)
+      }
+    },
+    async getMyGroup() {
+      const userName = this.$store.state.user.userInfo.name
+      const { data, status } = await this.$http.getMyGroup({userName})
+      if (data.status === 2000 && (100 <= status <= 400)) {
+        const { data: groupList } = data
+        groupList.forEach(item => {
+          item.conversationType = conversationTypes.group
+          item.isGroup = true
+          item.roomid = item.groupId._id
+        })
+        this.conversationList = [...this.conversationList, ...groupList]
+      }
     }
   },
-  
+  sockets: {
+    async receiveAgreeFriendValidate(data) {
+      console.log('receiveAgreeFriendValidate conversationlist', data)
+      await this.getMyFriends()
+      this.getMyGroup()
+    },
+  },
   watch: {
     conversationList: {
       handler() {
@@ -60,38 +98,8 @@ export default {
     conversationItem
   },
   async created() {
-    const id = this.$store.state.user.userInfo._id
-    {const { data, status } = await this.$http.getMyFriends(id)
-    if (data.status === 2000 && (100 <= status <= 400)) {
-      const { data: friendList } = data
-      friendList.forEach(item => {
-        item.conversationType = conversationTypes.friend
-        item.myNickname = this.userInfo.nickname
-        item.myId = this.userInfo._id
-        item.myAvatar = this.userInfo.photo
-      })
-      this.conversationList = friendList
-      this.changeCurrentConversation(this.conversationList[0])
-      const saveLocalData = friendList.map(item => {
-        return item._id
-      })
-      saveMyFriendsToLocalStorage(saveLocalData)
-    }}
-
-    /**
-     * 以下是获取用户的群聊会话列表，默认是优先加载user会话后加载group会话
-     */
-    const userName = this.$store.state.user.userInfo.name
-    const { data, status } = await this.$http.getMyGroup({userName})
-    if (data.status === 2000 && (100 <= status <= 400)) {
-      const { data: groupList } = data
-      groupList.forEach(item => {
-        item.conversationType = conversationTypes.group
-        item.isGroup = true
-        item.roomid = item.groupId._id
-      })
-      this.conversationList = [...this.conversationList, ...groupList]
-    }
+    await this.getMyFriends()
+    this.getMyGroup()
   }
 }
 </script>
