@@ -6,5 +6,9 @@ export default {
   },
   getQiniuToken() {
     return request.get('/sys/qiniutoken')
+  },
+  // 获取天气信息
+  getWeather(city) {
+    return request.get(`http://wthrcdn.etouch.cn/weather_mini?city=${city}`)
   }
 }
