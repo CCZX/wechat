@@ -78,6 +78,10 @@ export default {
         this.loading = false
         this.showAdditionMessage = false
         this.additionMessage = ''
+        this.$alert('验证消息发送成功！', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        })
       }, 500)
       const validateSysUsr = this.sysUsers.filter(item => item.code === '111111')[0]
       const val = {
