@@ -5,7 +5,8 @@ export default {
   publishPyqNews(data) {
     return request.post('/pyq/publishpyqnews', data)
   },
-  getFriendlyPyq(id) {
-    return request.get(`/pyq/getfridenlypyq?id=${id}`)
+  getFriendlyPyq(data) {
+    const { id, page, pageSize } = data
+    return request.get(`/pyq/getfridenlypyq?id=${id}&page=${page}&pageSize=${pageSize}`)
   }
 }
