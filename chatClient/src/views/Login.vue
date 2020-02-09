@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page">
+  <div class="login-page" :style="'background-image: url('+ bgUrl +')'">
     <div class="wrapper">
       <el-card>
         <div class="title">
@@ -7,26 +7,24 @@
           <span class="register" :class="!isLoginState ? 'active' : ''" @click="changeState(false)">注册</span>
         </div>
         <main class="body">
-          <transition name="fade">
-            <el-form class="login-form" v-show="isLoginState">
+          <transition name="hor-scroll">
+            <el-form class="login-form" v-if="isLoginState">
               <el-form-item>
-                <el-input v-model="loginInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
-                <!-- <span class="account-errinfo">{{ loginErrInfo.account }}</span> -->
+                <el-input v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-input type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
-                <!-- <span class="password-errinfo">{{ loginErrInfo.password }}</span> -->
               </el-form-item>
               <el-form-item class="cv-code">
-                <el-input class="cv-code-inp" v-model="loginInfo.cvCode" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
+                <el-input class="cv-code-inp" v-model="loginInfo.cvCode" @keydown="test" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
                 <canvas width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
               </el-form-item>
               <el-button class="login-btn" type="primary" @click="login">登录</el-button>
             </el-form>
             
           </transition>
-          <transition name="fade">
-            <el-form class="register-form" v-show="!isLoginState">
+          <transition name="hor-scroll">
+            <el-form class="register-form" v-if="!isLoginState">
               <el-form-item>
                 <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
                 <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
@@ -55,9 +53,12 @@
 
 
 <script>
+import bgUrl1 from './../../static/image/zw1.jpg'
+import bgUrl2 from './../../static/image/zw2.jpg'
 import {createCanvas} from '@/utils/cvcode'
 import canvasImg from './../../static/image/canvas2.jpg'
 import { accountReg, passwordReg } from '@/utils/index'
+let timer = null
 export default {
   name: 'Login',
   data() {
@@ -75,6 +76,7 @@ export default {
       },
       cvCode: '', // 验证码
       isLoginState: true,
+      bgUrl: bgUrl2
     }
   },
   computed: {
@@ -152,10 +154,22 @@ export default {
     changeState(flag) {
       this.isLoginState = flag
       this.getCVCode()
+    },
+    test(e) {
+      console.log(e)
     }
   },
   async mounted() {
     this.getCVCode()
+    // timer = setInterval(() => {
+    //   this.bgUrl = this.bgUrl === bgUrl1 ? bgUrl2 : bgUrl1
+    // }, 10000)
+    // document.addEventListener('keydown', (e) => {
+    //   console.log(e)
+    // })
+  },
+  beforeDestroy() {
+    window.clearInterval(timer)
   },
 };
 </script>
@@ -165,21 +179,21 @@ export default {
   @import "./../../static/css/animation.scss";
   @import "./../../static/css/var.scss";
   position: relative;
-  height: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all .8s ease;
   .wrapper {
     width: 400px;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, 50%);
+    transform: translate(-50%, -50%);
+    opacity: .9;
     .title {
       text-align: center;
       padding: 0 0 20px ;
-      // .login {
-      //   border-right: 1px solid #cccccc;
-      // }
       .login, .register {
-        // margin: 0 3px;
         box-sizing: border-box;
         padding: 4px;
         cursor: pointer;
@@ -193,12 +207,15 @@ export default {
     .body {
       height: 100%;
       position: relative;
+      display: flex;
+      .login-form, .register-form {
+        width: 100%;
+      }
       .cv-code {
         .el-form-item__content {
           display: flex;
           justify-content: space-between;
           .cv-code-inp {
-            // width: 200px;
             margin-right: 20px;
           }
         }
@@ -210,5 +227,3 @@ export default {
   }
 }
 </style>
-
-
