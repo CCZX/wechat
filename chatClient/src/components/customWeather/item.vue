@@ -6,7 +6,7 @@
           <i style="font-size: 40px" :class="'icon iconfont'+ ' ' + outCome['iconclass']"></i>
         </div>
         <div class="temperature">
-          <p class="type">{{outCome.type}}</p>
+          <p class="type">{{city}}&nbsp;{{outCome.type}}</p>
           <span>{{outCome.low}}-{{outCome.high}}</span>
         </div>
       </div>
@@ -28,6 +28,9 @@ export default {
       default() {
         return {"date":"8日星期六","high":"高温 11℃","fx":"无持续风向","low":"低温 7℃","fl":"<![CDATA[<3级]]>","type":"小雨"}
       }
+    },
+    city: {
+      type: String
     }
   },
   computed: {
