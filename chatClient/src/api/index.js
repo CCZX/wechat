@@ -4,6 +4,8 @@ import group from './modules/group'
 import news from './modules/news'
 import sys from './modules/sys'
 import validate from './modules/validate'
+import pyq from './modules/pyq'
+import file from './modules/file'
 
 export default {
   ...user,
@@ -11,5 +13,7 @@ export default {
   ...group,
   ...news,
   ...sys,
-  ...validate
+  ...validate,
+  ...pyq,
+  ...file
 }
