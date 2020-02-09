@@ -58,6 +58,75 @@ export const accountReg = /^[\w\d_]{3,6}/
 export const passwordReg = /^[\w\d]{6,14}/
 
 // 格式化日期
+export function formatDate(time, type = 'YYYY-MM-DD') { //
+  const y = formatNumber(time.getFullYear())
+  const m = formatNumber(time.getMonth() + 1)
+  const d = formatNumber(time.getDate())
+  const h = formatNumber(time.getHours())
+  const mm = formatNumber(time.getMinutes())
+  const s = formatNumber(time.getSeconds())
+  if (type === 'YYYY-MM-DD HH-MM-SS') {
+    return `${y}-${m}-${d} ${h}:${mm}:${s}`
+  } else if (type === 'YYYY-MM-DD') {
+    return `${y}-${m}-${d}`
+  } else if (type === 'YYYY-MM') {
+    return `${y}-${m}`
+  } else if (type === 'HH-MM-SS') {
+    return `${h}:${mm}:${s}`
+  } else if (type === 'HH') {
+    return `${h}`
+  }
+}
+
+/**
+ * validate reg
+ */
+export const validateNickname = (rule, value, callback) => {
+  if (value === "") {
+    callback();
+  } else {
+    if (value.length > 12) {
+      callback(new Error("请输入不超过12位字符"));
+      return;
+    }
+    callback();
+  }
+}
+export const validatePhone = (rule, value, callback) => {
+  if (value === "") {
+    callback();
+  } else {
+    let reg = /^1[3|4|5|7|8]\d{9}$/;
+    if (!reg.test(value)) {
+      callback(new Error("请输入正确的手机格式！"));
+      return;
+    }
+    callback();
+  }
+}
+export const validateEmail = (rule, value, callback) => {
+  if (value === "") {
+    callback();
+  } else {
+    let reg = /^[A-Za-z0-9._%-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,4}$/;
+    if (!reg.test(value)) {
+      callback(new Error("请输入正确的邮箱格式！"));
+      return;
+    }
+    callback();
+  }
+}
+export const validateSignature = (rule, value, callback) => {
+  if (value === "") {
+    callback();
+  } else {
+    if (value.length > 100) {
+      callback(new Error("请输入不超过100位字符"));
+      return;
+    }
+    callback();
+  }
+}
 
 // 防抖函数
 export function debounce(fn, wait) {
