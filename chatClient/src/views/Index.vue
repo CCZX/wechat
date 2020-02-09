@@ -32,7 +32,7 @@
           </div>
         </el-card>
         <el-button type="primary" style="width: 100%">
-          <router-link to="/schedule">
+          <router-link to="/schedule" class="link">
             前往日程查看更多
           </router-link>
         </el-button>
@@ -166,6 +166,10 @@ export default {
             }
           }
         }
+      }
+      .link {
+        text-decoration: none;
+        color: #ffffff;
       }
     }
     .weather {
