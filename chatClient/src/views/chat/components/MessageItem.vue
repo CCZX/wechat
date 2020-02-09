@@ -28,7 +28,7 @@
         <span
           v-else-if="messageitem.messageType === 'img'"
           :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
-          class="primary-font text">
+          class="primary-font text" style="cursor: zoom-in">
           <img width="200" :src="messageitem.message" alt="图片" @click="preview(messageitem.message)">
         </span>
       </div>
