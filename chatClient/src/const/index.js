@@ -58,3 +58,20 @@ export const coArtBoardReplyTypes = {
   disagree: 'disagree',
   busy: 'busy'
 }
+
+export const weatherMap = {
+  "阴": 'icon-tianqi',
+  "多云": 'icon-tianqi1',
+  "晴": 'icon-ziyuan',
+  "小雨下雨": 'icon-n1'
+}
+
+export const weekNumZHMap = {
+  "0": '星期天',
+  "1": '星期一',
+  "2": '星期二',
+  "3": '星期三',
+  "4": '星期四',
+  "5": '星期五',
+  "6": '星期六',
+}
