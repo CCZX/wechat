@@ -44,10 +44,11 @@ const getMyFriends = (req, res) => {
 
 // 在同意之后添加好友
 const addFriend = (data) => {
-  FRIEND.insertMany(data)
-  const helloNews = {
-    
-  }
+  FRIEND.find(data).then(doc => {
+    if (doc.length === 0) {
+      FRIEND.insertMany(data)      
+    }
+  })
 }
 
 module.exports = {
