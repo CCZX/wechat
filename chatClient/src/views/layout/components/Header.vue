@@ -77,6 +77,7 @@ import { mapState } from 'vuex'
 import vueDraggableResizable from 'vue-draggable-resizable'
 import CoArtBoard from '@/views/CoArtBoard'
 import { coArtBoardReplyTypes } from '@/const'
+let timer
 export default {
   data() {
     return {
@@ -107,7 +108,7 @@ export default {
   sockets: {
     apply(data) {
       // 收到了对方的请求
-      console.log('收到协作请i去', data)
+      console.log('收到协作请求', data)
       if (this.isToCoArtBoard) {
         this.$socket.emit('reply', {...data, type: coArtBoardReplyTypes.busy})
         return
@@ -122,6 +123,9 @@ export default {
             this.coArtBoardState = 'reply'
             this.$store.dispatch('app/SET_CURRENT_CONVERSATION', data)
             this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+            setTimeout(() => {
+              clearTimeout(timer)
+            }, 1000)
           })
           .catch(() => {
             this.$socket.emit('reply', {...data, type: coArtBoardReplyTypes.disagree})
@@ -130,6 +134,7 @@ export default {
     },
     reply(data) {
       console.log("reply", data)
+      clearTimeout(timer)
       switch (data.type) {
         case coArtBoardReplyTypes.disagree:
           this.$message.error('对方拒绝了你的请求，发个消息试试吧')
@@ -149,6 +154,23 @@ export default {
         default:
           break;
       }
+    }
+  },
+  watch: {
+    isToCoArtBoard: {
+      handler(newVal) {
+        if (newVal) {
+          timer = setTimeout(() => {
+            this.$alert('对方没有答应，请先等待一段时间再尝试', '提示', {
+              confirmButtonText: '确定',
+              type: 'warning',
+              callback: action => {
+                this.$store.dispatch('app/SET_ISTOCOARTBOARD')                
+              }
+            });
+          }, 10000)
+        }
+      }, deep: true, immediate: true
     }
   },
 }
