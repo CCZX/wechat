@@ -32,6 +32,8 @@ GET：`/api/v1/pyq/getfridenlypyq`
 ```JavaScript
 {
   id: String, // 用户的ID
+  page: Number,
+  pageSize: Number
 }
 ```
 
