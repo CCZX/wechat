@@ -25,25 +25,25 @@
         </el-alert>
         <el-card class="box-card"  v-for="(item, index) in todos" :key="index">
           <div class="content">
-            <span class="item">待办事项：{{ item.title }}</span>
-            <span class="item">开始时间：{{ item.start }}</span>
-            <span class="item">结束时间：{{ item.end ? item.end : item.start }}</span>
-            <span class="item">事件类型：<el-tag :type="item.cssClass" effect="dark" size="mini">{{ matterLevelMap[item.cssClass] }}</el-tag></span>
+            <span class="item ellipsis">待办事项：{{ item.title }}</span>
+            <span class="item ellipsis">开始时间：{{ item.start }}</span>
+            <span class="item ellipsis">结束时间：{{ item.end ? item.end : item.start }}</span>
+            <span class="item ellipsis">事件类型：<el-tag :type="item.cssClass" effect="dark" size="mini">{{ matterLevelMap[item.cssClass] }}</el-tag></span>
           </div>
         </el-card>
-        <el-button type="primary" icon="el-icon-arrow-right">
+        <el-button type="primary" style="width: 100%">
           <router-link to="/schedule">
             前往日程查看更多
           </router-link>
         </el-button>
-        <!-- <el-alert
-          title=""
-          type="info"
-          center
-          :closable="false"
-          close-text="知道了"
-          show-icon>
-        </el-alert> -->
+      </div>
+      <div class="weather">
+        <el-alert
+          title="最近天气走势"
+          type="success"
+          :closable="false">
+        </el-alert>
+        <weather />
       </div>
       <!-- <a-map /> -->
     </div>
@@ -55,6 +55,7 @@ import ConversationList from '@/views/conversation/ConversationList'
 import ChatArea from '@/views/chat/ChatArea'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { fromatTime } from '@/utils'
+import weather from '@/components/customWeather'
 // import AMap from '@/components/customMap'
 export default {
   name: 'Index',
@@ -96,6 +97,7 @@ export default {
   components: {
     ConversationList,
     ChatArea,
+    weather
     // AMap
   },
   mounted() {
@@ -146,14 +148,18 @@ export default {
   .detail {
     width: 20%;
     .todo {
-      height: 60%;
+      max-height: 60%;
       text-align: center;
+      border-bottom: 1px solid #cccccc;
+      padding: 10px;
       .box-card {
+        margin: 10px 0;
         .content {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
           .item {
+            text-align: left;
             padding-top: 10px;
             &:first-child {
               padding-top: 0;
@@ -161,6 +167,9 @@ export default {
           }
         }
       }
+    }
+    .weather {
+      padding: 10px;
     }
   }
 }

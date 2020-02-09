@@ -3,7 +3,7 @@
     <main class="layout-main">
       <my-header></my-header>
       <el-main class="el-main">
-        <audio :src="NotifyAudio" ref="audio" muted>123</audio>
+        <audio :src="NotifyAudio" ref="audio" muted></audio>
         <router-view></router-view>
       </el-main>
     </main>
@@ -85,6 +85,9 @@ export default {
     userGoOnline() {
       this.$socket.emit('goOnline', this.userInfo)
     },
+    /**
+     * 获取系统用户（比如发送验证消息的系统用户）,然后加入会话列表
+     */
     async sysUserJoinSocket() {
       const { data } = await this.$http.getSysUsers()
       const { data: sysUserList, status } = data

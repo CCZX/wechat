@@ -2,8 +2,10 @@
   <div class="layout-header__com">
     <el-header>
       <div class="logo">
-        WeChats
-        <span class="logo-img"></span>
+        <router-link to="/" class="logo-link">
+          Co-Messager
+          <span class="logo-img"></span>
+        </router-link>
       </div>
       <div class="operation">
         <span class="item">
@@ -20,7 +22,7 @@
       <div class="user-info">
         <el-dropdown class="droplist">
           <span class="el-dropdown-link">
-            <el-badge :value="validateUnReadCount" class="badge-item">
+            <el-badge :is-dot="validateUnReadCount > 0" class="badge-item">
               <el-avatar size="large"
                 class="avatar"
                 :src="'http://localhost:3333' + userInfo.photo"
@@ -37,9 +39,14 @@
               </router-link>
             </el-dropdown-item>
             <el-dropdown-item class="user-menu-item">
-              <router-link to="/system" class="link">
-                系统消息
-              </router-link>
+              <el-badge
+                :value="validateUnReadCount"
+                :hidden="validateUnReadCount === 0"
+              >
+                <router-link to="/system" class="link">
+                  系统消息
+                </router-link>
+              </el-badge>
             </el-dropdown-item>
             <el-dropdown-item class="user-menu-item">
               <router-link to="/setting" class="link">
@@ -199,6 +206,10 @@ export default {
       // width: 10%;
       cursor: pointer;
       font-size: 20px;
+      .logo-link {
+        text-decoration: none;
+        color: #ffffff;
+      }
       .logo-img {
         position: absolute;
         top: 0;
