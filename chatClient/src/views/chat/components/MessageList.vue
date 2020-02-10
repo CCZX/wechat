@@ -1,9 +1,17 @@
 <template>
   <div class="chat-area__message-list__com" ref="msglist">
-    <div class="tips" ref="tips" :key="Date.now()">
-      <span>没有更多消息了</span>
+    <div class="top-operations" ref="tips" :key="Date.now()">
+      <!-- <span>没有更多消息了</span> -->
+      <span v-if="hasmore">
+        <span class="loadmore" @click="loadMore">点击加载更多...</span>
+        <i class="el-icon-loading" v-if="isloading"></i>
+      </span>
+      <span class="no-more secondary-font" v-else>没有更多了...</span>
     </div>
-    <transition-group appear name="slipOut">
+    <div class="top-operation" v-if="showTopOperation">
+    </div>
+    <transition-group appear name="hro-scroll">
+    <!-- <transition-group appear :name="useanimation ? 'hro-scroll' : ''"> -->
       <message-item v-for="(item, index) in messagelist" :key="index" :messageitem="item" @seturl="setCurrentImgUrl" />
     </transition-group>
     <div class="flag"></div>
@@ -18,11 +26,12 @@ import messageItem from "./MessageItem"
 import picturePreview from '@/components/picturePreview'
 import { debounce } from '@/utils'
 export default {
-  props: ["messagelist"],
+  props: ["messagelist", "scrollbottom", "hasmore", "isloading", "useanimation"],
   data() {
     return {
       currentImgUrl: '',
-      showPicturePreview: false
+      showPicturePreview: false,
+      showTopOperation: false
     }
   },
   methods: {
@@ -33,8 +42,14 @@ export default {
     setshowPicturePreview(flag) {
       this.showPicturePreview = flag
     },
+    loadMore() {
+      this.$emit('load-message', true)
+    },
     handlerScroll: debounce(function () {
       const scrollTop = this.$refs['msglist'].scrollTop
+      if (scrollTop < 5) {
+        this.$emit('load-message', true)
+      }
     }, 500)
   },
   components: {
@@ -44,22 +59,18 @@ export default {
   watch: {
     messagelist: {
       handler() {
-        this.$nextTick(() =>{
-          setTimeout(() => {
-            this.$refs['msglist'].scrollTop = this.$refs['msglist'].scrollHeight + 200
+        if (this.scrollbottom) {
+          this.$nextTick(() =>{
             setTimeout(() => {
-              this.$refs['tips'].style.opacity = "1"
-            }, 100);
-          }, 0);
-        })
+              this.$refs['msglist'].scrollTop = this.$refs['msglist'].scrollHeight + 200
+              setTimeout(() => {
+                this.$refs['tips'].style.opacity = "1"
+              }, 100);
+            }, 0);
+          })
+        }
       }, deep: true, immediate: true
     }
-  },
-  mounted() {
-    this.$refs['msglist'].addEventListener('scroll', this.handlerScroll)
-  },
-  beforeDestroy() {
-    this.$refs['msglist'].removeEventListener('scroll', this.handlerScroll)
   },
 };
 </script>
@@ -67,9 +78,15 @@ export default {
 <style lang="scss">
 @import './../../../../static/css/animation.scss';
 .chat-area__message-list__com {
-  .tips {
-    opacity: 0;
+  .top-operations {
     text-align: center;
+    .loadmore {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+        color: #409EFF;
+      }
+    }
   }
   box-sizing: border-box;
   height: 100%;

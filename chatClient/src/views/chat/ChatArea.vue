@@ -1,15 +1,27 @@
 <template>
   <div class="chat-area__com">
-    <chat-header :currentConversation="currentConversation"/>
+    <chat-header :currentConversation="currentConversation" @setshowsider="setShowSider" />
     <div
        :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'"
     >
       <div class="message-list-container">
-        <message-list :messagelist="messagesOutcome"/>
+        <message-list ref='messagelist'
+          @load-message="loadmessage"
+          :messagelist="messagesOutcome"
+          :scrollbottom="scrollBottom"
+          :hasmore="hasMore"
+          :isloading="isLoading"
+          :useanimation="useAnimation"
+        />
       </div>
       <div class="group-desc" v-if="currentConversation.conversationType === 'GROUP'">
         <group-desc :currentConversation="currentConversation" />
       </div>
+      <transition name="common">
+        <div class="sider" v-if="showSider">
+          <sider />
+        </div>
+      </transition>
     </div>
     <div class="message-edit-container">
       <div class="send-type">
@@ -54,6 +66,7 @@ import { conversationTypes, uploadImgStatusMap, qiniu_URL } from '@/const'
 import customEmoji from '@/components/customEmoji'
 import upImg from '@/components/customUploadImg'
 import groupDesc from './components/GroupDesc'
+import sider from './components/Sider'
 export default {
   props: {
     currentConversation: Object,
@@ -65,7 +78,15 @@ export default {
       messages: [],
       showEmojiCom: false,
       showUpImgCom: false,
-      token: ''
+      token: '', // 上传七牛云所需token
+      page: 0,
+      pageSize: 15,
+      hasMore: true,
+      showTopOperation: false,
+      scrollBottom: true,
+      isLoading: false,
+      useAnimation: false,
+      showSider: false
     }
   },
   computed: {
@@ -153,31 +174,61 @@ export default {
     joinChatRoom() {
       this.$socket.emit("join", this.currentConversation)
     },
-    async getRecentNews() {
+    async getRecentNews(init = true) {
       /**
        * getRecentNews分为两种目前分为两种情况：1.获取两两好友之间的；2.获取群聊的
        */
       // this.setLoading(false)
-      this.setLoading(true)
+      if (this.isLoading) return // 防止重复发起请求
+      this.isLoading = true
+      init && this.setLoading(true) // 只有在第一次加载的时候才让ChatArea有loading动画，后面加载时不显示
       const { roomid, conversationType } = this.currentConversation
+      const params = {
+        roomid,
+        page: this.page,
+        pageSize: this.pageSize
+      }
       if (conversationType === conversationTypes.friend) {
-        const { data, status } = await this.$http.getRecentNews({ roomid })
+        const { data, status } = await this.$http.getRecentNews(params)
         this.setLoading(false)
         if (data.status === 2000 && status === 200) {
-          this.messages = [...this.messages, ...data.data]
+          this.isLoading = false
+          data.data.reverse()
+          this.messages = [...data.data, ...this.messages]
+          if (data.data.length < this.pageSize) {
+            this.hasMore = false
+            return
+          }
+          this.page++
         }
       } else if (conversationType === conversationTypes.group) {
-        const { data, status } = await this.$http.getRecentGroupNews({ roomid })
+        const { data, status } = await this.$http.getRecentGroupNews(params)
         this.setLoading(false)
+        this.isLoading = false
         if (data.status === 2000 && status === 200) {
-          this.messages = [...this.messages, ...data.data]
+          data.data.reverse()
+          this.messages = [...data.data, ...this.messages]
+          if (data.data.length < this.pageSize) {
+            this.hasMore = false
+            return
+          }
+          this.page++
         }
       }
-      
     },
     handlerShowEmoji() {
       this.showEmojiCom = false
       this.showUpImgCom = false
+    },
+    loadmessage() {
+      this.scrollBottom = false
+      this.useAnimation = true
+      if (this.hasMore) {
+        this.getRecentNews(false)
+      }
+    },
+    setShowSider() {
+      this.showSider = !this.showSider
     }
   },
   components: {
@@ -185,18 +236,22 @@ export default {
     messageList,
     customEmoji,
     groupDesc,
-    upImg
+    upImg,
+    sider
   },
   watch: {
     currentConversation(newVal, oldVal) {
       if (newVal && newVal._id) {
+        this.page = 0
+        this.scrollBottom = true
         this.setLoading(true)
         this.messageText = ""
         this.messages = []
+        this.hasMore = true
         this.joinChatRoom()
         this.getRecentNews()
       }
-    }
+    }, deep: true, immediate: true
   },
   created() {
     document.addEventListener('click', this.handlerShowEmoji)
@@ -218,17 +273,30 @@ export default {
   height: 100%;
   .main {
     display: flex;
+    position: relative;
     height: calc(100% - 210px);
     width: 100%;
     .message-list-container {
+      position: relative;
       height: 100%;
       width: 75%;
+      .top-operation {
+        position: absolute;
+      }
     }
     .group-desc {
       height: 100%;
       width: 25%;
     }
-    
+    .sider {
+      position: absolute;
+      right: 0;
+      top: 0;
+      border: 1px solid red;
+      width: 150px;
+      height: 100%;
+      background-color: #e9ebee;
+    }
   }
   .main.no-group {
     .message-list-container {
