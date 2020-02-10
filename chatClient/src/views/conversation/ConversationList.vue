@@ -21,7 +21,7 @@
 import conversationItem from './ConversationItem'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { conversationTypes } from '@/const'
-import { saveMyFriendsToLocalStorage } from '@/utils'
+import { saveMyFriendsToLocalStorage, saveMyGroupToLocalStorage } from '@/utils'
 export default {
   name: "ConversationListComponent",
   props: {
@@ -48,7 +48,7 @@ export default {
       })
     },
     async getMyFriends() {
-      const id = this.$store.state.user.userInfo._id
+      const id = this.userInfo._id
       const { data, status } = await this.$http.getMyFriends(id)
       if (data.status === 2000 && (100 <= status <= 400)) {
         const { data: friendList } = data
@@ -59,7 +59,7 @@ export default {
           item.myAvatar = this.userInfo.photo
         })
         this.conversationList = friendList
-        this.changeCurrentConversation(this.conversationList[0])
+        this.changeCurrentConversation(this.conversationList[0] || {})
         const saveLocalData = friendList.map(item => {
           return item._id
         })
@@ -67,7 +67,7 @@ export default {
       }
     },
     async getMyGroup() {
-      const userName = this.$store.state.user.userInfo.name
+      const userName = this.userInfo.name
       const { data, status } = await this.$http.getMyGroup({userName})
       if (data.status === 2000 && (100 <= status <= 400)) {
         const { data: groupList } = data
@@ -77,6 +77,8 @@ export default {
           item.roomid = item.groupId._id
         })
         this.conversationList = [...this.conversationList, ...groupList]
+        const saveLocalData = groupList.map(item => item.groupId._id)
+        saveMyGroupToLocalStorage(saveLocalData)
       }
     }
   },
