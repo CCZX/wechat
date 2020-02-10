@@ -5,19 +5,16 @@
         <el-avatar
           class="avatar"
           shape="square"
-          :src="item.isGroup ? IMG_URL + item.img : IMG_URL + item.photo"
+          :src="IMG_URL + item.photo"
         >
         </el-avatar>
         <div class="info">
           <p class="item primary-font nickname">
-            <span v-if="item.isGroup">
-              {{item.title}}
-            </span>
-            <router-link :to="`/user/${item._id}`" tag="span" v-else>
+            <router-link :to="`/user/${item._id}`" tag="span">
               {{item.nickname}}
             </router-link>
           </p>
-          <p class="item secondary-font">{{ item.isGroup ? item.desc : item.signature}}</p>
+          <p class="item secondary-font">{{item.signature}}</p>
         </div>
       </div>
       <div class="operation">
@@ -96,8 +93,6 @@ export default {
         status: 0,
         validateType: 0
       }
-      console.log(val)
-      return
       this.$socket.emit('sendValidateMessage', val)
     }
   },
