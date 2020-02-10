@@ -1,9 +1,10 @@
 <template>
   <div
     class="chat-area__message-item__com"
-    :style="messageitem.senderId === userInfo._id ? {'flex-direction': 'row-reverse', 'margin-left': 'calc(100% - 200px)'} : ''"
+    :style="messageItemComStyle"
   >
     <el-avatar
+      v-if="messageitem.messageType !== 'sys'"
       class="avatar"
       size="large"
       :src="messageitem.senderId === userInfo._id ? 'http://localhost:3333' + userInfo.photo : 'http://localhost:3333' + messageitem.senderAvatar"
@@ -11,14 +12,17 @@
     >
       <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt srcset>
     </el-avatar>
-    <div class="message-info">
+    <div
+      class="message-info"
+      :style="messageitem.messageType === 'sys' ? 'width: 100%' : ''"
+    >
       <span class="secondary-font time">
         <span
           :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
         >{{messageitem.time}}</span>
       </span>
       <div
-        :class="messageitem.senderId === userInfo._id ? 'content isme' : 'content'"
+        :class="contentClassName"
       >
         <span
           v-if="messageitem.messageType === 'text'"
@@ -30,6 +34,12 @@
           :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
           class="primary-font text" style="cursor: zoom-in">
           <img width="200" :src="messageitem.message" alt="图片" @click="preview(messageitem.message)">
+        </span>
+        <span
+          v-else-if="messageitem.messageType === 'sys'"
+          class="secondary-font sys-tips"
+        >
+          系统提示：{{messageitem.message}}
         </span>
       </div>
     </div>
@@ -43,7 +53,28 @@ export default {
   computed: {
     ...mapState("user", {
       userInfo: "userInfo"
-    })
+    }),
+    contentClassName() {
+      let res = ''
+      if (this.messageitem.messageType === 'sys') {
+        res = 'sys-content'
+      } else {
+        res = this.messageitem.senderId === this.userInfo._id ? 'content isme' : 'content'
+      }
+      return res
+    },
+    messageItemComStyle() {
+      let res = {}
+      if (this.messageitem.messageType === 'sys') {
+        res = {
+          width: 'auto',
+          'text-align': 'center'
+        }
+      } else if (this.messageitem.senderId === this.userInfo._id) {
+        res = {'flex-direction': 'row-reverse', 'margin-left': 'calc(100% - 200px)'}
+      }
+      return res
+    } 
   },
   methods: {
     preview(url) {
@@ -67,6 +98,16 @@ export default {
     .time {
       display: block;
       overflow: hidden;
+    }
+    .sys-content {
+      margin-top: 50px;
+      position: relative;
+      margin-top: 5px;
+      white-space: wrap;
+      word-break: break-word;
+      .sys-tips {
+        color: hsla(201, 100%, 55%, 1);
+      }
     }
     .content {
       margin-top: 50px;
