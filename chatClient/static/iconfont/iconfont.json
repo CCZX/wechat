@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31140",
+      "name": "雷电-天气",
+      "font_class": "leidian",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
       "icon_id": "398906",
       "name": "评论",
       "font_class": "pinglun",
@@ -48,6 +55,13 @@
       "unicode_decimal": 59216
     },
     {
+      "icon_id": "1505691",
+      "name": "天气",
+      "font_class": "tianqi",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "1929167",
       "name": "转发",
       "font_class": "zhuanfa",
@@ -76,6 +90,13 @@
       "unicode_decimal": 58925
     },
     {
+      "icon_id": "5198005",
+      "name": "天气",
+      "font_class": "n1",
+      "unicode": "e6eb",
+      "unicode_decimal": 59115
+    },
+    {
       "icon_id": "6798079",
       "name": "动物骨骼分析",
       "font_class": "dongwugugefenxi",
@@ -95,6 +116,20 @@
       "font_class": "shipin",
       "unicode": "e6ca",
       "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "9097115",
+      "name": "天气",
+      "font_class": "ziyuan",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "9626944",
+      "name": "天气",
+      "font_class": "tianqi1",
+      "unicode": "e87f",
+      "unicode_decimal": 59519
     },
     {
       "icon_id": "11742030",
