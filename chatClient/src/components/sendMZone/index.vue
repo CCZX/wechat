@@ -6,7 +6,7 @@
           class="send-textarea"
           v-model="content"
           maxlength="200"
-          placeholder="说点什么吧"
+          placeholder="说点什么吧~"
           @focus="showFotter = true"
         ></textarea> 
       </div>
@@ -24,7 +24,8 @@
           仅好友可见
         </div>
         <div class="send">
-          <el-button type="success" size="small" @click="send">发表</el-button>
+          <el-button type="success" size="small" @click="send" :loading="isPublishing">发表</el-button>
+          <el-button type="danger" size="small" @click="cancel">取消</el-button>
         </div>
         <transition name="roll">
           <div class="emoji-com" v-show="showEmoji">
@@ -40,10 +41,9 @@
     </transition>
     <transition name="roll">
       <div class="picture-view-area" v-show="pictures.length">
-        <picture-view :size="pictureLimit" :pitures="pictures" @deleteItem="deletePictureItem" />
+        <picture-view :size="pictureLimit" :pitures="pictures" @deleteItem="deletePictureItem" @deleteAll="deletePictures" />
       </div>
     </transition>
-    
   </div>
 </template>
 
@@ -58,12 +58,14 @@ export default {
   data() {
     return {
       content: '',
+      // pictures: ['http://blog.static.chenr.cn/cc-messger-170240566a4-56.jpeg', 'http://blog.static.chenr.cn/cc-messger-1701041742e-71.jpeg', 'http://blog.static.chenr.cn/cc-messger-170240566a4-56.jpeg'],
       pictures: [],
       showFotter: false,
       showEmoji: false,
       showUploadImg: false,
       pictureLimit: PICTURE_LIMIT,
-      token: ''
+      token: '',
+      isPublishing: false
     }
   },
   computed: {
@@ -77,6 +79,7 @@ export default {
         this.$message.error('说点什么吧？')
         return
       }
+      this.isPublishing = true
       const data = {
         userId: this.userInfo._id,
         content: this.content,
@@ -84,7 +87,17 @@ export default {
         pictures: this.pictures
       }
       const res = await this.$http.publishPyqNews(data)
-      console.log(res)
+      const { status } = res.data
+      if (status === 2000 && res.status < 400) {
+        this.$message({
+          message: '发布成功！',
+          type: 'success'
+        })
+        this.content = ""
+        this.pictures = []
+        this.showFotter = false
+      }
+      this.isPublishing = false
     },
     getPictureStatus(res) {
       if (res.status === uploadImgStatusMap.error) {
@@ -96,8 +109,16 @@ export default {
         this.pictures = [...this.pictures, IMG_URL]
       }
     },
+    cancel() {
+      this.showFotter = false
+      this.content = ''
+      this.pictures = []
+    },
     deletePictureItem(index) {
       this.pictures.splice(index, 1)
+    },
+    deletePictures() {
+      this.pictures = []
     },
     addEmoji(item) {
       this.content += item
@@ -150,17 +171,15 @@ export default {
     height: 60px;
     .send-content {
       flex-grow: 1;
+      height: 100%;
       .send-textarea {
         display: inline-block;
-        height: 60px;
+        height: 100%;
         box-sizing: border-box;
-        height: calc(100% - 30px);
         width: 100%;
         outline: none;
         border: none;
-        border: 0;
-        border-radius: 5px;
-        padding: 0px 10px;
+        padding: 10px;
         resize: none;
       }
     }
@@ -186,7 +205,7 @@ export default {
     transition: all .5s ease;
     .poster-attach {
       .item {
-        // cursor: not-allowed;
+        cursor: pointer;
         margin-right: 10px;
         font-size: 20px;
         color: #c35673;
