@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="static/image/favicon.ico" />
-    <title>Messager</title>
+    <title>Co-Messager</title>
   </head>
   <body>
     <div id="app"></div>
@@ -13,9 +13,32 @@
   <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
   <script src="https://unpkg.com/qiniu-js@2.4.0/dist/qiniu.min.js"></script>
   <script>
+    function myBrowser() {
+      const userAgent = navigator.userAgent
+      const isOpera = userAgent.indexOf("Opera") > -1
+      if (isOpera) {
+        return "Opera"
+      } else if (userAgent.indexOf("Edge") > -1) {
+        return "Edge"
+      } else if (userAgent.indexOf("Firefox") > -1) {
+        return "FireFox"
+      } if (userAgent.indexOf("Chrome") > -1) {
+        return "Chrome"
+      } else if (userAgent.indexOf("Safari") > -1) {
+        return "Safari"
+      } else if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) { //判断是否IE浏览器
+        alert("球球你不要再用IE了吧(ノへ￣、)，换谷歌、火狐试试")
+        return "IE"
+      } else {
+        alert("球球你不要再用IE了吧(ノへ￣、)，换谷歌、火狐试试")
+        return "IE"
+      }
+    }
     const UserAgent = navigator.userAgent
     const OSInfo = UserAgent.substring(UserAgent.indexOf('(')+1,UserAgent.indexOf(';'))
-    const Browser = UserAgent.slice(81, 90)
+    const Browser = myBrowser()
+    window.OSInfo = OSInfo
+    window.Browser = Browser
     console.log(
       '%c OS：' + OSInfo + ' %c Browser：' + Browser + ' %c ',
       'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
