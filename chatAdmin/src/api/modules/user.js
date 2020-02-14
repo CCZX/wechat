@@ -17,5 +17,8 @@ export default {
   },
   changeUserStatus(data) { // 更改用户状态：0；正常，1：冻结，2：注销
     return request.post(`/user/changestatus`, data)
+  },
+  getOnlineUser() {
+    return request.get(`/user/onlineusers`)
   }
 }
