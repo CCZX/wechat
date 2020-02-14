@@ -29,7 +29,7 @@ export default {
    * @param {data} Object
    */
   getRecentGroupNews(data) {
-    const { roomid } = data
-    return request.get(`/groupnews/recentnews?roomid=${roomid}`)
+    const { roomid, page, pageSize } = data
+    return request.get(`/groupnews/recentnews?roomid=${roomid}&page=${page}&pageSize=${pageSize}`)
   }
 }
