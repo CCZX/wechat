@@ -82,6 +82,7 @@ const { insertNewNews } = require('./controller/news')
 const { insertValidateNews, changeValidateNewsStatus } = require('./controller/validateNews')
 const { insertNewGroupNews } = require('./controller/groupNews')
 const { addFriend } = require('./controller/friendly')
+const { addNewGroupUser } = require('./controller/group')
 const { conversationTypes } = require('./const')
 
 const conversationList = {}
@@ -132,8 +133,22 @@ io.on('connection', (socket) => {
     const { roomid, reveiverId, senderId } = data
     const senderRoomId = roomid.replace(reveiverId, senderId)
     socket.to(senderRoomId).emit('receiveAgreeFriendValidate', data)
-    changeValidateNewsStatus(data, 1)
+    changeValidateNewsStatus(data, 1) // 用户同意加好友之后改变验证消息的状态
   })
+  socket.on('sendAgreeGroupValidate', data => {
+    const groupUser = {
+      groupId: data.groupId._id,
+      userId: data.senderId,
+      userName: data.senderName,
+      manager: 0,
+      holder: 0,
+      card: ''
+    }
+    console.log('groupUser', groupUser)
+    addNewGroupUser(groupUser)
+  })
+
+
   socket.on('apply', data=>{ // 转发申请
     console.log('apply user to', data)
     // sockS[data.account].emit('apply', data);
