@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./app.js"
   },
   "dependencies": {
+    "body-parse": "^0.1.0",
     "cookie-parser": "~1.4.3",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
@@ -16,6 +17,9 @@
     "mongoose": "^5.5.5",
     "morgan": "~1.9.0",
     "multer": "^1.4.2",
+    "multiparty": "^4.2.1",
+    "os-utils": "0.0.14",
+    "qiniu": "^7.3.0",
     "socket.io": "^2.3.0"
   }
 }
