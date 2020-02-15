@@ -12,7 +12,7 @@ const findMyValidateNews = async (req, res) => {
       $or: [
         {senderId: id}, {reveiverId: id}
       ]
-    })
+    }).populate({path: 'groupId', select: 'title'})
     return res.json({
       status: 2000,
       data,
