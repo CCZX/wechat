@@ -11,10 +11,6 @@ const getRecentNews = async (req, res) => {
     const data = await NEWS.find({
       roomid: roomid
     }).sort({_id: -1}).skip(Number(page*pageSize)).limit(Number(pageSize))
-    // data.sort((a, b) => {
-    //   return a.time > b.time
-    // })
-    // console.log(data)
     return res.json({
       status: 2000,
       data,
