@@ -40,13 +40,13 @@
           </div>
         </div>
         <div class="comment-like">
-          <div class="like iconfont icon-dianzan">
+          <div class="like iconfont icon-dianzan" v-if="item.likes.length > 0">
             <span v-for="(likeitem, index) in item.likes" :key="likeitem._id">
               {{likeitem.authorId.nickname}}{{index+1 === item.likes.length ? '' : '、'}}
             </span>
           </div>
           <div class="comments">
-            comment
+            <comment-list :commentlist="item.comments" />
             <!-- <send-comment :id="item._id" :val="commentsObj[item._id]" :valChange="valChange" /> -->
           </div>
         </div>
@@ -56,7 +56,7 @@
             style="margin: 0; font-size: 20px"
             @click.stop="handlerShowEmoji($event, item._id)"
           />
-          <el-button type="success" size="mini">评论</el-button>
+          <el-button type="success" size="mini" @click="doComment(item._id, pyqIndex)">评论</el-button>
         </div>
       </div>
       <div class="loading">
@@ -65,9 +65,11 @@
       <div style="margin-bottom: 10px">
         <el-alert v-if="!hasMore && !isLoading" title="没有更多了..." type="info" center show-icon :closable="false" />
       </div>
-      <div class="emoji-com" v-if="showEmojiCom" :style="`left:${emojiLeft}; top: ${emojiTop}`">
-        <custom-emoji @addemoji="addEmoji" />
-      </div>
+      <transition name="roll">
+        <div class="emoji-com" v-if="showEmojiCom" :style="`left:${emojiLeft}; top: ${emojiTop}`">
+          <custom-emoji @addemoji="addEmoji" />
+        </div>
+      </transition>
     </div>
     <transition>
       <picture-preview :imgurl="currentImgUrl" @setshow="setshowPicturePreview" v-if="showPicturePreview" />            
@@ -78,8 +80,8 @@
 <script>
 import './../../../static/iconfont/iconfont.css'
 import picturePreview from '@/components/picturePreview'
-import sendComment from '@/components/customSendComment'
 import customEmoji from '@/components/customEmoji'
+import commentList from '@/components/customCommentList'
 import { debounce } from '@/utils'
 export default {
   data() {
@@ -163,11 +165,39 @@ export default {
           })
         }
       })
-      
     },
-    valChange(val, id) {
-      console.log(val, id)
-      this.commentsObj[id] = val
+    doComment(id, index) {
+      if (!this.commentsObj[id]) {
+        return
+      }
+      const params = {
+        pyqId: id,
+        content: this.commentsObj[id],
+        authorId: this.userInfo._id
+      }
+      this.$http.doComment(params).then(res => {
+        const { data } = res
+        this.commentsObj[id] = ''
+        if (res.status < 400) {
+          if (data.status === 2000) {
+            this.$message({
+              message: '评论成功！',
+              type: 'success'
+            })
+            const tmp = JSON.parse(JSON.stringify(this.pyqList))
+            tmp[index].comments.push({
+              ['_id']: Date.now(),
+              content: this.commentsObj[id],
+              createDate: Date.now(),
+              authorId: {
+                nickname: this.userInfo.nickname,
+                photo: this.userInfo.photo
+              }
+            })
+            this.pyqList = tmp
+          }
+        }
+      })
     },
     addEmoji(val) {
       this.commentsObj[this.currentPyq] += val
@@ -194,8 +224,8 @@ export default {
   },
   components: {
     picturePreview,
-    sendComment,
-    customEmoji
+    customEmoji,
+    commentList
   },
   created() {
     this.getFriendlyPyq()
@@ -209,7 +239,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import './../../../static/css/animation.scss';
 .pyq-com {
   .pyq-com-wrapper {
@@ -274,20 +304,26 @@ export default {
         position: relative;
         margin-top: 20px;
         padding: 10px;
-        background-color: #e5e9ef;
-        &::before {
-          position: absolute;
-          bottom: 100%;
-          content: '';
-          border-bottom: 10px solid #e5e9ef; // f4f5f7
-          border-left: 10px solid transparent;
-          border-right: 10px solid transparent;
-        }
+        border-top: 1px solid #e5e9ef;
+        // background-color: #e5e9ef;
+        // &::before {
+        //   position: absolute;
+        //   bottom: 100%;
+        //   content: '';
+        //   border-bottom: 10px solid #e5e9ef; // f4f5f7
+        //   border-left: 10px solid transparent;
+        //   border-right: 10px solid transparent;
+        // }
         .like {
           &::before {
             padding: 1px;
             color: #c35673;
           }
+        }
+        .comments {
+          margin-top: 10px;
+          border-top: 1px solid #fff;
+          padding-top: 10px;
         }
       }
       .comment-area {
