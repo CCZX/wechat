@@ -19,6 +19,10 @@ const validateNewsSchema = new Schema({
   additionMessage: String, // 附加消息
   status: Number, // 0/1/2，未处理/同意/不同意
   validateType: Number, /// 0/1, 好友/群聊
+  groupId: {
+    type: Schema.Types.ObjectId,
+    ref: 'group'
+  }
 })
 
 const validateNews = DB.model('validateNews', validateNewsSchema)
