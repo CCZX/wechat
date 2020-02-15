@@ -146,6 +146,11 @@ export const saveMyFriendsToLocalStorage = (data) => {
   window.localStorage.setItem('friends', data)
 }
 
+export const saveMyGroupToLocalStorage = (data) => {
+  data = JSON.stringify(data)
+  window.localStorage.setItem('groups', data)
+}
+
 export function imgRandomName() {
   const timestamp = Date.now().toString(16)
   const random = Math.floor(Math.random()*100)
