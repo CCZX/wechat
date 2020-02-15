@@ -43,7 +43,13 @@
                 </router-link>
               </span>
             </el-tooltip>
-            {{validateNewsTips.applyFriend}}
+            <!-- {{item.validateType === 0 ? validateNewsTips.applyFriend}} -->
+            <span v-if="item.validateType === 0">
+              {{validateNewsTips.applyFriend}}
+            </span>
+            <span v-else-if="item.validateType === 1">
+              {{validateNewsTips.applyGroup}}：{{item.groupId && item.groupId.title}}
+            </span>
             <span class="time">
               {{item.time}}
             </span>
@@ -122,12 +128,16 @@ export default {
   },
   methods: {
     agreeValidate(item) {
-      this.$socket.emit('sendAgreeFriendValidate', item)
+      if (item.validateType === 0) {
+        this.$socket.emit('sendAgreeFriendValidate', item)
+      } else if (item.validateType === 1) {
+        this.$socket.emit('sendAgreeGroupValidate', item)        
+      }
       this.isAdding = true
       setTimeout(() => {
         this.isAdding = false
         this.$emit('changeValidateNewsStatus', item, 1)
-        this.$alert('快去主页和好友聊天吧', '添加成功', {
+        this.$alert('添加成功', '提示！', {
           confirmButtonText: '确定'
         });
       }, 500)
