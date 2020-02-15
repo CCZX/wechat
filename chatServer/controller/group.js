@@ -1,5 +1,6 @@
 const GROUP_USER = require('./../models/group').groupUser
 const GROUP = require('./../models/group').group
+const { insertNewGroupNews } = require('./groupNews')
 
 const getMyGroup = (req, res) => { // 获取我的群聊
   let { userName } = req.query
@@ -46,29 +47,55 @@ const getGroupInfo = (req, res) => { // 获取群聊详情
   })
 }
 
-const preFetchGroup = async (req, res) => { // 在客户端搜索群聊
+const searchGroup = async (req, res) => { // 在客户端搜索群聊
   const { type, q, page, pageSize } = req.query
-  const reg = new RegExp(q)
-  try {
-    const data = await GROUP.find({
-      [type]: {$regex: reg}
-    }).limit(Number(pageSize)).skip(Number(page) * Number(pageSize))
+  GROUP.searchGroup( type, q, page, pageSize ).then(doc => {
     return res.json({
       status: 2000,
-      data: data,
-      msg: '获取成功！'
+      data: doc,
+      msg: 'success'
     })
-  } catch (error) {
+  }).catch(err => {
     return res.json({
       status: 2003,
       data: err,
       msg: '服务器错误，请稍后重试！'
     })
-  }
+  })
+}
+
+// 给群聊添加新成员
+const addNewGroupUser = (data) => {
+  const { userId, groupId, userName } = data
+  GROUP_USER.find({
+    userId: userId
+  }).then(doc => {
+    if (doc.length === 0) {
+      GROUP_USER.insertMany(data).then(doc => {
+        GROUP.update({
+          _id: groupId
+        }, { $inc: {userNum: 1} })
+        const sysTipsNews = {
+          roomid: groupId,
+          message: `${userName}加入群聊`,
+          messageType: 'sys',
+          isReadUser: []
+        }
+        insertNewGroupNews(sysTipsNews)
+      })
+    }
+  }).catch(err => {
+    return res.json({
+      status: 2003,
+      data: err,
+      msg: '服务器错误，请稍后重试！'
+    })
+  })
 }
 
 module.exports = {
   getMyGroup,
   getGroupInfo,
-  preFetchGroup
+  searchGroup,
+  addNewGroupUser
 }
