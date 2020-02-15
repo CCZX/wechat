@@ -1,7 +1,7 @@
 <template>
   <div class="pyq-com">
     <div class="pyq-com-wrapper">
-      <div class="item" v-for="item in pyqList" :key="item._id+Date.now()">
+      <div class="item" v-for="(item, pyqIndex) in pyqList" :key="item._id+Date.now()">
         <div class="header">
           <router-link :to="`/user/${item.userId._id}`">
             <el-avatar :size="60" :src="IMG_URL + item.userId.photo" @error="()=>true">
@@ -35,16 +35,28 @@
           </div>
           <div class="operation">
             <i class="item iconfont icon-pinglun1 comment" title="评论"></i>
-            <i class="item iconfont icon-dianzan like" title="点赞"></i>
+            <i class="item iconfont icon-dianzan like" title="点赞" @click="doLike(item._id, pyqIndex)"></i>
             <i class="item iconfont icon-zhuanfa farward" title="转发"></i>
           </div>
         </div>
         <div class="comment-like">
           <div class="like iconfont icon-dianzan">
-            <span>
-              16-计科-四班-徐傲、15计科2班边小丰、计科 16 唐圣雄、16计科章格宁、16 计科 王志宏、张潇、曾泉文、谢必瑞、李阳、Stamina、最后一天、taco哥、情、说丶、、Shilling、.、林曜曜、SuMm Er.、。。等55人觉得很赞
+            <span v-for="(likeitem, index) in item.likes" :key="likeitem._id">
+              {{likeitem.authorId.nickname}}{{index+1 === item.likes.length ? '' : '、'}}
             </span>
           </div>
+          <div class="comments">
+            comment
+            <!-- <send-comment :id="item._id" :val="commentsObj[item._id]" :valChange="valChange" /> -->
+          </div>
+        </div>
+        <div class="comment-area">
+          <el-input placeholder="请输入内容" v-model="commentsObj[item._id]" />
+          <i class="item iconfont icon-emoji"
+            style="margin: 0; font-size: 20px"
+            @click.stop="handlerShowEmoji($event, item._id)"
+          />
+          <el-button type="success" size="mini">评论</el-button>
         </div>
       </div>
       <div class="loading">
@@ -52,6 +64,9 @@
       </div>
       <div style="margin-bottom: 10px">
         <el-alert v-if="!hasMore && !isLoading" title="没有更多了..." type="info" center show-icon :closable="false" />
+      </div>
+      <div class="emoji-com" v-if="showEmojiCom" :style="`left:${emojiLeft}; top: ${emojiTop}`">
+        <custom-emoji @addemoji="addEmoji" />
       </div>
     </div>
     <transition>
@@ -63,6 +78,8 @@
 <script>
 import './../../../static/iconfont/iconfont.css'
 import picturePreview from '@/components/picturePreview'
+import sendComment from '@/components/customSendComment'
+import customEmoji from '@/components/customEmoji'
 import { debounce } from '@/utils'
 export default {
   data() {
@@ -74,7 +91,12 @@ export default {
       hasMore: true,
       isLoading: false,
       currentImgUrl: '',
-      showPicturePreview: false
+      showPicturePreview: false,
+      commentsObj: {},
+      showEmojiCom: false,
+      currentPyq: '',
+      emojiTop: '',
+      emojiLeft: ''
     }
   },
   computed: {
@@ -94,6 +116,9 @@ export default {
         const { data, status } = res.data
         if (status === 2000 && res.status < 400) {
           this.pyqList = [...this.pyqList, ...data]
+          this.pyqList.forEach(item => {
+            this.$set(this.commentsObj, item._id, '')
+          })
           this.isLoading = false
           if (data.length < 7) {
             this.hasMore = false
@@ -111,6 +136,48 @@ export default {
     setshowPicturePreview(flag) {
       this.showPicturePreview = flag
     },
+    doLike(pyqId, index) {
+      const params = {
+        authorId: this.userInfo._id,
+        pyqId
+      }
+      this.$http.doLike(params).then(res => {
+        const { data } = res
+        if (res.status < 400 && data.status === 2000) {
+          this.$message({
+            message: '点赞成功！',
+            type: 'success'
+          })
+          const tmp = JSON.parse(JSON.stringify(this.pyqList))
+          tmp[index].likes.push({
+            ['_id']: Date.now(),
+            authorId: {
+              nickname: this.userInfo.nickname
+            }
+          })
+          this.pyqList = tmp
+        } else if (res.status < 400 && data.status === 2004) {
+          this.$message({
+            message: '你已经点过赞了',
+            type: 'warning'
+          })
+        }
+      })
+      
+    },
+    valChange(val, id) {
+      console.log(val, id)
+      this.commentsObj[id] = val
+    },
+    addEmoji(val) {
+      this.commentsObj[this.currentPyq] += val
+    },
+    handlerShowEmoji(e, id) {
+      this.currentPyq = id
+      this.emojiTop = e.pageY - 230 + 'px'
+      this.emojiLeft = e.pageX - 200 + 'px'
+      this.showEmojiCom = true
+    },
     handleDocmentScroll: debounce(function () {
       const scrollTop = document.documentElement.scrollTop
       const clientHeight = document.documentElement.clientHeight
@@ -120,17 +187,24 @@ export default {
           this.getFriendlyPyq() 
         }
       }
-    }, 500)
+    }, 500),
+    handleDocmentClick() {
+      this.showEmojiCom = false
+    }
   },
   components: {
-    picturePreview
+    picturePreview,
+    sendComment,
+    customEmoji
   },
   created() {
     this.getFriendlyPyq()
     document.addEventListener('scroll', this.handleDocmentScroll)
+    document.addEventListener('click', this.handleDocmentClick)
   },
   beforeDestroy() {
     document.removeEventListener('scroll', this.handleDocmentScroll)    
+    document.removeEventListener('click', this.handleDocmentClick)
   },
 }
 </script>
@@ -216,6 +290,14 @@ export default {
           }
         }
       }
+      .comment-area {
+        display: flex;
+        height: 45px;
+        align-items: center;
+      }
+    }
+    .emoji-com {
+      position: absolute;
     }
   }
 }
