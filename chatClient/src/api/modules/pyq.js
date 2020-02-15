@@ -8,5 +8,13 @@ export default {
   getFriendlyPyq(data) {
     const { id, page, pageSize } = data
     return request.get(`/pyq/getfridenlypyq?id=${id}&page=${page}&pageSize=${pageSize}`)
-  }
+  },
+  // 朋友圈点赞
+  doLike(data) {
+    return request.post('/pyq/like', data)
+  },
+  // 朋友圈评论
+  doComment(data) {
+    return request.post('/pyq/comment', data)
+  },
 }
