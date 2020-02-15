@@ -11,9 +11,9 @@ const insertNewGroupNews = async (news) =>  {
  * @param {*} res 
  */
 const getRecentGroupNews = async (req, res) => {
-  const { roomid } = req.query
+  const { roomid, pageSize, page } = req.query
   try {
-    const data = await GROUP_NEWS.find({roomid}).limit(30)
+    const data = await GROUP_NEWS.find({roomid}).sort({_id: -1}).skip(Number(page*pageSize)).limit(Number(pageSize))
     return res.json({
       status: 2000,
       data,
