@@ -6,11 +6,15 @@ const insertNewNews = async (news) => {
 }
 
 const getRecentNews = async (req, res) => {
-  const { roomid } = req.query
+  const { roomid, page, pageSize } = req.query
   try {
     const data = await NEWS.find({
       roomid: roomid
-    }).skip(NEWS.count() - 30).sort({_id: 1})
+    }).sort({_id: -1}).skip(Number(page*pageSize)).limit(Number(pageSize))
+    // data.sort((a, b) => {
+    //   return a.time > b.time
+    // })
+    // console.log(data)
     return res.json({
       status: 2000,
       data,
