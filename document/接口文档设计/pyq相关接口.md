@@ -23,6 +23,7 @@ GET：`/api/v1/pyq/publishpyqnews`
   msg: ''
 }
 ```
+
 ### 2、获取好友朋友圈
 
 GET：`/api/v1/pyq/getfridenlypyq`
@@ -51,6 +52,54 @@ db.pyqNews.find({
 {
   status: Number,
   data: [{}, {}, ...],
+  msg: ''
+}
+```
+### 3、朋友圈点赞
+
+> 描述：目前只支持点赞不支持取消点赞
+
+POST：`/api/v1/pyq/like`
+
+> 传递参数
+
+```JavaScript
+{
+  authorId: String, // 用户ID
+  pyqId: String // 朋友圈ID
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number, // 2000成功，2004：已经点赞，重复操作
+  data: [{}],
+  msg: ''
+}
+```
+
+### 4、朋友圈评论
+
+> 描述：目前只支持点赞不支持取消点赞
+
+POST：`/api/v1/pyq/comment`
+
+> 传递参数
+
+```TypeScript
+{
+  pyqId: String, // 朋友圈Id
+  content: String, // 评论内容
+  authorId: String, // 评论者Id
+  parentId?: String, // 夫评论，用户回复别人的评论时别人评论的引用
+  level?: Number, // 评论层级，默认为0
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number, // 2000成功
+  data: [{}],
   msg: ''
 }
 ```
