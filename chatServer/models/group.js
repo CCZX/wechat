@@ -10,8 +10,22 @@ const groupSchema = new Schema({
   userNum: Number, // 群成员数量，避免某些情况需要多次联表查找，如搜索；所以每次加入一人，数量加一
   createDate: { type: Date, default: Date.now() }, // 建群时间
   grades: { type: String, default: 'V1' }, // 群等级，备用
-  holderName: String // 群主账号，在user实体中对应name字段
+  holderName: String, // 群主账号，在user实体中对应name字段
+  holderUserId: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
+  }
 })
+// 搜索群聊
+groupSchema.statics.searchGroup = function (type, q, page, pageSize) {
+  const reg = new RegExp(q)
+  return this
+        .find({
+          [type]: {$regex: reg}
+        }).populate({path: 'holderUserId', select: 'nickname photo signature'}).skip(Number(page*pageSize)).limit(Number(pageSize)).sort({_id: -1})
+}
+
+
 const group = DB.model('group', groupSchema)
 
 const groupUserSchema = new Schema({
@@ -26,7 +40,11 @@ const groupUserSchema = new Schema({
   userName: { type: String },
   manager: { type: Number, default: 0 }, // 是否是管理员，默认0，不是
   holder: { type: Number, default: 0 }, // 是否是群主，默认0，不是
-  card: String // 群名片
+  card: String, // 群名片
+  time: {
+    type: Date,
+    default: new Date()
+  }
 })
 
 groupUserSchema.statics.findGroupByUserName = function (userName, cb) { // 根据用户名查找所在群聊
