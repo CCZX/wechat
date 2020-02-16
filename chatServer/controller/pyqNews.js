@@ -46,10 +46,10 @@ const getMyFriendPyqNews = async (req, res) => {
         const pyqIds = pyqList.map(item => item._id)
         PYQ_LIKE.find({
           pyqId: {$in: pyqIds}
-        }).populate({path: 'authorId', select: 'nickname photo'}).then(likeList => {
+        }).populate({path: 'authorId', select: 'nickname photo signature'}).then(likeList => {
           PYQ_COMMENT.find({
             pyqId: {$in: pyqIds}
-          }).populate({path: 'authorId', select: 'nickname photo'}).then(commentList => {
+          }).populate({path: 'authorId', select: 'nickname photo signature'}).then(commentList => {
             let likeObj = {}
             likeList.forEach(item => {
               likeObj[item.pyqId] = likeObj[item.pyqId] ? [...likeObj[item.pyqId], item] : [item]
