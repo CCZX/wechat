@@ -139,7 +139,7 @@ export default {
     setshowPicturePreview(flag) {
       this.showPicturePreview = flag
     },
-    doLike(pyqId, index) {
+    doLike: debounce(function (pyqId, index) {
       const params = {
         authorId: this.userInfo._id,
         pyqId
@@ -166,7 +166,7 @@ export default {
           })
         }
       })
-    },
+    }, 500),
     doComment(id, index) {
       if (!this.commentsObj[id]) {
         return
