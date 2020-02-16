@@ -10,9 +10,31 @@
           </router-link>
           <div class="info">
             <div class="nickname">
-              <router-link :to="`/user/${item.userId._id}`" class="nickname-link">
-                {{item.userId.nickname}}
-              </router-link>
+              <el-popover
+                placement="top"
+                width="240"
+                trigger="hover"
+              >
+                <div class="user-card-body">
+                  <div class="header">
+                    <div class="user-card-avatar">
+                      <el-avatar :size="50" :src="IMG_URL + item.userId.photo" @error="()=>true">
+                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                      </el-avatar>
+                    </div>
+                    <div class="user-card-info">
+                      <p class="info-item-nickname ellipsis">{{item.userId.nickname}}</p>
+                      <p class="info-item-signature ellipsis secondary-font">{{item.userId.signature}}</p>
+                    </div>
+                  </div>
+                  <!-- <div class="content">
+                    <el-button type="success" size="mini">加好友</el-button>
+                  </div> -->
+                </div>
+                <router-link slot="reference" :to="`/user/${item.userId._id}`" class="nickname-link">
+                  {{item.userId.nickname}}
+                </router-link>
+              </el-popover>
             </div>
             <div class="time secondary-font">
               <span>{{item.createDate}}</span>
@@ -51,7 +73,7 @@
             <span v-for="(likeitem, index) in item.likes" :key="likeitem._id">
               <el-popover
                 placement="top"
-                width="300"
+                width="240"
                 trigger="hover"
               >
                 <div class="user-card-body">
@@ -286,22 +308,6 @@ export default {
 
 <style lang="scss" scoped>
 @import './../../../static/css/animation.scss';
-.user-card-body {
-  .header {
-    display: flex;
-    align-items: center;
-    .user-card-info {
-      width: 224px;
-      margin-left: 5px;
-      .info-item-nickname {
-        margin: 0;
-      }
-      .info-item-signature {
-        margin: 3px 0;
-      }
-    }
-  }
-}
 .pyq-com {
   .pyq-com-wrapper {
     .item {
