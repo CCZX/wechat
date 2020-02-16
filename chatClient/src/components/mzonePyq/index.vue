@@ -35,7 +35,11 @@
           </div>
           <div class="operation">
             <i class="item iconfont icon-pinglun1 comment" title="评论"></i>
-            <i class="item iconfont icon-dianzan like" title="点赞" @click="doLike(item._id, pyqIndex)"></i>
+            <i
+              class="item iconfont icon-dianzan like" title="点赞"
+              @click="doLike(item._id, pyqIndex)"
+              :style="hasILike[item._id].includes(userInfo._id) ? 'color: #c35673' : ''"
+            />
             <i class="item iconfont icon-zhuanfa farward" title="转发"></i>
           </div>
         </div>
@@ -105,6 +109,14 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    hasILike() { // 判断我也没有点赞
+      const pyqLikeUserIdsMap = {}
+      this.pyqList.forEach(item => {
+        const ids = item.likes.map(item => item.authorId._id)
+        pyqLikeUserIdsMap[item._id] = ids
+      })
+      return pyqLikeUserIdsMap
     }
   },
   methods: {
@@ -155,7 +167,8 @@ export default {
           tmp[index].likes.push({
             ['_id']: Date.now(),
             authorId: {
-              nickname: this.userInfo.nickname
+              nickname: this.userInfo.nickname,
+              _id: this.userInfo._id
             }
           })
           this.pyqList = tmp
