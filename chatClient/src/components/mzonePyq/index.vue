@@ -303,7 +303,7 @@ export default {
       }
       .comment-like {
         position: relative;
-        margin-top: 20px;
+        margin-top: 10px;
         padding: 10px;
         border-top: 1px solid #e5e9ef;
         // background-color: #e5e9ef;
@@ -324,7 +324,6 @@ export default {
         .comments {
           margin-top: 10px;
           border-top: 1px solid #fff;
-          padding-top: 10px;
         }
       }
       .comment-area {
