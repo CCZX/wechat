@@ -31,7 +31,7 @@
         </span>
         <span
           v-else-if="messageitem.messageType === 'img'"
-          :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
+          :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
           class="primary-font text" style="cursor: zoom-in">
           <img width="200" :src="messageitem.message" alt="图片" @click="preview(messageitem.message)">
         </span>
@@ -58,6 +58,8 @@ export default {
       let res = ''
       if (this.messageitem.messageType === 'sys') {
         res = 'sys-content'
+      } else if (this.messageitem.messageType === 'img') {
+        res = 'img-content'        
       } else {
         res = this.messageitem.senderId === this.userInfo._id ? 'content isme' : 'content'
       }
@@ -107,6 +109,20 @@ export default {
       word-break: break-word;
       .sys-tips {
         color: hsla(201, 100%, 55%, 1);
+      }
+    }
+    .img-content {
+      margin-top: 50px;
+      position: relative;
+      margin-top: 5px;
+      white-space: wrap;
+      word-break: break-word;
+      .img-wrapper {
+        display: inline-block;
+        cursor: zoom-in;
+        min-height: 50px;
+        min-width: 50px;
+        background-color: #e5e9ef;
       }
     }
     .content {
