@@ -3,11 +3,12 @@
     <div class="wrapper">
       <el-card>
         <div class="title">
+          <p class="title-name">Wellcome to Co-Messager</p>
           <span class="login" :class="isLoginState ? 'active' : ''" @click="changeState(true)">登录</span>
           <span class="register" :class="!isLoginState ? 'active' : ''" @click="changeState(false)">注册</span>
         </div>
         <main class="body">
-          <transition name="hor-scroll">
+          <!-- <transition name="hor-scroll"> -->
             <el-form class="login-form" v-if="isLoginState">
               <el-form-item>
                 <el-input v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
@@ -16,14 +17,13 @@
                 <el-input type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
               </el-form-item>
               <el-form-item class="cv-code">
-                <el-input class="cv-code-inp" v-model="loginInfo.cvCode" @keydown="test" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
+                <el-input class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
                 <canvas width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
               </el-form-item>
               <el-button class="login-btn" type="primary" @click="login">登录</el-button>
             </el-form>
-            
-          </transition>
-          <transition name="hor-scroll">
+          <!-- </transition> -->
+          <!-- <transition name="hor-scroll"> -->
             <el-form class="register-form" v-if="!isLoginState">
               <el-form-item>
                 <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
@@ -43,9 +43,8 @@
               </el-form-item>
               <el-button class="login-btn" type="primary" @click="register">注册</el-button>
             </el-form>
-          </transition>
+          <!-- </transition> -->
         </main>
-        
       </el-card>
     </div>
   </div>
@@ -155,22 +154,10 @@ export default {
       this.isLoginState = flag
       this.getCVCode()
     },
-    test(e) {
-      console.log(e)
-    }
   },
   async mounted() {
     this.getCVCode()
-    // timer = setInterval(() => {
-    //   this.bgUrl = this.bgUrl === bgUrl1 ? bgUrl2 : bgUrl1
-    // }, 10000)
-    // document.addEventListener('keydown', (e) => {
-    //   console.log(e)
-    // })
-  },
-  beforeDestroy() {
-    window.clearInterval(timer)
-  },
+  }
 };
 </script>
 
@@ -192,7 +179,10 @@ export default {
     opacity: .9;
     .title {
       text-align: center;
-      padding: 0 0 20px ;
+      padding: 0 0 20px;
+      .title-name {
+        margin: 7px;
+      }
       .login, .register {
         box-sizing: border-box;
         padding: 4px;
@@ -206,7 +196,7 @@ export default {
     }
     .body {
       height: 100%;
-      position: relative;
+      // position: relative;
       display: flex;
       .login-form, .register-form {
         width: 100%;
