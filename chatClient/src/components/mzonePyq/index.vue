@@ -1,7 +1,7 @@
 <template>
   <div class="pyq-com">
     <div class="pyq-com-wrapper">
-      <div class="item" v-for="(item, pyqIndex) in pyqList" :key="item._id+Date.now()">
+      <div class="item" v-for="(item, pyqIndex) in pyqList" :key="item._id">
         <div class="header">
           <router-link :to="`/user/${item.userId._id}`">
             <el-avatar :size="60" :src="IMG_URL + item.userId.photo" @error="()=>true">
@@ -47,14 +47,15 @@
           </div>
           <div class="comments">
             <comment-list :commentlist="item.comments" />
-            <!-- <send-comment :id="item._id" :val="commentsObj[item._id]" :valChange="valChange" /> -->
           </div>
         </div>
         <div class="comment-area">
           <el-input placeholder="请输入内容" v-model="commentsObj[item._id]" />
-          <i class="item iconfont icon-emoji"
-            style="margin: 0; font-size: 20px"
+          <i
+            class="iconfont icon-emoji"
+            style="margin: 0 10px; font-size: 20px; cursor: pointer;"
             @click.stop="handlerShowEmoji($event, item._id)"
+            title="添加表情"
           />
           <el-button type="success" size="mini" @click="doComment(item._id, pyqIndex)">评论</el-button>
         </div>
