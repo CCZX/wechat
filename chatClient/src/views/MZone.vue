@@ -54,6 +54,7 @@
           slider
         </div>
       </div>
+      <back-top />
     </div>
   </div>
 </template>
@@ -61,6 +62,7 @@
 <script>
 import mPyq from '@/components/mzonePyq'
 import sendMzone from '@/components/sendMZone'
+import backTop from '@/components/backTop'
 export default {
   name: 'MZone',
   data() {
@@ -86,7 +88,8 @@ export default {
   },
   components: {
     mPyq,
-    sendMzone
+    sendMzone,
+    backTop
   }
 }
 </script>
