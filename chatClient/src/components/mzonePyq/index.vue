@@ -34,7 +34,10 @@
             <span class="secondary-font">阅读：{{item.readCount ? item.readCount : 0}}次</span>
           </div>
           <div class="operation">
-            <i class="item iconfont icon-pinglun1 comment" title="评论"></i>
+            <i
+              class="item iconfont icon-pinglun1 comment" title="评论"
+              @click="handleClickComment(item._id)"
+            />
             <i
               class="item iconfont icon-dianzan like" title="点赞"
               @click="doLike(item._id, pyqIndex)"
@@ -46,7 +49,9 @@
         <div class="comment-like">
           <div class="like iconfont icon-dianzan" v-if="item.likes.length > 0">
             <span v-for="(likeitem, index) in item.likes" :key="likeitem._id">
-              {{likeitem.authorId.nickname}}{{index+1 === item.likes.length ? '' : '、'}}
+              <router-link :to="`/user/${likeitem.authorId._id}`" class="like-user-link">
+                {{likeitem.authorId.nickname}}{{index+1 === item.likes.length ? '' : '、'}}
+              </router-link>
             </span>
           </div>
           <div class="comments">
@@ -54,7 +59,7 @@
           </div>
         </div>
         <div class="comment-area">
-          <el-input placeholder="请输入内容" v-model="commentsObj[item._id]" />
+          <el-input placeholder="说点什么吧~" v-model="commentsObj[item._id]" :ref="'commentInp'+item._id" />
           <i
             class="iconfont icon-emoji"
             style="margin: 0 10px; font-size: 20px; cursor: pointer;"
@@ -234,6 +239,10 @@ export default {
     }, 500),
     handleDocmentClick() {
       this.showEmojiCom = false
+    },
+    handleClickComment(id) {
+      const key = 'commentInp'+id
+      console.log(this.$refs[key][0].focus())
     }
   },
   components: {
@@ -307,8 +316,12 @@ export default {
         align-items: center;
         .operation {
           .item {
+            &:hover {
+              color: #c35673;
+            }
             width: 40px;
             height: 40px;
+            margin-left: 20px;
             font-size: 20px;
             cursor: pointer;
           }
@@ -332,6 +345,9 @@ export default {
           &::before {
             padding: 1px;
             color: #c35673;
+          }
+          .like-user-link {
+            text-decoration: none;
           }
         }
         .comments {
