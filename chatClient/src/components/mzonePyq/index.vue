@@ -240,7 +240,6 @@ export default {
       }
       this.$http.doComment(params).then(res => {
         const { data } = res
-        this.commentsObj[id] = ''
         if (res.status < 400) {
           if (data.status === 2000) {
             this.$message({
@@ -260,6 +259,7 @@ export default {
             this.pyqList = tmp
           }
         }
+        this.commentsObj[id] = ''
       })
     },
     addEmoji(val) {
@@ -286,7 +286,7 @@ export default {
     },
     handleClickComment(id) {
       const key = 'commentInp'+id
-      console.log(this.$refs[key][0].focus())
+      this.$refs[key][0].focus()
     }
   },
   components: {
