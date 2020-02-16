@@ -49,9 +49,31 @@
         <div class="comment-like">
           <div class="like iconfont icon-dianzan" v-if="item.likes.length > 0">
             <span v-for="(likeitem, index) in item.likes" :key="likeitem._id">
-              <router-link :to="`/user/${likeitem.authorId._id}`" class="like-user-link">
-                {{likeitem.authorId.nickname}}{{index+1 === item.likes.length ? '' : '、'}}
-              </router-link>
+              <el-popover
+                placement="top"
+                width="300"
+                trigger="hover"
+              >
+                <div class="user-card-body">
+                  <div class="header">
+                    <div class="user-card-avatar">
+                      <el-avatar :size="50" :src="IMG_URL + likeitem.authorId.photo" @error="()=>true">
+                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                      </el-avatar>
+                    </div>
+                    <div class="user-card-info">
+                      <p class="info-item-nickname ellipsis">{{likeitem.authorId.nickname}}</p>
+                      <p class="info-item-signature ellipsis secondary-font">{{likeitem.authorId.signature}}</p>
+                    </div>
+                  </div>
+                  <!-- <div class="content">
+                    <el-button type="success" size="mini">加好友</el-button>
+                  </div> -->
+                </div>
+                <router-link slot="reference" :to="`/user/${likeitem.authorId._id}`" class="like-user-link">
+                  {{likeitem.authorId.nickname}}{{index+1 === item.likes.length ? '' : '、'}}
+                </router-link>
+              </el-popover>
             </span>
           </div>
           <div class="comments">
@@ -264,6 +286,22 @@ export default {
 
 <style lang="scss" scoped>
 @import './../../../static/css/animation.scss';
+.user-card-body {
+  .header {
+    display: flex;
+    align-items: center;
+    .user-card-info {
+      width: 224px;
+      margin-left: 5px;
+      .info-item-nickname {
+        margin: 0;
+      }
+      .info-item-signature {
+        margin: 3px 0;
+      }
+    }
+  }
+}
 .pyq-com {
   .pyq-com-wrapper {
     .item {
