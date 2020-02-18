@@ -37,7 +37,7 @@
               </el-popover>
             </div>
             <div class="time secondary-font">
-              <span>{{item.createDate}}</span>
+              <span>{{item.createDate | formatDateToZH}}</span>
             </div>
           </div>
         </div>
@@ -136,8 +136,16 @@ import './../../../static/iconfont/iconfont.css'
 import picturePreview from '@/components/picturePreview'
 import customEmoji from '@/components/customEmoji'
 import commentList from '@/components/customCommentList'
-import { debounce } from '@/utils'
+import { debounce, formatDateToZH } from '@/utils'
 export default {
+  props: {
+    newpyqitem: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       pyqList: [],
@@ -293,6 +301,20 @@ export default {
     picturePreview,
     customEmoji,
     commentList
+  },
+  filters: {
+    formatDateToZH(val) {
+      return formatDateToZH(val)
+    }
+  },
+  watch: {
+    newpyqitem: {
+      handler(val) {
+        const keys = Object.keys(val)
+        if (keys.length < 1) return
+        this.pyqList = [val, ...this.pyqList]
+      }
+    }
   },
   created() {
     this.getFriendlyPyq()
