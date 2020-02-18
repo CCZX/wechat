@@ -45,7 +45,7 @@
         <el-button @click="send" type="success" size="small" round>发送</el-button>
         <el-button @click="send" type="danger" size="small" round>清空</el-button>
       </div>
-      <textarea class="textarea" v-model="messageText" maxlength="200" @keydown.enter="send($event)"></textarea>
+      <textarea class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true" @keydown.enter="send($event)"></textarea>
       <transition name="roll">
         <up-img class="emoji-component" v-if="showUpImgCom" :token="token" @getstatus="getImgUploadResult" :getstatus="getImgUploadResult" />
       </transition>
@@ -137,7 +137,6 @@ export default {
       }
       if (res.status === uploadImgStatusMap.complete) {
         const img_URL = qiniu_URL + res.data.key
-        console.log(img_URL)
         const common = this.generatorMessageCommon()
         const newMessage = {
           ...common,
@@ -162,7 +161,6 @@ export default {
       }
       const common = this.generatorMessageCommon()
       const newMessage = {
-        // time: this.currentConversation.conversationType === conversationTypes.group ? fromatTime(new Date(), false) : fromatTime(new Date()),
         ...common,
         message: this.messageText,
         messageType: "text",
@@ -178,7 +176,6 @@ export default {
       /**
        * getRecentNews分为两种目前分为两种情况：1.获取两两好友之间的；2.获取群聊的
        */
-      // this.setLoading(false)
       if (this.isLoading) return // 防止重复发起请求
       this.isLoading = true
       init && this.setLoading(true) // 只有在第一次加载的时候才让ChatArea有loading动画，后面加载时不显示
