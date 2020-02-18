@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { formatDate } from '@/utils'
+import { formatDateToZH } from '@/utils'
 export default {
   props: ["commentlist"],
   data() {
@@ -59,7 +59,7 @@ export default {
   },
   filters: {
     formatDate(val) {
-      return formatDate(new Date(val), 'YYYY-MM-DD HH-MM-SS')
+      return formatDateToZH(val)
     }
   }
 }
