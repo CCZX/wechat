@@ -93,6 +93,17 @@ export default {
           message: '发布成功！',
           type: 'success'
         })
+        this.$emit('watchsend', {
+          ...res.data.data[0],
+          userId: {
+            _id: this.userInfo._id,
+            photo: this.userInfo.photo,
+            signature: this.userInfo.signature,
+            nickname: this.userInfo.nickname
+          },
+          comments: [],
+          likes: []
+        })
         this.content = ""
         this.pictures = []
         this.showFotter = false
