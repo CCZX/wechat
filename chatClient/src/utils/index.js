@@ -78,6 +78,27 @@ export function formatDate(time, type = 'YYYY-MM-DD') { //
   }
 }
 
+// 将时间转化为中文的形式：昨天 12：12，12月12日 12：12
+export const formatDateToZH = (date) => {
+  const targetDate = new Date(date)
+  const nowTime = new Date(formatDate(new Date())).getTime()
+  const targetTime = new Date(formatDate(targetDate)).getTime()
+  const daysAgo = (nowTime - targetTime) / 86400000
+  const yearsAgo = new Date().getFullYear() - targetDate.getFullYear()
+  const year = `${targetDate.getFullYear()}年`
+  const monthAndDay = `${formatNumber(targetDate.getMonth() + 1)}月${formatNumber(targetDate.getDate())}日`
+  const hourAndMinute = formatNumber(targetDate.getHours())+':'+formatNumber(targetDate.getMinutes())
+  if (daysAgo < 1) {
+    return hourAndMinute
+  } else if (1 <= daysAgo && daysAgo < 2) {
+    return `昨天 ${hourAndMinute}`
+  } else if (yearsAgo < 1) {
+    return monthAndDay + ' ' + hourAndMinute
+  } else {
+    return year + monthAndDay + ' ' + hourAndMinute
+  }
+}
+
 /**
  * validate reg
  */
@@ -151,6 +172,7 @@ export const saveMyGroupToLocalStorage = (data) => {
   window.localStorage.setItem('groups', data)
 }
 
+// 随机名称函数
 export function imgRandomName() {
   const timestamp = Date.now().toString(16)
   const random = Math.floor(Math.random()*100)
