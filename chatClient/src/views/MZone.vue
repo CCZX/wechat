@@ -47,8 +47,8 @@
           </el-menu>
         </div>
         <div class="content">
-          <send-mzone />
-          <m-pyq />
+          <send-mzone @watchsend="watchSendPyq" />
+          <m-pyq :newpyqitem="newPyqItem" />
         </div>
         <div class="slider">
           slider
@@ -69,12 +69,18 @@ export default {
     return {
       userDetails: {},
       IMG_URL: process.env.IMG_URL,
-      activeIndex: '1'
+      activeIndex: '1',
+      newPyqItem: {}
     }
   },
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    }
+  },
+  methods: {
+    watchSendPyq(newPyqItem) {
+      this.newPyqItem = newPyqItem
     }
   },
   async created() {
@@ -94,7 +100,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .mzone-page {
   width: 100%;
   background-color: #e9ebee;
