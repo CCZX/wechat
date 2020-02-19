@@ -133,8 +133,8 @@
         <el-alert v-if="!hasMore && !isLoading" title="没有更多了..." type="info" center show-icon :closable="false" />
       </div>
       <transition name="roll">
-        <div class="emoji-com" v-if="showEmojiCom" :style="`left:${emojiLeft}; top: ${emojiTop}`">
-          <custom-emoji @addemoji="addEmoji" />
+        <div ref="emojiCom" class="emoji-com" v-if="showEmojiCom" :style="`left:${emojiLeft}; top: ${emojiTop}`" @mouseenter="handleEmojiMouseenter">
+          <custom-emoji @addemoji="addEmoji" tabposition="top" />
         </div>
       </transition>
     </div>
@@ -306,7 +306,7 @@ export default {
     },
     handlerShowEmoji(e, id) {
       this.currentPyq = id
-      this.emojiTop = e.pageY - 230 + 'px'
+      this.emojiTop = e.pageY + 20 + 'px'
       this.emojiLeft = e.pageX - 200 + 'px'
       this.showEmojiCom = true
     },
@@ -331,6 +331,11 @@ export default {
     handleClickComment(id) {
       const key = 'commentInp'+id
       this.$refs[key][0].focus()
+    },
+    handleEmojiMouseenter() {
+      this.$refs['emojiCom'] && this.$refs['emojiCom'].addEventListener('mouseleave', () => {
+        this.showEmojiCom = false
+      })
     }
   },
   components: {
