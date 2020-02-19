@@ -8,7 +8,8 @@ const pyqNewsSchema = new Schema({
     ref: 'user'
   },
   createDate: {
-    type: String
+    type: Date,
+    default: Date.now
   },
   content: {
     type: String,
