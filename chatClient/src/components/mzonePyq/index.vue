@@ -40,6 +40,13 @@
               <span>{{item.createDate | formatDateToZH}}</span>
             </div>
           </div>
+          <div class="pyq-item-operation" v-if="item.userId._id === userInfo._id">
+            <i class="el-icon-more" @click="handleClickOperation"></i>
+            <div class="operation-list" v-if="showOperationList">
+              <span class="operation-list-item" @click="deleteItemPyq(item._id)"><i class="el-icon-delete-solid item-icon" />删除</span>
+              <span class="operation-list-item"><i class="el-icon-edit-outline item-icon" />编辑</span>
+            </div>
+          </div>
         </div>
         <div class="body">
           <div class="content">
@@ -156,11 +163,12 @@ export default {
       isLoading: false,
       currentImgUrl: '',
       showPicturePreview: false,
-      commentsObj: {},
+      commentsObj: {}, // 朋友圈的评论对象
       showEmojiCom: false,
-      currentPyq: '',
-      emojiTop: '',
-      emojiLeft: ''
+      currentPyq: '', // 当前选择的朋友圈
+      emojiTop: '', // emoji组件的位置
+      emojiLeft: '',
+      showOperationList: false // 显示对本条朋友圈的操作列表
     }
   },
   computed: {
@@ -177,6 +185,12 @@ export default {
     }
   },
   methods: {
+    deleteItemPyq(id) {
+      this.$http.deletePyqItem({pyqId: id, userId: this.userInfo._id})
+    },
+    handleClickOperation() {
+      this.showOperationList = !this.showOperationList
+    },
     getFriendlyPyq() {
       this.isLoading = true
       const params = {
@@ -222,7 +236,7 @@ export default {
           })
           const tmp = JSON.parse(JSON.stringify(this.pyqList))
           tmp[index].likes.push({
-            ['_id']: Date.now(),
+            ...data.data[0],
             authorId: {
               nickname: this.userInfo.nickname,
               _id: this.userInfo._id
@@ -341,6 +355,7 @@ export default {
         align-items: center;
         border-bottom: 1px solid #C0C4CC;
         padding: 0 0 10px;
+        position: relative;
         .info {
           display: flex;
           flex-direction: column;
@@ -358,6 +373,29 @@ export default {
           }
           .time {
             margin-top: 10px;
+          }
+        }
+        .pyq-item-operation {
+          position: absolute;
+          right: 5px;
+          .operation-list {
+            position: absolute;
+            width: 60px;
+            text-align: center;
+            background-color: #fff;
+            padding: 5px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            .operation-list-item {
+              &:hover {
+                text-decoration: underline;
+              }
+              margin-bottom: 5px;
+              font-size: 12px;
+              cursor: pointer;
+              .item-icon {
+                margin-right: 5px;
+              }
+            }
           }
         }
       }
