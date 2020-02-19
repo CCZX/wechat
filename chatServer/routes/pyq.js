@@ -8,5 +8,6 @@ router.post('/publishpyqnews', pyqController.publishPyqNews)
 router.get('/getfridenlypyq', pyqController.getMyFriendPyqNews)
 router.post('/like', pyqLikeController.doLike)
 router.post('/comment', pyqCommentController.doComment)
+router.post('/deletepyq', pyqController.deletePyqItem)
 
 module.exports = router
