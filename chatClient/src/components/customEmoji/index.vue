@@ -1,6 +1,6 @@
 <template>
   <div class="custom-emoji-com" @click.stop="()=>{}">
-    <el-tabs type="border-card" class="wrapper" tab-position="bottom">
+    <el-tabs :tab-position="tabposition" type="border-card" class="wrapper">
       <el-tab-pane v-for="(value, key, index) in emojisList" :label="key" :key="index" addable>
         <span slot="label"><i :class="emijoIconClassNameMap[key]"></i> </span>
         <span
@@ -19,6 +19,14 @@
 <script>
 import emojis from '@/const/emoji'
 export default {
+  props: {
+    tabposition: {
+      type: String,
+      default() {
+        return 'bottom'
+      }
+    }
+  },
   data() {
     return {
       emojisList: emojis.data,
