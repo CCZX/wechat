@@ -41,9 +41,15 @@
             </div>
           </div>
           <div class="pyq-item-operation" v-if="item.userId._id === userInfo._id">
-            <i class="el-icon-more" @click="handleClickOperation"></i>
-            <div class="operation-list" v-if="showOperationList">
-              <span class="operation-list-item" @click="deleteItemPyq(item._id)"><i class="el-icon-delete-solid item-icon" />删除</span>
+            <i class="el-icon-more" @click.stop="handleClickOperation(item._id)"></i>
+            <div class="operation-list" v-if="showOperationListObj[item._id]">
+              <!-- <el-popconfirm
+                title="这是一段内容确定删除吗？"
+              > -->
+                <span slot="reference" class="operation-list-item" @click="deleteItemPyq(item._id)">
+                  <i class="el-icon-delete-solid item-icon" />删除
+                </span>
+              <!-- </el-popconfirm> -->
               <span class="operation-list-item"><i class="el-icon-edit-outline item-icon" />编辑</span>
             </div>
           </div>
@@ -163,12 +169,12 @@ export default {
       isLoading: false,
       currentImgUrl: '',
       showPicturePreview: false,
-      commentsObj: {}, // 朋友圈的评论对象
+      commentsObj: {}, // 每条朋友圈的评论，key是朋友圈id,value是该朋友圈的评论
       showEmojiCom: false,
       currentPyq: '', // 当前选择的朋友圈
       emojiTop: '', // emoji组件的位置
       emojiLeft: '',
-      showOperationList: false // 显示对本条朋友圈的操作列表
+      showOperationListObj: {} // 是否显示对本条朋友圈的操作列表
     }
   },
   computed: {
@@ -185,11 +191,21 @@ export default {
     }
   },
   methods: {
-    deleteItemPyq(id) {
-      this.$http.deletePyqItem({pyqId: id, userId: this.userInfo._id})
+    async deleteItemPyq(id) {
+      const { data } = await this.$http.deletePyqItem({pyqId: id, userId: this.userInfo._id})
+      console.log(data)
+      if (data.status === 2000) {
+        this.$message({
+          message: '删除成功！',
+          type: 'success'
+        })
+        const id = data.data._id
+        const newPyqList = this.pyqList.filter(item => item._id !== id)
+        this.pyqList = newPyqList
+      }
     },
-    handleClickOperation() {
-      this.showOperationList = !this.showOperationList
+    handleClickOperation(id) {
+      this.showOperationListObj[id] = !this.showOperationListObj[id]
     },
     getFriendlyPyq() {
       this.isLoading = true
@@ -204,6 +220,7 @@ export default {
           this.pyqList = [...this.pyqList, ...data]
           this.pyqList.forEach(item => {
             this.$set(this.commentsObj, item._id, '')
+            this.$set(this.showOperationListObj, item._id, false)
           })
           this.isLoading = false
           if (data.length < 7) {
@@ -305,6 +322,11 @@ export default {
     }, 500),
     handleDocmentClick() {
       this.showEmojiCom = false
+      for (const key in this.showOperationListObj) {
+        if (this.showOperationListObj.hasOwnProperty(key)) {
+          this.showOperationListObj[key] = false
+        }
+      }
     },
     handleClickComment(id) {
       const key = 'commentInp'+id
@@ -378,17 +400,27 @@ export default {
         .pyq-item-operation {
           position: absolute;
           right: 5px;
+          cursor: pointer;
           .operation-list {
+            // &::before {
+            //   content: '';
+            //   border-bottom: 5px solid #ffffff
+            // }
             position: absolute;
+            right: -15px;
             width: 60px;
             text-align: center;
             background-color: #fff;
             padding: 5px;
             box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
             .operation-list-item {
+              &:last-child {
+                margin-bottom: 0;
+              }
               &:hover {
                 text-decoration: underline;
               }
+              display: inline-block;
               margin-bottom: 5px;
               font-size: 12px;
               cursor: pointer;
