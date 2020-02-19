@@ -5,9 +5,9 @@ const PYQ_COMMENT = require('./../models/pyqComment')
 
 // 用户在朋友圈发表动态
 const publishPyqNews = async (req, res) => {
-  const { userId, createDate, content, pictures } = req.body
+  const { userId, content, pictures } = req.body
   const data = {
-    userId, createDate, content, pictures
+    userId, content, pictures
   }
   try {
     const doc = await PYQ_NEWS.insertMany(data)
@@ -81,7 +81,36 @@ const getMyFriendPyqNews = async (req, res) => {
   })
 }
 
+const deletePyqItem = async (req, res) => {
+  const { pyqId, userId } = req.body
+  PYQ_NEWS.findOneAndDelete({
+    _id: pyqId,
+    userId: userId
+  }).then(doc => {
+    PYQ_COMMENT.remove({
+      pyqId: pyqId
+    }).then(commentdoc => {
+      PYQ_LIKE.remove({
+        pyqId: pyqId
+      }).then(likedoc => {
+        return res.json({
+          status: 2000,
+          data: doc,
+          msg: '删除成功'
+        })
+      })
+    })
+  }).catch(err => {
+    return res.json({
+      status: 2004,
+      data: err,
+      msg: '服务端错误'
+    })
+  })
+}
+
 module.exports = {
   publishPyqNews,
-  getMyFriendPyqNews
+  getMyFriendPyqNews,
+  deletePyqItem
 }
