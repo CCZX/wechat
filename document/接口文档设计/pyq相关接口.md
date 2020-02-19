@@ -103,3 +103,28 @@ POST：`/api/v1/pyq/comment`
   msg: ''
 }
 ```
+
+### 4、删除自己的朋友圈
+
+> 描述：用户只能删除自己的朋友圈不能删除别人的
+
+在删除朋友圈的同时会删除该朋友圈关联的评论以及点赞信息。
+
+POST：`/api/v1/pyq/deletepyq`
+
+> 传递参数
+
+```TypeScript
+{
+  pyqId: String, // 朋友圈Id
+  userId: String, // 本人Id
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number, // 2000成功
+  data: [],
+  msg: ''
+}
+```
