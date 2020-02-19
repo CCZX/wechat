@@ -17,4 +17,7 @@ export default {
   doComment(data) {
     return request.post('/pyq/comment', data)
   },
+  deletePyqItem(data) {
+    return request.post('pyq/deletepyq', data)
+  }
 }
