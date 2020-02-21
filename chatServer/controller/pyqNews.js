@@ -25,6 +25,7 @@ const publishPyqNews = async (req, res) => {
   }
 }
 
+// 获取朋友圈列表
 const getMyFriendPyqNews = async (req, res) => {
   const { id, page, pageSize } = req.query
   const friendlyList = []
@@ -50,12 +51,28 @@ const getMyFriendPyqNews = async (req, res) => {
           PYQ_COMMENT.find({
             pyqId: {$in: pyqIds}
           }).populate({path: 'authorId', select: 'nickname photo signature'}).then(commentList => {
+            // 处理点赞逻辑
             let likeObj = {}
             likeList.forEach(item => {
               likeObj[item.pyqId] = likeObj[item.pyqId] ? [...likeObj[item.pyqId], item] : [item]
             })
+            // end
+
+            // 处理子评论逻辑
+            const childComment = commentList.filter(item => item.parentId)
+            const childCommentObj = {}
+            childComment.forEach(item => {
+              childCommentObj[item.parentId] = childCommentObj[item.parentId] ? [...childCommentObj[item.parentId], item] : [item]
+            })
+            const hasChildCommentList = JSON.parse(JSON.stringify(commentList))
+            hasChildCommentList.forEach(item => {
+              item.reply = childCommentObj[item._id] || []
+            })
+            // end
+
+            // 朋友圈添加对应的评论逻辑
             let commentObj = {}
-            commentList.forEach(item => {
+            hasChildCommentList.forEach(item => {
               commentObj[item.pyqId] = commentObj[item.pyqId] ? [...commentObj[item.pyqId], item] : [item]
             })
             const tmp = JSON.parse(JSON.stringify(pyqList))
@@ -63,6 +80,7 @@ const getMyFriendPyqNews = async (req, res) => {
               item.likes = likeObj[item._id] || []
               item.comments = commentObj[item._id] || []
             })
+            // end
             return res.json({
               status: 2000,
               data: tmp,
@@ -81,6 +99,7 @@ const getMyFriendPyqNews = async (req, res) => {
   })
 }
 
+// 删除朋友圈
 const deletePyqItem = async (req, res) => {
   const { pyqId, userId } = req.body
   PYQ_NEWS.findOneAndDelete({
