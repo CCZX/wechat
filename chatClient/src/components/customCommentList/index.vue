@@ -10,9 +10,6 @@
         <div class="content">
           <p class="user-content ellipsis">
             <span>
-              <!-- <router-link :to="`/user/${item.authorId._id}`" class="user-content-link">
-                {{item.authorId.nickname}}  
-              </router-link> -->
               <el-popover
                 placement="top"
                 width="240"
@@ -37,11 +34,32 @@
                 <router-link slot="reference" :to="`/user/${item.authorId._id}`" class="user-content-link">
                   {{item.authorId.nickname}}  
                 </router-link>
-              </el-popover> 
+              </el-popover>
             </span>：
             <span>{{item.content}}</span>
           </p>
-          <p class="time-content secondary-font">{{item.createDate | formatDate}}</p>
+          <span class="time-content secondary-font">{{item.createDate | formatDate}}</span>
+          <span class="reply secondary-font" @click="showReplyArea(item._id)">回复</span>
+          <div class="reply-box">
+            <div class="reply-item" v-for="replyItem in item.reply" :key="replyItem._id">
+              <div class="reply-item-avatar">
+                <el-avatar :size="40" :src="IMG_URL + replyItem.authorId.photo" @error="()=>true">
+                  <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                </el-avatar>
+              </div>
+              <div class="reply-item-content">
+                <p class="user">
+                  <span class="name">{{replyItem.authorId.nickname}}：</span>
+                  {{replyItem.content}}
+                </p>
+                <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="reply-area" v-if="replyAreaShowMap[item._id]">
+            <el-input :ref="'reply-inp'+item._id" v-model="replyContentMap[item._id]" style="margin-right: 5px" />
+            <el-button type="success" size="mini" @click="doReplyComment(item._id, item.level)">回复</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -51,17 +69,58 @@
 <script>
 import { formatDateToZH } from '@/utils'
 export default {
-  props: ["commentlist"],
+  props: ["commentlist", "pyqid"],
   data() {
     return {
-      IMG_URL: process.env.IMG_URL
+      IMG_URL: process.env.IMG_URL,
+      replyContent: '',
+      replyAreaShowMap: {},
+      replyContentMap: {}
+    }
+  },
+  methods: {
+    doReplyComment(id, parentLevel) {
+      const pyqId = this.pyqid
+      const content = this.replyContentMap[id]
+      const authorId = this.userInfo._id
+      const parentId = id
+      const level = parentLevel + 1
+      this.$http.doComment({
+        pyqId, content, authorId, parentId, level
+      }).then(res => {
+        console.log(res)
+      })
+    },
+    showReplyArea(id) {
+      const replyAreaShowMap = this.replyAreaShowMap
+      for (const key in replyAreaShowMap) {
+        if (replyAreaShowMap.hasOwnProperty(key)) {
+          replyAreaShowMap[key] = false
+        }
+      }
+      replyAreaShowMap[id] = true
+      const ref = 'reply-inp' + id
+      this.$nextTick(() => {
+        this.$refs[ref][0].focus()
+      })
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo
     }
   },
   filters: {
     formatDate(val) {
       return formatDateToZH(val)
     }
-  }
+  },
+  created() {
+    this.commentlist.forEach(item => {
+      this.$set(this.replyAreaShowMap, item._id, false)
+      this.$set(this.replyContentMap, item._id, '')
+    })
+  },
 }
 </script>
 
@@ -69,15 +128,22 @@ export default {
 .custom-comment-list-com {
   .comment-list-wrapper {
     .comment-item {
-      display: flex;
-      align-items: center;
+      position: relative;
       margin-bottom: 10px;
       &:last-child {
         margin-bottom: 0;
       }
+      .avatar {
+        // float: left;
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
       .content {
-        margin-left: 10px;
-        flex: 1;
+        display: inline-block;
+        padding-left: 50px;
+        width: 100%;
         .user-content {
           margin: 0;
           .user-content-link {
@@ -86,6 +152,34 @@ export default {
         }
         .time-content {
           margin: 5px 0 0 0;
+        }
+        .reply {
+          cursor: pointer;
+        }
+        .reply-box {
+          .reply-item {
+            position: relative;
+            margin: 5px 0;
+            min-height: 40px;
+            .reply-item-avatar {
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+            .reply-item-content {
+              margin-left: 50px;
+              .user {
+                margin: 0 0 5px 0;
+                .name {
+                  font-family: "'Microsoft YaHei', Arial, Helvetica, sans-serif"
+                }
+              }
+            }
+          }
+        }
+        .reply-area {
+          display: flex;
+          margin: 5px 0;
         }
       }
     }
