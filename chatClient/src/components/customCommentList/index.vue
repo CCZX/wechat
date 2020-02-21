@@ -41,7 +41,7 @@
           <span class="time-content secondary-font">{{item.createDate | formatDate}}</span>
           <span class="reply secondary-font" @click="showReplyArea(item._id)">回复</span>
           <div class="reply-box">
-            <div class="reply-item" v-for="replyItem in item.reply" :key="replyItem._id">
+            <div class="reply-item" v-for="replyItem in item.reply.slice(0, showMaxReply)" :key="replyItem._id">
               <div class="reply-item-avatar">
                 <el-avatar :size="40" :src="IMG_URL + replyItem.authorId.photo" @error="()=>true">
                   <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
@@ -55,6 +55,37 @@
                 <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
               </div>
             </div>
+            <transition-group v-if="viewMoreReplyMap[item._id]">
+              <div class="reply-item" v-for="replyItem in item.reply.slice(showMaxReply)" :key="replyItem._id">
+                <div class="reply-item-avatar">
+                  <el-avatar :size="40" :src="IMG_URL + replyItem.authorId.photo" @error="()=>true">
+                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                  </el-avatar>
+                </div>
+                <div class="reply-item-content">
+                  <p class="user">
+                    <span class="name">{{replyItem.authorId.nickname}}：</span>
+                    {{replyItem.content}}
+                  </p>
+                  <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
+                </div>
+              </div>
+            </transition-group>
+            <span
+              class="view-more-reply-item secondary-font"
+            >
+              <span class="reply-count" v-if="item.reply.length">
+                共{{item.reply.length}}条回复{{item.reply.length > showMaxReply ? '，' : ''}}
+              </span>
+              <span class="oper"
+                v-if="!viewMoreReplyMap[item._id] && item.reply.length > showMaxReply"
+                @click="viewMoreReplyMap[item._id] = !viewMoreReplyMap[item._id]"
+              >查看</span>
+              <span
+                class="oper" v-if="viewMoreReplyMap[item._id] && item.reply.length > showMaxReply"
+                @click="viewMoreReplyMap[item._id] = !viewMoreReplyMap[item._id]"
+              >收起</span>
+            </span>
           </div>
           <div class="reply-area" v-if="replyAreaShowMap[item._id]">
             <el-input :ref="'reply-inp'+item._id" v-model="replyContentMap[item._id]" style="margin-right: 5px" />
@@ -75,7 +106,9 @@ export default {
       IMG_URL: process.env.IMG_URL,
       replyContent: '',
       replyAreaShowMap: {},
-      replyContentMap: {}
+      replyContentMap: {},
+      viewMoreReplyMap: {},
+      showMaxReply: 5
     }
   },
   methods: {
@@ -88,7 +121,26 @@ export default {
       this.$http.doComment({
         pyqId, content, authorId, parentId, level
       }).then(res => {
-        console.log(res)
+        const { data } = res
+        if (res.status === 200 && data.status === 2000) {
+          const replyItem = {...data.data[0], authorId: {
+            photo: this.userInfo.photo,
+            signature: this.userInfo.signature,
+            nickname: this.userInfo.nickname,
+            _id: this.userInfo._id
+          }}
+          this.$emit('addchild',this.pyqid, id, replyItem)
+          this.$message({
+            message: '回复成功！',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '回复失败！',
+            type: 'error'
+          })
+        }
+        this.replyContentMap[id] = ""
       })
     },
     showReplyArea(id) {
@@ -103,6 +155,9 @@ export default {
       this.$nextTick(() => {
         this.$refs[ref][0].focus()
       })
+    },
+    viewMoreReply(id) {
+      this.viewMoreReplyMap[id] = true
     }
   },
   computed: {
@@ -119,6 +174,7 @@ export default {
     this.commentlist.forEach(item => {
       this.$set(this.replyAreaShowMap, item._id, false)
       this.$set(this.replyContentMap, item._id, '')
+      this.$set(this.viewMoreReplyMap, item._id, false)
     })
   },
 }
@@ -176,6 +232,17 @@ export default {
               }
             }
           }
+          .view-more-reply-item {
+            cursor: pointer;
+            .oper {
+              &:hover {
+                background-color: #EBEEF5;
+              }
+              padding: 1px 2px;
+              border-radius: 3px;
+              color: #1890ff;
+            }
+          }
         }
         .reply-area {
           display: flex;
@@ -186,4 +253,3 @@ export default {
   }
 }
 </style>
-
