@@ -64,7 +64,7 @@ const getMyFriendPyqNews = async (req, res) => {
             childComment.forEach(item => {
               childCommentObj[item.parentId] = childCommentObj[item.parentId] ? [...childCommentObj[item.parentId], item] : [item]
             })
-            const hasChildCommentList = JSON.parse(JSON.stringify(commentList))
+            const hasChildCommentList = JSON.parse(JSON.stringify(commentList.filter(item => !item.parentId)))
             hasChildCommentList.forEach(item => {
               item.reply = childCommentObj[item._id] || []
             })
