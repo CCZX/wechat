@@ -112,7 +112,7 @@
             </span>
           </div>
           <div class="comments">
-            <comment-list :commentlist="item.comments" />
+            <comment-list @addchild="addChildComment" :pyqid="item._id" :commentlist="item.comments" />
           </div>
         </div>
         <div class="comment-area">
@@ -336,6 +336,13 @@ export default {
       this.$refs['emojiCom'] && this.$refs['emojiCom'].addEventListener('mouseleave', () => {
         this.showEmojiCom = false
       })
+    },
+    addChildComment(pyqId, id, data) { // pyqId:朋友圈Id，id：父评论id，data：新子评论
+      const newPyq = JSON.parse(JSON.stringify(this.pyqList))
+      const pyqIndex = this.pyqList.findIndex(pyqItem => pyqItem._id === pyqId )
+      const commentIndex = this.pyqList[pyqIndex].comments.findIndex(item => item._id === id )
+      newPyq[pyqIndex].comments[commentIndex].reply.push(data)
+      this.pyqList = newPyq
     }
   },
   components: {
