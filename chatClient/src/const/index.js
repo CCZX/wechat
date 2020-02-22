@@ -75,3 +75,5 @@ export const weekNumZHMap = {
   "5": '星期五',
   "6": '星期六',
 }
+
+export const commentTips = "黑猫警长提示您文明发言"
