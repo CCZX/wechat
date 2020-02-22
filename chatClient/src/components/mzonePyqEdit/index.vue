@@ -1,5 +1,5 @@
 <template>
-  <div class="mzone-pyq-edit p-center" v-loading="isLoading">
+  <div class="mzone-pyq-edit hor-ver-center" v-loading="isLoading">
     <i class="close-box el-icon-close" @click="close"></i>
     <div class="header">
       <router-link :to="`/user/${pyqInfo.userId._id}`">
@@ -144,7 +144,6 @@ export default {
 .mzone-pyq-edit {
   background-color: #fff;
   width: 650px;
-  position: absolute;
   padding: 10px;
   .close-box {
     float: right;

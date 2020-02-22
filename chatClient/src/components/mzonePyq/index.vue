@@ -43,10 +43,10 @@
           <div class="pyq-item-operation" v-if="item.userId._id === userInfo._id">
             <i class="el-icon-more" @click.stop="handleClickOperation(item._id)"></i>
             <div class="operation-list" v-if="showOperationListObj[item._id]">
-              <span slot="reference" class="operation-list-item" @click="deleteItemPyq(item._id)">
+              <span class="operation-list-item operation-text" @click="deleteItemPyq(item._id)">
                 <i class="el-icon-delete-solid item-icon" />删除
               </span>
-              <span class="operation-list-item" @click="editPyq(item._id)">
+              <span class="operation-list-item operation-text" @click="editPyq(item._id)">
                 <i class="el-icon-edit-outline item-icon" />编辑
               </span>
             </div>

@@ -40,7 +40,7 @@
           </p>
           <span class="time-content secondary-font">{{item.createDate | formatDate}}</span>
           <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
-            <span class="reply secondary-font" @click="showReplyArea(item._id, item.level, item.authorId)">回复</span>
+            <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, item.level, item.authorId)">回复</span>
           </el-tooltip>
           <div class="reply-box">
             <div class="reply-item" v-for="replyItem in item.reply.slice(0, showMaxReply)" :key="replyItem._id">
@@ -60,7 +60,7 @@
                 </p>
                 <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
                 <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
-                  <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
+                  <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
                 </el-tooltip>
               </div>
             </div>
@@ -83,7 +83,7 @@
                   </p>
                   <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
                   <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
-                    <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
+                    <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
                   </el-tooltip>
                 </div>
               </div>
@@ -94,12 +94,12 @@
               <span class="reply-count" v-if="item.reply.length">
                 共{{item.reply.length}}条回复{{item.reply.length > showMaxReply ? '，' : ''}}
               </span>
-              <span class="oper"
+              <span class="operation-text"
                 v-if="!viewMoreReplyMap[item._id] && item.reply.length > showMaxReply"
                 @click="viewMoreReplyMap[item._id] = !viewMoreReplyMap[item._id]"
               >查看</span>
               <span
-                class="oper" v-if="viewMoreReplyMap[item._id] && item.reply.length > showMaxReply"
+                class="operation-text" v-if="viewMoreReplyMap[item._id] && item.reply.length > showMaxReply"
                 @click="viewMoreReplyMap[item._id] = !viewMoreReplyMap[item._id]"
               >收起</span>
             </span>
@@ -117,12 +117,12 @@
       </div>
       <div class="comment-operation-list secondary-font">
         <span
-          class="oper expand"
+          class="operation-text expand"
           v-if="commentlist.length> 3 && !viewMoreComment"
           @click="viewMoreComment = true"
         >点击查看更多</span>
         <span
-          class="oper fold"
+          class="operation-text fold"
           v-if="viewMoreComment"
           @click="viewMoreComment = false"
         >点击收起评论</span>
@@ -296,15 +296,6 @@ export default {
     }
     .comment-operation-list {
       text-align: center;
-    }
-    .oper {
-      &:hover {
-        background-color: #EBEEF5;
-      }
-      cursor: pointer;
-      padding: 1px 2px;
-      border-radius: 3px;
-      color: #1890ff;
     }
   }
 }
