@@ -43,14 +43,12 @@
           <div class="pyq-item-operation" v-if="item.userId._id === userInfo._id">
             <i class="el-icon-more" @click.stop="handleClickOperation(item._id)"></i>
             <div class="operation-list" v-if="showOperationListObj[item._id]">
-              <!-- <el-popconfirm
-                title="这是一段内容确定删除吗？"
-              > -->
-                <span slot="reference" class="operation-list-item" @click="deleteItemPyq(item._id)">
-                  <i class="el-icon-delete-solid item-icon" />删除
-                </span>
-              <!-- </el-popconfirm> -->
-              <span class="operation-list-item"><i class="el-icon-edit-outline item-icon" />编辑</span>
+              <span slot="reference" class="operation-list-item" @click="deleteItemPyq(item._id)">
+                <i class="el-icon-delete-solid item-icon" />删除
+              </span>
+              <span class="operation-list-item" @click="editPyq(item._id)">
+                <i class="el-icon-edit-outline item-icon" />编辑
+              </span>
             </div>
           </div>
         </div>
@@ -143,6 +141,9 @@
     <transition>
       <picture-preview :imgurl="currentImgUrl" @setshow="setshowPicturePreview" v-if="showPicturePreview" />            
     </transition>
+    <div class="pyq-edit-box" v-if="showEditPyq">
+      <pyq-edit :pyqid="currentEditPyqId" @close="closeEditPyq" @modify="modifyPyqItem" />
+    </div>
   </div>
 </template>
 
@@ -151,6 +152,7 @@ import './../../../static/iconfont/iconfont.css'
 import picturePreview from '@/components/picturePreview'
 import customEmoji from '@/components/customEmoji'
 import commentList from '@/components/customCommentList'
+import pyqEdit from '@/components/mzonePyqEdit'
 import { debounce, formatDateToZH } from '@/utils'
 import { commentTips } from '@/const'
 export default {
@@ -178,7 +180,9 @@ export default {
       emojiTop: '', // emoji组件的位置
       emojiLeft: '',
       showOperationListObj: {}, // 是否显示对本条朋友圈的操作列表
-      commentTips
+      commentTips,
+      showEditPyq: false,
+      currentEditPyqId: ''
     }
   },
   computed: {
@@ -357,12 +361,30 @@ export default {
       const commentIndex = this.pyqList[pyqIndex].comments.findIndex(item => item._id === id )
       newPyq[pyqIndex].comments[commentIndex].reply.push(data)
       this.pyqList = newPyq
+    },
+    editPyq(id) {
+      this.currentEditPyqId = id
+      this.showEditPyq = !this.showEditPyq
+    },
+    closeEditPyq() {
+      this.showEditPyq = false
+    },
+    modifyPyqItem(id, data) {
+      const newPyqList = JSON.parse(JSON.stringify(this.pyqList))
+      newPyqList.map(item => {
+        if (item._id === id) {
+          item.content = data.content
+          item.pictures = data.pictures
+        }
+      })
+      this.pyqList = newPyqList
     }
   },
   components: {
     picturePreview,
     customEmoji,
-    commentList
+    commentList,
+    pyqEdit
   },
   filters: {
     formatDateToZH(val) {
@@ -428,10 +450,6 @@ export default {
           right: 5px;
           cursor: pointer;
           .operation-list {
-            // &::before {
-            //   content: '';
-            //   border-bottom: 5px solid #ffffff
-            // }
             position: absolute;
             right: -15px;
             width: 60px;
@@ -517,6 +535,16 @@ export default {
     .emoji-com {
       position: absolute;
     }
+  }
+  .pyq-edit-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10001;
+    padding: 100px;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 </style>
