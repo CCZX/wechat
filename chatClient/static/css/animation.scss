@@ -40,3 +40,36 @@
 .roll-leave-active {
   transition: all 0.6s ease;
 }
+
+.hor-scroll-enter {
+  // position: absolute;
+  transform: translateX(100px)
+}
+.hor-scroll-leave-to {
+  // opacity: 0;
+  // position: absolute;
+  transform: translateX(-100px)
+}
+
+.hor-scroll-enter-active,
+.hor-scroll-leave-active {
+  // position: absolute;
+  transition: all 1s ease-out;
+}
+
+.common-enter {
+  // position: absolute;
+  transform: translateX(100px)
+}
+.common-leave-to {
+  // opacity: 0;
+  // position: absolute;
+  transform: translateX(100px)
+}
+
+.common-enter-active,
+.common-leave-active {
+  // position: absolute;
+  opacity: 0;
+  transition: all 1s ease-out;
+}
