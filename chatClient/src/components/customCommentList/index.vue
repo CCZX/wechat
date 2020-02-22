@@ -133,6 +133,7 @@
 
 <script>
 import { formatDateToZH } from '@/utils'
+import { commentTips } from '@/const'
 export default {
   props: ["commentlist", "pyqid"],
   data() {
@@ -146,7 +147,7 @@ export default {
       showMaxReply: 3,
       currentReplyCommentLevel: 0,
       currentReplyToAuthorId: {},
-      replyTips: '黑猫警长提示您文明发言',
+      replyTips: commentTips,
       viewMoreComment: false
     }
   },
