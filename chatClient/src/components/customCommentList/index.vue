@@ -39,7 +39,9 @@
             <span>{{item.content}}</span>
           </p>
           <span class="time-content secondary-font">{{item.createDate | formatDate}}</span>
-          <span class="reply secondary-font" @click="showReplyArea(item._id, item.level, item.authorId)">回复</span>
+          <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
+            <span class="reply secondary-font" @click="showReplyArea(item._id, item.level, item.authorId)">回复</span>
+          </el-tooltip>
           <div class="reply-box">
             <div class="reply-item" v-for="replyItem in item.reply.slice(0, showMaxReply)" :key="replyItem._id">
               <div class="reply-item-avatar">
@@ -57,7 +59,9 @@
                   {{replyItem.content}}
                 </p>
                 <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
-                <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
+                <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
+                  <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
+                </el-tooltip>
               </div>
             </div>
             <transition-group v-if="viewMoreReplyMap[item._id]">
@@ -78,7 +82,9 @@
                     {{replyItem.content}}
                   </p>
                   <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
-                  <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
+                  <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
+                    <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
+                  </el-tooltip>
                 </div>
               </div>
             </transition-group>
@@ -127,7 +133,8 @@ export default {
       replyContentPlaceholderMap: {},
       showMaxReply: 3,
       currentReplyCommentLevel: 0,
-      currentReplyToAuthorId: {}
+      currentReplyToAuthorId: {},
+      replyTips: '黑猫警长提示您文明发言'
     }
   },
   methods: {
@@ -180,7 +187,7 @@ export default {
       })
       this.currentReplyCommentLevel = level
       this.currentReplyToAuthorId = authorId
-      this.replyContentPlaceholderMap[id] = `回复 @${this.currentReplyToAuthorId.nickname}`
+      this.replyContentPlaceholderMap[id] = `回复 @${this.currentReplyToAuthorId.nickname}（请文明发言）`
     },
     viewMoreReply(id) {
       this.viewMoreReplyMap[id] = true
@@ -201,7 +208,7 @@ export default {
       this.$set(this.replyAreaShowMap, item._id, false)
       this.$set(this.replyContentMap, item._id, '')
       this.$set(this.viewMoreReplyMap, item._id, false)
-      this.$set(this.replyContentPlaceholderMap, item._id, '')
+      this.$set(this.replyContentPlaceholderMap, item._id, '请文明发言')
     })
   },
 }
