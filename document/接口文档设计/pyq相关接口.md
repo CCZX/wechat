@@ -129,3 +129,54 @@ POST：`/api/v1/pyq/deletepyq`
   msg: ''
 }
 ```
+
+### 5、获取某条朋友圈详细信息
+
+> 描述：只有当朋友圈Id以及用户Id都匹配时才能获取到
+
+GET：`/api/v1/pyq/pyqinfo`
+
+> 传递参数
+
+```javascript
+{
+  pyqId: String, // 朋友圈Id
+  userId: String // 用户Id
+}
+```
+
+> 返回数据
+
+```javascript
+{
+  status: Number,
+  data: [{}],
+  msg: String
+}
+```
+
+### 6、更新某条朋友圈
+
+> 描述：只有朋友圈Id以及userId相同时才能更新。只能更新content以及pictures
+ 
+POST: `/api/v1/pyq/pyqmodify`
+
+> 传递参数
+
+```javascript
+{
+  pyqId: String, // 朋友圈Id
+  userId: String, // 用户Id
+  content: String, // 更新后的content
+  pictures: Array // 更新后的图片
+}
+```
+
+> 返回数
+```javascript
+{
+  status: Number,
+  data: [{}],
+  msg: String
+}
+```
