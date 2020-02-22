@@ -128,8 +128,57 @@ const deletePyqItem = async (req, res) => {
   })
 }
 
+// 获取某条朋友圈信息
+const getPyqItemInfo = async (req, res) => {
+  const { pyqId, userId } = req.query
+  try {
+    const doc = await PYQ_NEWS.find({
+      _id: pyqId,
+      userId
+    }).populate({path: 'userId', select: 'nickname photo signature'})
+    return res.json({
+      status: 2000,
+      data: doc,
+      msg: '获取成功'
+    })
+  } catch (error) {
+    return res.json({
+      status: 2003,
+      data: error,
+      msg: '服务端错误'
+    })
+  }
+
+}
+
+// 修改某条朋友圈
+const modifyPyqItem = async (req, res) => {
+  const { pyqId, userId, content, pictures = [] } = req.body
+  PYQ_NEWS.update({
+    _id: pyqId,
+    userId
+  }, {
+    content,
+    pictures
+  }).then(doc => {
+    return res.json({
+      status: 2000,
+      data: doc,
+      msg: '更新成功'
+    })
+  }).catch(err => {
+    return res.json({
+      status: 2003,
+      data: err,
+      msg: '服务端错误'
+    })
+  })
+}
+
 module.exports = {
   publishPyqNews,
   getMyFriendPyqNews,
-  deletePyqItem
+  deletePyqItem,
+  getPyqItemInfo,
+  modifyPyqItem
 }
