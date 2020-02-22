@@ -39,7 +39,7 @@
             <span>{{item.content}}</span>
           </p>
           <span class="time-content secondary-font">{{item.createDate | formatDate}}</span>
-          <span class="reply secondary-font" @click="showReplyArea(item._id)">回复</span>
+          <span class="reply secondary-font" @click="showReplyArea(item._id, item.level, item.authorId)">回复</span>
           <div class="reply-box">
             <div class="reply-item" v-for="replyItem in item.reply.slice(0, showMaxReply)" :key="replyItem._id">
               <div class="reply-item-avatar">
@@ -48,11 +48,16 @@
                 </el-avatar>
               </div>
               <div class="reply-item-content">
-                <p class="user">
-                  <span class="name">{{replyItem.authorId.nickname}}：</span>
+                <p class="content-header">
+                  <span class="name">{{replyItem.authorId.nickname}}
+                    <span class="reply-to-author" v-if="replyItem.level === 2">
+                      回复@{{replyItem.replyToAuthorInfo && replyItem.replyToAuthorInfo.nickname}}
+                    </span>：
+                  </span>
                   {{replyItem.content}}
                 </p>
                 <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
+                <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
               </div>
             </div>
             <transition-group v-if="viewMoreReplyMap[item._id]">
@@ -63,11 +68,17 @@
                   </el-avatar>
                 </div>
                 <div class="reply-item-content">
-                  <p class="user">
-                    <span class="name">{{replyItem.authorId.nickname}}：</span>
+                  <p class="content-header">
+                    <span class="name">{{replyItem.authorId.nickname}}
+                      <span class="reply-to-author" v-if="replyItem.level === 2">
+                        回复@{{replyItem.replyToAuthorInfo && replyItem.replyToAuthorInfo.nickname}}
+                      </span>：
+                    </span>
+                    
                     {{replyItem.content}}
                   </p>
                   <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
+                  <span class="reply secondary-font" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
                 </div>
               </div>
             </transition-group>
@@ -88,8 +99,13 @@
             </span>
           </div>
           <div class="reply-area" v-if="replyAreaShowMap[item._id]">
-            <el-input :ref="'reply-inp'+item._id" v-model="replyContentMap[item._id]" style="margin-right: 5px" />
-            <el-button type="success" size="mini" @click="doReplyComment(item._id, item.level)">回复</el-button>
+            <el-input
+              :ref="'reply-inp'+item._id"
+              v-model="replyContentMap[item._id]"
+              style="margin-right: 5px"
+              :placeholder="replyContentPlaceholderMap[item._id]"
+            />
+            <el-button type="success" size="mini" @click="doReplyComment(item._id)">回复</el-button>
           </div>
         </div>
       </div>
@@ -108,18 +124,22 @@ export default {
       replyAreaShowMap: {},
       replyContentMap: {},
       viewMoreReplyMap: {},
-      showMaxReply: 5
+      replyContentPlaceholderMap: {},
+      showMaxReply: 3,
+      currentReplyCommentLevel: 0,
+      currentReplyToAuthorId: {}
     }
   },
   methods: {
-    doReplyComment(id, parentLevel) {
+    doReplyComment(id) {
       const pyqId = this.pyqid
       const content = this.replyContentMap[id]
       const authorId = this.userInfo._id
       const parentId = id
-      const level = parentLevel + 1
+      const level = this.currentReplyCommentLevel === 2 ? this.currentReplyCommentLevel : this.currentReplyCommentLevel + 1
+      const replyToAuthorInfo = this.currentReplyToAuthorId
       this.$http.doComment({
-        pyqId, content, authorId, parentId, level
+        pyqId, content, authorId, parentId, level, replyToAuthorInfo
       }).then(res => {
         const { data } = res
         if (res.status === 200 && data.status === 2000) {
@@ -143,7 +163,10 @@ export default {
         this.replyContentMap[id] = ""
       })
     },
-    showReplyArea(id) {
+    /**
+     * 父评论的Id，当前要回复评论的level，被回复评论的用户信息
+     */
+    showReplyArea(id, level, authorId) {
       const replyAreaShowMap = this.replyAreaShowMap
       for (const key in replyAreaShowMap) {
         if (replyAreaShowMap.hasOwnProperty(key)) {
@@ -155,6 +178,9 @@ export default {
       this.$nextTick(() => {
         this.$refs[ref][0].focus()
       })
+      this.currentReplyCommentLevel = level
+      this.currentReplyToAuthorId = authorId
+      this.replyContentPlaceholderMap[id] = `回复 @${this.currentReplyToAuthorId.nickname}`
     },
     viewMoreReply(id) {
       this.viewMoreReplyMap[id] = true
@@ -175,6 +201,7 @@ export default {
       this.$set(this.replyAreaShowMap, item._id, false)
       this.$set(this.replyContentMap, item._id, '')
       this.$set(this.viewMoreReplyMap, item._id, false)
+      this.$set(this.replyContentPlaceholderMap, item._id, '')
     })
   },
 }
@@ -224,7 +251,7 @@ export default {
             }
             .reply-item-content {
               margin-left: 50px;
-              .user {
+              .content-header {
                 margin: 0 0 5px 0;
                 .name {
                   font-family: "'Microsoft YaHei', Arial, Helvetica, sans-serif"
