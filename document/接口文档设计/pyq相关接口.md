@@ -93,6 +93,7 @@ POST：`/api/v1/pyq/comment`
   authorId: String, // 评论者Id
   parentId?: String, // 夫评论，用户回复别人的评论时别人评论的引用
   level?: Number, // 评论层级，默认为0
+  replyToAuthorInfo: Object, // 被回复者的信息
 }
 ```
 > 返回数据
