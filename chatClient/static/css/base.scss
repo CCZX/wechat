@@ -69,10 +69,16 @@ html, body {
   transform: translate(-50%, -50%);
 }
 
-.p-center {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.operation-text {
+  &:hover {
+    background-color: #EBEEF5;
+  }
+  display: inline-block;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #1890ff;
+  transition: all .5s ease-in;
 }
 
 /* 美化滚动条 */
