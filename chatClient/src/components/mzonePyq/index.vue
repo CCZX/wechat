@@ -69,10 +69,12 @@
             <span class="secondary-font">阅读：{{item.readCount ? item.readCount : 0}}次</span>
           </div>
           <div class="operation">
-            <i
-              class="item iconfont icon-pinglun1 comment" title="评论"
-              @click="handleClickComment(item._id)"
-            />
+            <el-tooltip class="item" effect="dark" :content="commentTips" placement="top">
+              <i
+                class="item iconfont icon-pinglun1 comment" title="评论"
+                @click="handleClickComment(item._id)"
+              />
+            </el-tooltip>
             <i
               class="item iconfont icon-dianzan like" title="点赞"
               @click="doLike(item._id, pyqIndex)"
@@ -150,6 +152,7 @@ import picturePreview from '@/components/picturePreview'
 import customEmoji from '@/components/customEmoji'
 import commentList from '@/components/customCommentList'
 import { debounce, formatDateToZH } from '@/utils'
+import { commentTips } from '@/const'
 export default {
   props: {
     newpyqitem: {
@@ -174,7 +177,8 @@ export default {
       currentPyq: '', // 当前选择的朋友圈
       emojiTop: '', // emoji组件的位置
       emojiLeft: '',
-      showOperationListObj: {} // 是否显示对本条朋友圈的操作列表
+      showOperationListObj: {}, // 是否显示对本条朋友圈的操作列表
+      commentTips
     }
   },
   computed: {
@@ -192,17 +196,27 @@ export default {
   },
   methods: {
     async deleteItemPyq(id) {
-      const { data } = await this.$http.deletePyqItem({pyqId: id, userId: this.userInfo._id})
-      console.log(data)
-      if (data.status === 2000) {
+      this.$confirm('删除后不可恢复, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const { data } = await this.$http.deletePyqItem({pyqId: id, userId: this.userInfo._id})
+        if (data.status === 2000) {
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          })
+          const id = data.data._id
+          const newPyqList = this.pyqList.filter(item => item._id !== id)
+          this.pyqList = newPyqList
+        }
+      }).catch(() => {
         this.$message({
-          message: '删除成功！',
-          type: 'success'
-        })
-        const id = data.data._id
-        const newPyqList = this.pyqList.filter(item => item._id !== id)
-        this.pyqList = newPyqList
-      }
+          type: 'info',
+          message: '已取消删除'
+        })    
+      })
     },
     handleClickOperation(id) {
       this.showOperationListObj[id] = !this.showOperationListObj[id]
@@ -480,15 +494,6 @@ export default {
         margin-top: 10px;
         padding: 10px;
         border-top: 1px solid #e5e9ef;
-        // background-color: #e5e9ef;
-        // &::before {
-        //   position: absolute;
-        //   bottom: 100%;
-        //   content: '';
-        //   border-bottom: 10px solid #e5e9ef; // f4f5f7
-        //   border-left: 10px solid transparent;
-        //   border-right: 10px solid transparent;
-        // }
         .like {
           &::before {
             padding: 1px;
