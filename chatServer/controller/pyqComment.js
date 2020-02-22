@@ -2,14 +2,15 @@ const PYQ_COMMENT = require('./../models/pyqComment')
 
 // 用户添加评论
 const doComment = (req, res) => {
-  const { pyqId, content, authorId, parentId = '', level = 0 } = req.body
+  const { pyqId, content, authorId, parentId = '', level = 0, replyToAuthorInfo = {} } = req.body
   console.log(req.body)
   const newComment = {
     pyqId,
     content,
     authorId,
     parentId,
-    level
+    level,
+    replyToAuthorInfo
   }
   PYQ_COMMENT.insertMany(newComment).then(doc => {
     return res.json({
