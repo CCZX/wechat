@@ -18,6 +18,13 @@ export default {
     return request.post('/pyq/comment', data)
   },
   deletePyqItem(data) {
-    return request.post('pyq/deletepyq', data)
+    return request.post('/pyq/deletepyq', data)
+  },
+  getPyqItemInfo(data) {
+    const  { pyqId, userId } = data
+    return request.get(`/pyq/pyqinfo?pyqId=${pyqId}&userId=${userId}`)
+  },
+  modifyPyqItem(data) {
+    return request.post('/pyq/pyqmodify', data)
   }
 }
