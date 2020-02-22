@@ -1,7 +1,7 @@
 <template>
   <div class="custom-comment-list-com">
     <div class="comment-list-wrapper">
-      <div class="comment-item" v-for="item in commentlist" :key="item._id">
+      <div class="comment-item" v-for="item in paginationCommentList" :key="item._id">
         <div class="avatar">
           <el-avatar :size="40" :src="IMG_URL + item.authorId.photo" @error="()=>true">
             <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
@@ -115,6 +115,18 @@
           </div>
         </div>
       </div>
+      <div class="comment-operation-list secondary-font">
+        <span
+          class="oper expand"
+          v-if="commentlist.length> 3 && !viewMoreComment"
+          @click="viewMoreComment = true"
+        >点击查看更多</span>
+        <span
+          class="oper fold"
+          v-if="viewMoreComment"
+          @click="viewMoreComment = false"
+        >点击收起评论</span>
+      </div>
     </div>
   </div>
 </template>
@@ -134,7 +146,8 @@ export default {
       showMaxReply: 3,
       currentReplyCommentLevel: 0,
       currentReplyToAuthorId: {},
-      replyTips: '黑猫警长提示您文明发言'
+      replyTips: '黑猫警长提示您文明发言',
+      viewMoreComment: false
     }
   },
   methods: {
@@ -196,6 +209,13 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    paginationCommentList() {
+      if (this.viewMoreComment) {
+        return this.commentlist.slice()
+      } else {
+        return this.commentlist.slice(0, 3)
+      }
     }
   },
   filters: {
@@ -266,23 +286,24 @@ export default {
               }
             }
           }
-          .view-more-reply-item {
-            cursor: pointer;
-            .oper {
-              &:hover {
-                background-color: #EBEEF5;
-              }
-              padding: 1px 2px;
-              border-radius: 3px;
-              color: #1890ff;
-            }
-          }
         }
         .reply-area {
           display: flex;
           margin: 5px 0;
         }
       }
+    }
+    .comment-operation-list {
+      text-align: center;
+    }
+    .oper {
+      &:hover {
+        background-color: #EBEEF5;
+      }
+      cursor: pointer;
+      padding: 1px 2px;
+      border-radius: 3px;
+      color: #1890ff;
     }
   }
 }
