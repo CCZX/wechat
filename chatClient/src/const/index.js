@@ -77,3 +77,20 @@ export const weekNumZHMap = {
 }
 
 export const commentTips = "黑猫警长提示您文明发言"
+
+export const defaultPyqItem = {
+  pictures: [
+    'http://blog.static.chenr.cn/cc-messger-1702f38162c-92.jpeg'
+  ],
+  readCount: 0,
+  _id: "5e3ea3518160c54408d9ba13",
+  userId: {
+    photo: "/uploads/2019-11-10/f-1573390856438-f1573390856092.png",
+    signature: "signature",
+    nickname: "nickname",
+    _id: "5d9d903f49db3825a8e76a03"
+  },
+  createDate: new Date(),
+  content: "content",
+  __v: 0,
+}
