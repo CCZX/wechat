@@ -65,7 +65,8 @@ export default {
       loginInfo: {
         account: '',
         password:'',
-        cvCode: ''
+        cvCode: '',
+        cvCodeTimestamp: ''
       },
       registerInfo: {
         account: '',
@@ -104,6 +105,10 @@ export default {
         let { status, data, msg } = res.data
         if (status === 1002) { // 验证码错误重新获取验证码
           this.getCVCode()
+        }
+        if (status === 1007) {
+          this.getCVCode()
+          return
         }
         if (res.status === 200 && status === 1000) {
           this.$message.success('登录成功！')
@@ -145,8 +150,9 @@ export default {
     },
     getCVCode() { // 获取验证码
       this.$http.getCVCode().then(res => {
-        let { data, status } = res.data
+        let { data, status, timestamp } = res.data
         this.cvCode = data
+        this.loginInfo.cvCodeTimestamp = timestamp
         createCanvas(this.cvCode, this.currCanvas, canvasImg)
       })
     },
