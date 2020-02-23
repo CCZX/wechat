@@ -33,9 +33,9 @@ module.exports = {
       }
     } catch (error) {
       return res.json({
-        status: 2003,
+        status: 1006,
         data: error,
-        msg: '服务端错误！'
+        msg: '登录过期！'
       })
     }
   }
