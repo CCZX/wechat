@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import { isProduction } from './index'
 import router from './../router'
-import { getCookie, setCookie } from './token'
+import { getCookie, setCookie, removeCookie } from './token'
 let instance = axios.create({
   timeout: 7000,
   baseURL: isProduction() ? 'http://localhost:3333' : '/api/v1'
@@ -49,6 +49,7 @@ instance.interceptors.response.use(
         type: 'warning',
         duration: 3000
       })
+      removeCookie()
       router.push('/login')
     } else if (response.data.status === 1007) {
       Message({
