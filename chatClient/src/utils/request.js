@@ -24,10 +24,11 @@ instance.interceptors.request.use(
 // 成功：2000，失败（无数据）：2001，未登录：2002，服务端错误：2003
 // 登录成功：1000，登录失败（账号或密码错误）：1001，验证码错误：1002
 // 用户已被注册:1003,注册失败:1004,注册成功:1005,用户验证过期：1006
+// 验证码过期：1007
 instance.interceptors.response.use(
   response => {
     if (response.data.status === 1000) {
-      setCookie(response.data.authorization)
+      setCookie(response.data.token)
     }
     if (response.data.status === 2002) { // 未登录
       Message({
@@ -49,6 +50,12 @@ instance.interceptors.response.use(
         duration: 3000
       })
       router.push('/login')
+    } else if (response.data.status === 1007) {
+      Message({
+        message: '验证码过期！',
+        type: 'warning',
+        duration: 3000
+      })
     }
     return response
   },
