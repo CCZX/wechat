@@ -2,12 +2,13 @@
 const cvCodeList = require('./../const/index').cvCodeList
 
 const cvCode = () => {
-  let res = ''
+  const timestamp = Date.now()
+  let code = ''
   for (let i = 0; i < 4; i++) {
     let random = Math.floor(Math.random() * cvCodeList.length)
-    res += cvCodeList[random]
+    code += cvCodeList[random]
   }
-  return res
+  return {code, timestamp}
 }
 module.exports = {
   cvCode
