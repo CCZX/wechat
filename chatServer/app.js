@@ -9,6 +9,8 @@ let server = require('http').createServer(app)
 let io = require('socket.io')(server)
 
 const { fromatTime } = require('./utils')
+const { checkToken } = require('./utils/auth')
+
 const onLineUser = {}
 
 const user = require('./routes/user')
@@ -23,7 +25,6 @@ const pyq = require('./routes/pyq')
 // const socketHandler = require('./utils/socket')
 
 const API_VERSION = require('./const').API_VERSION
-const whiteList = [`${API_VERSION}/user/login`, `${API_VERSION}/user/register`, `${API_VERSION}/user/getcode`] // `${API_VERSION}/user/getcode`
 
 const options = {
   setHeaders(res, path, stat) {
@@ -45,6 +46,8 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+
+app.use(checkToken) // 验证token
 
 // app.use(`${API_VERSION}/*`, (req, res, next)　=> {
 //   console.log(req.session)
