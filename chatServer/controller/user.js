@@ -2,23 +2,33 @@ const USER = require('./../models/user')
 const ACCOUNTBASE = require('./../models/accountpool')
 const md5 = require('./../utils').md5
 const cvCode = require('./../utils/cvCode').cvCode
+const { createToken } = require('./../utils/auth')
 const randomNickname = require('./../utils/index').randomNickname
-const { monthAgo, nextMonth } = require('./../utils')
 let verificationCode = ''
 
 // 验证码
 const generatorCode = (req, res) => {
-  verificationCode = cvCode()
+  const { code, timestamp } = cvCode()
+  verificationCode = code
   return res.json({
     status: 2000,
     data: verificationCode,
+    timestamp,
     msg: 'code success'
   })
 }
 
 // 登录
 const login = (req, res) => {
-  let { account, password, cvCode, setting } = req.body
+  let { account, password, cvCode, cvCodeTimestamp, setting } = req.body
+  const nowTimestamp = Date.now()
+  if (nowTimestamp - cvCodeTimestamp > 10000) {
+    return res.json({
+      status: 1007,
+      data: [],
+      msg: '验证码超时'
+    })
+  }
   if (cvCode.toLocaleUpperCase() !== verificationCode) {
     return res.json({
       status: 1002,
@@ -63,9 +73,12 @@ const login = (req, res) => {
           console.log('upSuccess', up)
         })
         req.session.login = doc.name
+        const userId = doc._id
+        const token = createToken(userId)
         return res.json({
           status: 1000,
           data: doc,
+          token: token,
           msg: '登录成功'
         })
       } else {
