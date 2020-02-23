@@ -199,6 +199,7 @@ export default {
 @import './../../../../static/css/animation.scss';
 .user-menu-item {
   .link {
+    color: #3578E5;
     text-decoration: none;
     &:hover {
       text-decoration: underline;
