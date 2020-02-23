@@ -22,7 +22,7 @@ const generatorCode = (req, res) => {
 const login = (req, res) => {
   let { account, password, cvCode, cvCodeTimestamp, setting } = req.body
   const nowTimestamp = Date.now()
-  if (nowTimestamp - cvCodeTimestamp > 10000) {
+  if (nowTimestamp - cvCodeTimestamp > 60000) {
     return res.json({
       status: 1007,
       data: [],
