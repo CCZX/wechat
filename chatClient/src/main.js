@@ -15,7 +15,8 @@ import axios from './api'
 import store from './store'
 import directives from './directives'
 import { VueAMapKey } from '@/const'
-import './../static/css/base.css'
+// import './../static/css/base.css'
+import './../static/css/base.scss'
 import './../static/css/var.scss'
 
 Vue.use(ElementUI)
