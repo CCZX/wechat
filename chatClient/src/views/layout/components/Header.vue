@@ -58,6 +58,11 @@
                 反馈
               </router-link>
             </el-dropdown-item>
+            <el-dropdown-item class="user-menu-item">
+              <a class="link" @click="logout">
+                退出
+              </a>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div class="name-sigin">
@@ -84,6 +89,7 @@ import { mapState } from 'vuex'
 import vueDraggableResizable from 'vue-draggable-resizable'
 import CoArtBoard from '@/views/CoArtBoard'
 import { coArtBoardReplyTypes } from '@/const'
+import { removeCookie } from '@/utils/token'
 let timer
 export default {
   data() {
@@ -107,6 +113,12 @@ export default {
       isToCoArtBoard: 'isToCoArtBoard',
       currentConversation: 'currentConversation'
     })
+  },
+  methods: {
+    logout() {
+      this.$router.replace('/login')
+      removeCookie()
+    }
   },
   components: {
     CoArtBoard,
