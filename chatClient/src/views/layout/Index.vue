@@ -126,6 +126,7 @@ export default {
     box-sizing: border-box;
     min-height: 100%;
     .el-main {
+      margin-top: 60px;
       min-height: calc(100vh - 60px);
       background-color: #e9ebee;
       color: #333;

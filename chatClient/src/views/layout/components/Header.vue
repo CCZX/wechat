@@ -195,6 +195,10 @@ export default {
 }
 .layout-header__com {
   @import "./../../../../static/css/var.scss";
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1003;
   .el-header {
     display: flex;
     justify-content: space-between;
