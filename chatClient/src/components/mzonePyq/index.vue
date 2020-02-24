@@ -130,13 +130,16 @@
         <el-button v-if="isLoading" type="primary" style="width: 100%" :loading="isLoading">加载中</el-button>
       </div>
       <div style="margin-bottom: 10px">
-        <el-alert v-if="!hasMore && !isLoading" title="没有更多了..." type="info" center show-icon :closable="false" />
+        <el-alert v-if="!hasMore && !isLoading && pyqList.length" title="没有更多了..." type="info" center show-icon :closable="false" />
       </div>
       <transition name="roll">
         <div ref="emojiCom" class="emoji-com" v-if="showEmojiCom" :style="`left:${emojiLeft}; top: ${emojiTop}`" @mouseenter="handleEmojiMouseenter">
           <custom-emoji @addemoji="addEmoji" tabposition="top" />
         </div>
       </transition>
+    </div>
+    <div class="no-data hor-ver-center" v-if="!pyqList.length">
+      <empty-svg width="200" height="200" />
     </div>
     <transition>
       <picture-preview :imgurl="currentImgUrl" @setshow="setshowPicturePreview" v-if="showPicturePreview" />            
@@ -155,6 +158,7 @@ import commentList from '@/components/customCommentList'
 import pyqEdit from '@/components/mzonePyqEdit'
 import { debounce, formatDateToZH } from '@/utils'
 import { commentTips } from '@/const'
+import EmptySvg from '@/SVGComponents/empty'
 export default {
   props: {
     newpyqitem: {
@@ -384,7 +388,8 @@ export default {
     picturePreview,
     customEmoji,
     commentList,
-    pyqEdit
+    pyqEdit,
+    EmptySvg
   },
   filters: {
     formatDateToZH(val) {
@@ -415,6 +420,8 @@ export default {
 <style lang="scss" scoped>
 @import './../../../static/css/animation.scss';
 .pyq-com {
+  position: relative;
+  min-height: 240px;
   .pyq-com-wrapper {
     .item {
       background-color: #fff;
@@ -545,6 +552,11 @@ export default {
     z-index: 10001;
     padding: 100px;
     background-color: rgba(0, 0, 0, 0.1);
+  }
+  .no-data {
+    width: 100%;
+    text-align: center;
+    background-color: #fff;
   }
 }
 </style>
