@@ -39,7 +39,7 @@
         <div class="description" v-if="searchList.length">
           一共搜索到{{searchList.length}}条结果
         </div>
-        <div class="no-data" v-if="searchList.length === 0">没有数据...</div>
+        <empty-svg  class="no-data" v-if="searchList.length === 0" width="200" height="200" />
         <user-list :searchlist="searchList" v-if="searchObject === 'friend'" />
         <group-list :searchlist="searchList" v-else-if="searchObject === 'group'" />
         <div class="no-more" v-if="searchList.length && !hasMore">
@@ -61,6 +61,7 @@ import { debounce } from '@/utils'
 import { searchObjectMap, searchTypes } from '@/const'
 import userList from '@/components/customSearchList/userList'
 import groupList from '@/components/customSearchList/groupList'
+import EmptySvg from '@/SVGComponents/empty'
 export default {
   name: "Add",
   data() {
@@ -167,7 +168,8 @@ export default {
   },
   components: {
     userList,
-    groupList
+    groupList,
+    EmptySvg
   },
   mounted() {
     document.addEventListener('scroll', this.hanlerScroll)
@@ -197,7 +199,7 @@ export default {
       position: relative;
       background-color: #fff;
       border-radius: 3px;
-      min-height: 140px;
+      min-height: 250px;
       width: 600px;
       padding: 10px;
       .description {
