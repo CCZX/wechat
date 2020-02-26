@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button, Icon, Switch, Popover, Tag, Tooltip, Popconfirm  } from 'antd'
-import { formatDate, formatSex } from './../../../utils'
+import { formatDate, formatSex, msToDay } from './../../../utils'
 
 export const returnColumns = that => (
   [
     {
-      title: 'chatID',
+      title: 'MessageId',
       width: 100,
       dataIndex: 'code',
       key: 'code',
@@ -22,14 +22,14 @@ export const returnColumns = that => (
       title: '昵称',
       dataIndex: 'nickname',
       key: 'nickname',
-      width: 80,
+      width: 180,
       ellipsis: true,
     },
     {
       title: '年龄',
       dataIndex: 'age',
       key: 'age',
-      width: 100,
+      width: 80,
       ellipsis: true,
     },
     {
@@ -54,7 +54,7 @@ export const returnColumns = that => (
       key: 'signUpTime',
       width: 300,
       render:(text) => (
-        <span><Icon type="clock-circle" /> { formatDate(new Date(text), false) }</span>
+        <span><Icon type="clock-circle" /> { formatDate(new Date(text), "YYYY-MM-DD") }</span>
       )
     },
     {
@@ -63,8 +63,28 @@ export const returnColumns = that => (
       key: 'lastLoginTime',
       width: 300,
       render:(text) => (
-        <span><Icon type="clock-circle" /> { formatDate(new Date(text), false) }</span>
+        <span><Icon type="clock-circle" /> { formatDate(new Date(text), "YYYY-MM-DD") }</span>
       )
+    },
+    {
+      title: '上次登录已过去',
+      dataIndex: 'lastLoginTimeToNow',
+      key: 'lastLoginTimeToNow',
+      width: 300,
+      render:(text, record) => {
+        const date = msToDay(new Date() - new Date(record.lastLoginTime), "DD-HH")
+        return (
+          <span style={parseInt(date) > 30 ? {'color': 'red'} : {}}>
+            <Icon type="clock-circle" /> <span>{ date }</span>
+            <span style={{'marginLeft': '4px'}}>
+              {
+                parseInt(date) > 30 ? <Popover content="邮箱召回" title="召回">
+                  <Icon type="phone" />
+                </Popover> : ''
+              }
+            </span>
+          </span>
+      )}
     },
     {
       title: '签名',
@@ -88,7 +108,8 @@ export const returnColumns = that => (
       render: (text, record, index) => {
         return (
           <span style={{'display': 'flex'}}>
-            <Switch onChange={() => {that.handleChangeStatus(record, index)}} checked={text === 0 ? true : false } />{text === 0 ? '正常' : '冻结'}
+            <Switch style={{'marginRight': '4px'}} onChange={() => {that.handleChangeStatus(record, index)}} checked={text === 0 ? true : false } />
+            {text === 0 ? <Tag color="green">正常</Tag> : <Tag color="magenta">冻结</Tag>}
           </span>
         )
       }
@@ -109,7 +130,7 @@ export const returnColumns = that => (
         )
         return (
           <Popover content={content} title="登录日志">
-            <Tag color="magenta">查看登录信息</Tag>
+            <Tag color="volcano">查看登录信息</Tag>
           </Popover>
         )
       }
