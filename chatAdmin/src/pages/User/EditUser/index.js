@@ -54,7 +54,7 @@ class EditUser extends Component {
     const { visible, userList } = this.state
     return (
       <div className="user-edit-page">
-        <Table rowKey={i => i._id} columns={this.columns} dataSource={userList} scroll={{ x: 1500, y: 0 }} />
+        <Table rowKey={i => i._id} columns={this.columns} dataSource={userList} scroll={{ x: 1700, y: 0 }} />
         <CustomModal visible={visible} toggle={this.toggleModalVisiable} />
       </div>
     )
