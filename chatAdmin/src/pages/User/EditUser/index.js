@@ -5,14 +5,13 @@ import CustomModal from './components/Modal'
 import { returnColumns } from './const'
 
 const { changeUserStatus } = userApi
-
+const rowHeight = 90
 class EditUser extends Component {
   constructor(props) {
     super(props)
     this.state = {
       userList: [],
-      visible: false,
-      // columns: returnColumns(this)
+      visible: false
     }
     this.columns = returnColumns(this)
   }
@@ -33,9 +32,10 @@ class EditUser extends Component {
   }
   handleChangeStatus = (record, index) => {
     const { userList } = this.state
+    const newUserList = JSON.parse(JSON.stringify(userList))
     const originStatus = userList[index].status
     const nowStatus = originStatus === 0 ? 1 : 0
-    originStatus === 0 ? userList[index].status = 1 : userList[index].status = 0
+    newUserList[index].status = nowStatus
     const params = {
       id: record._id,
       state: nowStatus
@@ -47,14 +47,22 @@ class EditUser extends Component {
       }
     })
     this.setState({
-      userList: userList
+      userList: newUserList
     })
   }
   render() {
     const { visible, userList } = this.state
+    const layouContent = document.querySelector('.ant-layout-content')
+    const layouContentHeight = layouContent ? layouContent.offsetHeight : '600'
+    const pageSize = Math.round(layouContentHeight / rowHeight)
+    const pagination = {
+      pageSize,
+      total: userList.length,
+      showTotal: total => `共 ${total} 条数据`
+    }
     return (
       <div className="user-edit-page">
-        <Table rowKey={i => i._id} columns={this.columns} dataSource={userList} scroll={{ x: 1700, y: 0 }} />
+        <Table pagination={pagination} rowKey={i => i._id} columns={this.columns} dataSource={userList} scroll={{ x: 1700, y: 0 }} />
         <CustomModal visible={visible} toggle={this.toggleModalVisiable} />
       </div>
     )
