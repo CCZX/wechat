@@ -4,8 +4,9 @@
       <div class="header-wrapper" v-if="currentConversation.roomid">
         <div class="header-title">
           <span>{{currentConversation.isGroup ? currentConversation.groupId.title : currentConversation.nickname}}</span>
-          <i class="icon-qun iconfont iconic iconic-group" v-if="currentConversation.conversationType === 'GROUP'"></i>
-          <i class="el-icon-user-solid iconic " v-else></i>
+          <i :class="!showSettingPanel ? 'el-icon-arrow-down curp' : 'el-icon-arrow-up curp'" @click="toggleShowSettingPanel"></i>
+          <!-- <i class="icon-qun iconfont iconic iconic-group" v-if="currentConversation.conversationType === 'GROUP'"></i> -->
+          <!-- <i class="el-icon-user-solid iconic " v-else></i> -->
         </div>
         <div class="header-operation" v-if="!currentConversation.isGroup">
           <el-tooltip class="item" effect="dark" content="白板协作需要良好的网络环境" placement="top">
@@ -14,17 +15,29 @@
           <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
             <i class="operation-item iconfont icon-shipin"></i>
           </el-tooltip>
+          <i class="operation-item el-icon-s-tools" title="设置" @click="setShowSider"></i>
         </div>
       </div>
+    </transition>
+    <transition name="roll">
+      <div class="setting-panel" v-if="showSettingPanel">
+        <setting-panel :current-conversation="currentConversation" />  
+      </div>      
     </transition>
   </div>
 </template>
 
 <script>
 import './../../../../static/iconfont/iconfont.css'
+import settingPanel from './settingPanel'
 export default {
   props: {
     currentConversation: Object
+  },
+  data() {
+    return {
+      showSettingPanel: false
+    }
   },
   computed: {
     userInfo() {
@@ -34,13 +47,30 @@ export default {
   methods: {
     enterArtBoard() {
       this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+    },
+    setShowSider() {
+      this.$emit('setshowsider')
+    },
+    toggleShowSettingPanel() {
+      this.showSettingPanel = !this.showSettingPanel
     }
   },
+  watch: {
+    currentConversation: {
+      handler() {
+        this.showSettingPanel = false
+      }, immediate: true, deep: true
+    }
+  },
+  components: {
+    settingPanel
+  }
 }
 </script>
 
 <style lang="scss">
 .chat-area__header {
+  position: relative;
   box-sizing: border-box;
   height: 60px;
   padding: 0 20px;
@@ -56,6 +86,13 @@ export default {
         cursor: pointer;
       }
     }
+  }
+  .setting-panel {
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    width: 100%;
+    z-index: 1005;
   }
   .iconic-group::before {
     font-size: 20px;
