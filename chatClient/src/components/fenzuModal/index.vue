@@ -86,6 +86,7 @@ export default {
     width: 300px;
     padding: 40px 20px 20px;
     background-color: #fff;
+    border-radius: 10px;
     .fenzu-list {
       .item {
         display: block;
