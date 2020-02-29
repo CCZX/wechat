@@ -28,6 +28,20 @@ const userSchema = new Schema({
   loginSetting: { // 存储用户登录的IP、浏览器、OS等信息
     type: Object,
     default: {}
+  },
+  friendFenzu: {
+    type: Object,
+    default: {'我的好友': []}
+  },
+  /**
+   * {
+   *    id: 'C罗',
+   *    id: '梅西'
+   * }
+   */
+  friendBeizhu: {
+    type: Object,
+    default: {}
   }
 })
 const user = DB.model('user', userSchema)
