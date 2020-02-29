@@ -92,6 +92,7 @@ export default {
       if (!passwordReg.test(this.loginInfo.password)) {
         return this.$message.error('请输入6-64位由数字字母组成的密码')
       }
+      const returnCitySN = window.returnCitySN ? window.returnCitySN : {}
       const params = {
         ...this.loginInfo,
         setting: {
