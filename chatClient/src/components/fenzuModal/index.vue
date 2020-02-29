@@ -64,12 +64,8 @@ export default {
       }
     },
     close() {
-      console.log(1)
       this.$emit('hidden-fenzu')
     },
-    change() {
-      console.log(12)
-    }
   },
   mounted() {
     this.selectFenzu = this.currentFenzu

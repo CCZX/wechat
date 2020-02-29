@@ -21,7 +21,6 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log(to, from)
       //如果 要 to(进入) 的页面是需要 keepAlive 缓存的，把 name push 进 include数组
       setTimeout(() => {
         if (to.meta.keepAlive) {
@@ -32,7 +31,6 @@ export default {
         //再根据 deepth 来判断是前进还是后退
         //如果是后退
         if (from.meta.keepAlive && to.meta.deepth < from.meta.deepth) {
-          console.log('okokokokokokokokokok')
           const index = this.include.indexOf(from.name);
           const layoutIndex = this.include.indexOf('Layout')
           layoutIndex !== -1 && this.include.splice(layoutIndex, 1)

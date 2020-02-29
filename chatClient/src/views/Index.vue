@@ -111,20 +111,17 @@ export default {
         if (fromatTime(new Date(item.start), false) === fromatTime(new Date(), false)) {
           item.start = fromatTime(new Date(item.start), false)
           item.end ? item.end = fromatTime(new Date(item.end), false) : ''
-          console.log(item)
           return item
         }
       } else if (new Date(item.end) > new Date(item.start)) {
         if (fromatTime(new Date(item.start), false) <= fromatTime(new Date(), false) && fromatTime(new Date(item.end), false) >= fromatTime(new Date(), false)) {
           item.start = fromatTime(new Date(item.start), false)
           item.end = fromatTime(new Date(item.end), false)
-          console.log(item)
           return item
         }
       }
     }).filter(item => item)
     this.todos = todayTodos
-    console.log('todayTodos todayTodos', todayTodos)
   },
 }
 </script>

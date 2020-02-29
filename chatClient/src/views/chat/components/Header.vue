@@ -69,7 +69,6 @@ export default {
   watch: {
     currentConversation: {
       handler() {
-        console.log('header currentConversation 11111111111111111111111111111111111')
         this.showSettingPanel = false
       }, immediate: true, deep: true
     }

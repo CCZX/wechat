@@ -59,7 +59,6 @@ export default {
       this.isShowFenzu = true
     },
     hiddenFenzu() {
-      console.log(2)
       this.isShowFenzu = false
     },
     async modifyBeizhu() {
