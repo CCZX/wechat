@@ -10,5 +10,8 @@ router.get('/prefetchuser', userController.preFetchUser)
 router.get('/getalluser', userController.getAllUser)
 router.get('/getuserbysigntime', userController.getUserBySignUpTime)
 router.post('/changestatus', userController.changeUserStatus)
+router.post('/addfenzu', userController.addNewFenzu)
+router.post('/modifyuserfenzu', userController.modifyFrienFenzu)
+router.post('/modifyfriendbeizhu', userController.modifyBeizhu)
 
 module.exports = router
