@@ -11,7 +11,7 @@
       <el-tab-pane>
         <span slot="label"><i class="el-icon-chat-line-round"></i></span>
         <conversation-item
-          v-for="item in conversationList"
+          v-for="item in hasBeizhuConversationList"
           :key="item.id"
           :conversationInfo="item"
           :currentConversation="currentConversation"
@@ -57,7 +57,6 @@
         </el-collapse>
       </el-tab-pane>
     </el-tabs>
-    
   </div>
 </template>
 
@@ -97,21 +96,31 @@ export default {
     }
   },
   computed: {
-    userInfo() {
+    userInfo() { // 用户信息
       return this.$store.state.user.userInfo
     },
-    friendFenzu() {
-      return Object.keys(this.userInfo.friendFenzu)
+    friendBeizhu() { // 好友备注Map {id2: '备注1', id1: '备注2'}
+      return this.userInfo.friendBeizhu || {}
     },
-    friendConversationList() {
+    friendConversationList() { // 好友
       return this.conversationList.filter(item => item.conversationType === conversationTypes.friend)
     },
-    groupConversationList() {
+    groupConversationList() { // 群聊
       return this.conversationList.filter(item => item.conversationType === conversationTypes.group)
     },
-    fenzuUserList() {
+    hasBeizhuConversationList() { // 给会话加上备注
+      const conversationList = JSON.parse(JSON.stringify(this.conversationList))
+      return conversationList.map(item => {
+        item.beizhu = this.friendBeizhu[item._id] ? this.friendBeizhu[item._id] : ''
+        return item
+      })
+    },
+    friendFenzu() { // 获取所有分组 [分组1， 分组2]
+      return Object.keys(this.userInfo.friendFenzu)
+    },
+    fenzuUserList() { // 根据分组分类
       const myFenzuInfo = this.userInfo.friendFenzu
-      const myFriends = this.conversationList.filter(item => item.conversationType === conversationTypes.friend)
+      const myFriends = this.hasBeizhuConversationList.filter(item => item.conversationType === conversationTypes.friend)
       const myFenzuKeys = Object.keys(myFenzuInfo)
       const res = {}
       myFenzuKeys.forEach(item => {
@@ -133,18 +142,21 @@ export default {
       return res
     },
     myHolderGroup() {
-      return this.groupConversationList.filter(item => item.userId === this.userInfo._id)
+      return this.groupConversationList.filter(item => item.holder)
     },
     myJoinGroup() {
-      return this.groupConversationList.filter(item => item.userId !== this.userInfo._id)
+      return this.groupConversationList.filter(item => !item.holder)
     }
   },
   methods: {
     async addNewFenzu() {
-      if (!this.newFenzuName) return
+      if (!this.newFenzuName.trim()) return
+      if (this.friendFenzu.includes(this.newFenzuName.trim())) {
+        this.$message({type: 'warning', message: '已有该分组'})
+      }
       this.isAdding = true
       const params = {
-        name: this.newFenzuName,
+        name: this.newFenzuName.trim(),
         userId: this.userInfo._id
       }
       const { data } = await this.$http.addNewFenzu(params)
@@ -155,7 +167,6 @@ export default {
       const userInfo = await this.$http.getUserInfo(this.userInfo._id)
       this.isAdding = false
       this.$store.dispatch('user/LOGIN', userInfo.data.data)
-      console.log(data, userInfo.data)
     },
     changeCurrentConversation(item) {
       this.$emit('setCurrentConversation', item)
@@ -177,7 +188,7 @@ export default {
           item.myAvatar = this.userInfo.photo
         })
         this.conversationList = friendList
-        this.changeCurrentConversation(this.conversationList[0] || {})
+        // this.changeCurrentConversation(this.conversationList[0] || {})
         // 把好友的id保存到本地，可能会用到
         const saveLocalData = friendList.map(item => {
           return item._id
