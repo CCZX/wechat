@@ -16,5 +16,14 @@ export default {
   preFetchUser(data) {
     let { type, q, page, pageSize } = data
     return request.get(`/user/prefetchuser?type=${type}&q=${q}&page=${page}&pageSize=${pageSize}`)
-  } 
+  },
+  addNewFenzu(data) {
+    return request.post('/user/addfenzu', data)
+  },
+  modifyuserfenzu(data) {
+    return request.post(`/user/modifyuserfenzu`, data)
+  },
+  modifyFriendBeizhu(data) {
+    return request.post('/user/modifyfriendbeizhu', data)
+  }
 }
