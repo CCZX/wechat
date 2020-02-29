@@ -3,9 +3,23 @@
     <div class="operation-list">
       <span
         class="item operation-text"
-        @click="showFenzu"
+        @click.stop="showFenzu"
         v-if="currentConversation.conversationType === conversationTypes.friend"
       >切换分组</span>
+      
+      <el-popover
+        placement="top-start"
+        width="300"
+        trigger="click"
+      >
+        <el-input placeholder="请输入备注" v-model="newBeizhu" @keydown.enter.native="modifyBeizhu" />
+        <span
+          class="item operation-text"
+          slot="reference"
+          @click.stop="()=>{}"
+          v-if="currentConversation.conversationType === conversationTypes.friend"
+        >修改备注</span>
+      </el-popover>
       <span
         class="item operation-text__danger"
         v-if="currentConversation.conversationType === conversationTypes.friend"
@@ -31,7 +45,13 @@ export default {
   data() {
     return {
       isShowFenzu: false,
-      conversationTypes
+      conversationTypes,
+      newBeizhu: ''
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo
     }
   },
   methods: {
@@ -41,6 +61,18 @@ export default {
     hiddenFenzu() {
       console.log(2)
       this.isShowFenzu = false
+    },
+    async modifyBeizhu() {
+      const params = {
+        userId: this.userInfo._id,
+        friendId: this.currentConversation._id,
+        friendBeizhu: this.newBeizhu
+      }
+      await this.$http.modifyFriendBeizhu(params)
+      const userInfo = await this.$http.getUserInfo(this.userInfo._id)
+      this.$store.dispatch('user/LOGIN', userInfo.data.data)
+      this.$emit('setCurrentConversation', {...this.currentConversation, beizhu: this.newBeizhu})
+      this.newBeizhu = ''
     }
   },
   components: {

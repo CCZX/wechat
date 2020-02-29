@@ -3,8 +3,8 @@
     <transition name="roll">
       <div class="header-wrapper" v-if="currentConversation.roomid">
         <div class="header-title">
-          <span>{{currentConversation.isGroup ? currentConversation.groupId.title : currentConversation.nickname}}</span>
-          <i :class="!showSettingPanel ? 'el-icon-arrow-down curp' : 'el-icon-arrow-up curp'" @click="toggleShowSettingPanel"></i>
+          <span>{{haderTitle}}</span>
+          <i :class="!showSettingPanel ? 'el-icon-arrow-down curp' : 'el-icon-arrow-up curp'" @click.stop="toggleShowSettingPanel"></i>
           <!-- <i class="icon-qun iconfont iconic iconic-group" v-if="currentConversation.conversationType === 'GROUP'"></i> -->
           <!-- <i class="el-icon-user-solid iconic " v-else></i> -->
         </div>
@@ -21,7 +21,7 @@
     </transition>
     <transition name="roll">
       <div class="setting-panel" v-if="showSettingPanel">
-        <setting-panel :current-conversation="currentConversation" />  
+        <setting-panel :current-conversation="currentConversation" @setCurrentConversation="setCurrentConversation" />  
       </div>      
     </transition>
   </div>
@@ -32,7 +32,8 @@ import './../../../../static/iconfont/iconfont.css'
 import settingPanel from './settingPanel'
 export default {
   props: {
-    currentConversation: Object
+    currentConversation: Object,
+    setCurrentConversation: Function
   },
   data() {
     return {
@@ -42,6 +43,16 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    haderTitle() {
+      const currentConversation = this.currentConversation
+      let res = ''
+      if (currentConversation.isGroup) {
+        res = currentConversation.groupId.title
+      } else {
+        res = currentConversation.beizhu ? currentConversation.beizhu : currentConversation.nickname
+      }
+      return res
     }
   },
   methods: {
@@ -58,13 +69,19 @@ export default {
   watch: {
     currentConversation: {
       handler() {
+        console.log('header currentConversation 11111111111111111111111111111111111')
         this.showSettingPanel = false
       }, immediate: true, deep: true
     }
   },
   components: {
     settingPanel
-  }
+  },
+  // mounted() {
+  //   document.addEventListener('click', () => {
+  //     this.showSettingPanel = false
+  //   })
+  // },
 }
 </script>
 

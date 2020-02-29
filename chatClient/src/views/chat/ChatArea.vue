@@ -1,6 +1,10 @@
 <template>
   <div class="chat-area__com">
-    <chat-header :currentConversation="currentConversation" @setshowsider="setShowSider" />
+    <chat-header
+      :currentConversation="currentConversation"
+      @setshowsider="setShowSider"
+      :set-current-conversation="setCurrentConversation"
+    />
     <div
        :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'"
     >
@@ -70,7 +74,8 @@ import sider from './components/Sider'
 export default {
   props: {
     currentConversation: Object,
-    setLoading: Function
+    setLoading: Function,
+    setCurrentConversation: Function
   },
   data() {
     return {

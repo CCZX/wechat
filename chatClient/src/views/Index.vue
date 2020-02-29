@@ -11,6 +11,7 @@
         v-if="currentConversation && currentConversation._id"
         :currentConversation="currentConversation"
         :setLoading="setLoading"
+        :set-current-conversation="setCurrentConversation"
       />
       <div class="no-conversation" v-else>
         没有数据
@@ -18,11 +19,7 @@
     </div>
     <div class="detail">
       <div class="todo">
-        <el-alert
-          :title="todos > 2 ? '今日代办事项（最多）' : '今日代办事项'"
-          type="success"
-          :closable="false">
-        </el-alert>
+        <part-title text="今日代办" />
         <el-card class="box-card"  v-for="(item, index) in todos" :key="index">
           <div class="content">
             <span class="item ellipsis">待办事项：{{ item.title }}</span>
@@ -31,19 +28,20 @@
             <span class="item ellipsis">事件类型：<el-tag :type="item.cssClass" effect="dark" size="mini">{{ matterLevelMap[item.cssClass] }}</el-tag></span>
           </div>
         </el-card>
-        <el-button type="primary" style="width: 100%">
+        <el-alert v-if="!todos.length" title="今日暂无代办" type="info" center show-icon style="margin: 10px 0" :closable="false" />
+        <el-button type="primary" size="mini" style="width: 100%">
           <router-link to="/schedule" class="link">
             前往日程查看更多
           </router-link>
         </el-button>
       </div>
       <div class="weather">
-        <el-alert
+        <!-- <el-alert
           title="最近天气走势"
           type="success"
           :closable="false">
-        </el-alert>
-        <weather />
+        </el-alert> -->
+        <!-- <weather /> -->
       </div>
       <!-- <a-map /> -->
     </div>
@@ -56,6 +54,7 @@ import ChatArea from '@/views/chat/ChatArea'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { fromatTime } from '@/utils'
 import weather from '@/components/customWeather'
+import partTitle from '@/components/partTitle'
 // import AMap from '@/components/customMap'
 export default {
   name: 'Index',
@@ -75,13 +74,17 @@ export default {
   watch: {
     currentConversation: {
       handler(newVal) {
-        if(newVal.roomid) {
+        try {
+          if(newVal.roomid) {
           this.$store.dispatch('news/SET_UNREAD_NEWS', {
-            roomid: this.currentConversation.roomid,
+            roomid: this.currentConversation && this.currentConversation.roomid,
             count: 0,
             type: SET_UNREAD_NEWS_TYPE_MAP.clear
           })
           this.$store.dispatch('app/SET_CURRENT_CONVERSATION', newVal)
+        }
+        } catch (error) {
+          console.log('errrrr', error)
         }
       }, deep: true, immediate: true
     }
@@ -97,7 +100,8 @@ export default {
   components: {
     ConversationList,
     ChatArea,
-    weather
+    weather,
+    partTitle
     // AMap
   },
   mounted() {
@@ -111,7 +115,7 @@ export default {
           return item
         }
       } else if (new Date(item.end) > new Date(item.start)) {
-        if (fromatTime(new Date(item.start), false) < fromatTime(new Date(), false) && fromatTime(new Date(item.end), false) > fromatTime(new Date(), false)) {
+        if (fromatTime(new Date(item.start), false) <= fromatTime(new Date(), false) && fromatTime(new Date(item.end), false) >= fromatTime(new Date(), false)) {
           item.start = fromatTime(new Date(item.start), false)
           item.end = fromatTime(new Date(item.end), false)
           console.log(item)
