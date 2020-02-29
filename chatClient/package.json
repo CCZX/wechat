@@ -14,9 +14,12 @@
     "axios": "^0.18.0",
     "cropperjs": "^1.5.6",
     "element-ui": "^2.12.0",
+    "js-cookie": "^2.2.1",
     "normalize.css": "^8.0.1",
     "vue": "^2.5.2",
     "vue-amap": "^0.5.10",
+    "vue-draggable-resizable": "^2.1.0",
+    "vue-fullcalendar": "^1.0.9",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7",
     "vuex": "^3.1.1"
