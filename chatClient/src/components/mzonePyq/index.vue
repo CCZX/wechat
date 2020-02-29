@@ -138,7 +138,7 @@
         </div>
       </transition>
     </div>
-    <div class="no-data hor-ver-center" v-if="!pyqList.length">
+    <div class="no-data hor-ver-center" v-if="!pyqList.length && !isLoading">
       <empty-svg width="200" height="200" />
     </div>
     <transition>
@@ -560,5 +560,3 @@ export default {
   }
 }
 </style>
-
-
