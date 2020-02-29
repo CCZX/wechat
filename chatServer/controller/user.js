@@ -283,6 +283,89 @@ const changeUserStatus = (req, res) => {
   })
 }
 
+// 添加新的分组
+const addNewFenzu = async (req, res) => {
+  const { name, userId } = req.body
+  const userInfo = await USER.findOne({_id: userId})
+  const friendFenzu = userInfo.friendFenzu
+  const friendFenzuKeys = Object.keys(friendFenzu)
+  // const isHas = name in friendFenzu
+  let newFriendFenzu = null
+  if (!friendFenzuKeys.includes(name)) {
+    newFriendFenzu = Object.assign({}, friendFenzu, {[name]: []})
+  } else {
+    newFriendFenzu = friendFenzu
+  }
+  const upDoc = await USER.findByIdAndUpdate({
+    _id: userId
+  }, {
+    $set: {friendFenzu: newFriendFenzu}
+  })
+  return res.json({
+    status: 2000,
+    data: upDoc,
+    msg: '添加新分组成功'
+  })
+}
+
+const modifyFrienFenzu = async (req, res) => {
+  const { userId, friendId, newFenzu } = req.body
+  const userInfo = await USER.findOne({_id: userId})
+  const friendFenzu = JSON.parse(JSON.stringify(userInfo.friendFenzu))
+  // 找到原来的分组
+  let oldFenzu = ''
+  for (const key in friendFenzu) {
+    if (friendFenzu.hasOwnProperty(key)) {
+      const element = friendFenzu[key];
+      if (element.includes(friendId)) {
+        oldFenzu = key
+      }
+    }
+  }
+  if (oldFenzu === newFenzu) {
+    return res.json({
+      status: 2000,
+      data: '',
+      msg: '已经在次分组'
+    })
+  }
+  // 如果原来已经在某个分组就从中去掉
+  if (oldFenzu) {
+    const olfFenzuIdsIndex = friendFenzu[oldFenzu].findIndex(item => item === friendId)
+    friendFenzu[oldFenzu].splice(olfFenzuIdsIndex, 1)
+  }
+  // 加入新的分组
+  friendFenzu[newFenzu].push(friendId)
+  console.log(friendFenzu)
+  const upDoc = await USER.findByIdAndUpdate({
+    _id: userId
+  }, {
+    $set: {friendFenzu: friendFenzu}
+  })
+  return res.json({
+    status: 2000,
+    data: upDoc,
+    msg: '跟新成功'
+  })
+}
+
+const modifyBeizhu = async (req, res) => {
+  const {userId, friendId, friendBeizhu} = req.body
+  const userInfo = await USER.findOne({_id: userId})
+  const beizhuMap = userInfo.friendBeizhu
+  const newBeizhuMap = Object.assign({}, beizhuMap, {[friendId]: friendBeizhu})
+  const upDoc = await USER.findByIdAndUpdate({
+    _id: userId
+  }, {
+    $set: {friendBeizhu: newBeizhuMap}
+  })
+  return res.json({
+    status: 2000,
+    data: upDoc,
+    msg: '修改备注成功！'
+  })
+}
+
 module.exports = {
   login,
   generatorCode,
@@ -291,5 +374,8 @@ module.exports = {
   preFetchUser,
   getAllUser,
   getUserBySignUpTime,
-  changeUserStatus
+  changeUserStatus,
+  addNewFenzu,
+  modifyFrienFenzu,
+  modifyBeizhu
 }
