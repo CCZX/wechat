@@ -162,3 +162,54 @@ GET: `/api/v1/user/onlineusers`
     // none
 }
 ```
+
+### 9、添加分组
+
+> 描述：添加新的好友分组，如果已有该分组则不添加
+
+POST: `/api/v1/user/addfenzu`
+
+> 传参
+
+```javascript
+{
+    userId: String, // 用户Id
+    name: String // 新添加分组的名称
+}
+```
+
+### 10、修改好友分组
+
+> 描述：添加新的好友分组，如果已有该分组则不添加
+
+POST: `/api/v1/user/modifyuserfenzu`
+
+> 描述：修改好友的分组
+
+> 传参
+
+```javascript
+{
+    userId: String, // 用户Id
+    friendId: String, // 好友Id
+    newFenzu: String // 好友被添加到的分组
+}
+```
+
+### 10、修改好友备注
+
+> 描述：添加新的好友分组，如果已有该分组则不添加
+
+POST: `/api/v1/user/modifyfriendbeizhu`
+
+> 描述：修改好友的分组
+
+> 传参
+
+```javascript
+{
+    userId: String, // 用户Id
+    friendId: String, // 好友Id
+    friendBeizhu: String // 备注名称
+}
+```
