@@ -14,7 +14,10 @@ const router = new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import("@/views/login")
+      component: () => import("@/views/login"),
+      meta: {
+        deepth: 0.5
+      }
     },
     {
       path: '/',
@@ -30,7 +33,9 @@ const router = new Router({
           name: 'Index',
           component: () => import('@/views/Index'),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            keepAlive: true,
+            deepth: 1
           },
         },
         {
@@ -143,24 +148,24 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  //获取store里面的token
-  // let userName = store.state.userName;
-  let userName = sessionStorage.getItem('isLogin')
-  //判断要去的路由有没有requiresAuth
-  if(to.meta.requiresAuth){
-    if(userName){
-      next();
-    }else{
-      alert('请先登录再进行此操作!')
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath }  // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
-      });
-      } 
-  }else{
-    next();
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   //获取store里面的token
+//   // let userName = store.state.userName;
+//   let userName = sessionStorage.getItem('isLogin')
+//   //判断要去的路由有没有requiresAuth
+//   if(to.meta.requiresAuth){
+//     if(userName){
+//       next();
+//     }else{
+//       alert('请先登录再进行此操作!')
+//       next({
+//         path: '/login',
+//         query: { redirect: to.fullPath }  // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
+//       });
+//       } 
+//   }else{
+//     next();
+//   }
+// })
 
 export default router
