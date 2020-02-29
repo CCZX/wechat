@@ -24,44 +24,40 @@
       <div
         :class="contentClassName"
       >
-        <span
-          v-if="messageitem.messageType === 'text'"
-          :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
-          class="primary-font text"
+        <el-popover
+          placement="top"
+          width="30"
+          trigger="click"
         >
-          <el-popover
-            placement="top"
-            width="30"
-            trigger="click"
-          >
-            <div class="msg-operation-card-body">
-              <span class="operation-text operation-item" v-copy="messageitem.message">
-                <i class="el-icon-copy-document" />
-                <span class="oper-text">点击复制</span>
-              </span>
-              <span class="operation-text operation-item">
-                <i class="el-icon-delete" />
-                <span class="oper-text">点击删除</span>
-              </span>
-              <span class="operation-text operation-item">
-                <i class="el-icon-s-flag" />
-                <span class="oper-text">加入代办</span>
-              </span>
-              <span class="operation-text operation-item" v-copy="messageitem.message">
-                <i class="el-icon-copy-document" />
-                <span class="oper-text">点击复制</span>
-              </span>
-            </div>
-            <i
+          <div class="msg-operation-card-body">
+            <span class="operation-text operation-item" v-copy="messageitem.message">
+              <i class="el-icon-copy-document" />
+              <span class="oper-text">点击复制</span>
+            </span>
+            <span class="operation-text operation-item">
+              <i class="el-icon-delete" />
+              <span class="oper-text">点击删除</span>
+            </span>
+            <span class="operation-text operation-item">
+              <i class="el-icon-s-flag" />
+              <span class="oper-text">加入代办</span>
+            </span>
+            <span class="operation-text operation-item" v-copy="messageitem.message">
+              <i class="el-icon-copy-document" />
+              <span class="oper-text">点击复制</span>
+            </span>
+          </div>
+            <span
               slot="reference"
-              :class="this.messageitem.senderId === this.userInfo._id ? 'operation isme' : 'operation not-isme'"
-              :style="this.messageitem.senderId === this.userInfo._id ? 'left: 0' : ''"
-            />
-          </el-popover>
-          {{messageitem.message}}
-        </span>
+              v-if="messageitem.messageType === 'text'"
+              :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
+              class="primary-font text"
+            >
+              {{messageitem.message}}
+            </span>
+        </el-popover>
         <span
-          v-else-if="messageitem.messageType === 'img'"
+          v-if="messageitem.messageType === 'img'"
           :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
           class="primary-font text" style="cursor: zoom-in">
           <img width="200" :src="messageitem.message" alt="图片" @click="preview(messageitem.message)">
@@ -176,31 +172,12 @@ export default {
       white-space: wrap;
       word-break: break-word;
       .text {
+        cursor: pointer;
         position: relative;
         display: inline-block;
         border-radius: 10px;
         padding: 10px;
         background-color: hsla(201, 100%, 55%, 1);
-        .operation {
-          position: absolute;
-          right: 0;
-          top: 0;
-          width: 0;
-          height: 0;
-          cursor: pointer;
-        }
-        .operation.not-isme {
-          border-top-right-radius: 10px;
-          border-bottom-left-radius: 15px;
-          border-top: 15px solid #c35673;
-          border-left: 15px solid transparent;
-        }
-        .operation.isme {
-          border-top-left-radius: 10px;
-          border-bottom-right-radius: 15px;
-          border-top: 15px solid #c35673;
-          border-right: 15px solid transparent;
-        }
       }
       &::before {
         content: "";
