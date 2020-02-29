@@ -74,9 +74,9 @@ export default {
   },
   watch: {
     currentConversation: {
-      handler(newVal) {
+      handler(newVal, oldVal) {
         try {
-          if(newVal.roomid) {
+          if(newVal.roomid !== oldVal.roomid) {
           this.$store.dispatch('news/SET_UNREAD_NEWS', {
             roomid: this.currentConversation && this.currentConversation.roomid,
             count: 0,
