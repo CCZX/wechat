@@ -13,8 +13,8 @@
         :setLoading="setLoading"
         :set-current-conversation="setCurrentConversation"
       />
-      <div class="no-conversation" v-else>
-        没有数据
+      <div class="no-conversation hor-ver-center" v-else>
+        <chat-svg width="400" height="300" />
       </div>
     </div>
     <div class="detail">
@@ -55,6 +55,7 @@ import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { fromatTime } from '@/utils'
 import weather from '@/components/customWeather'
 import partTitle from '@/components/partTitle'
+import chatSvg from '@/SVGComponents/chat'
 // import AMap from '@/components/customMap'
 export default {
   name: 'Index',
@@ -101,7 +102,8 @@ export default {
     ConversationList,
     ChatArea,
     weather,
-    partTitle
+    partTitle,
+    chatSvg
     // AMap
   },
   mounted() {
@@ -140,10 +142,7 @@ export default {
     width: 55%;
     border-right: 1px solid #cccccc;
     .no-conversation {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%)
+      
     }
   }
   .detail {
