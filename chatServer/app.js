@@ -47,7 +47,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-app.use(checkToken) // 验证token
+// app.use(checkToken) // 验证token
 
 // app.use(`${API_VERSION}/*`, (req, res, next)　=> {
 //   console.log(req.session)
@@ -80,6 +80,9 @@ app.use(`${API_VERSION}/groupnews`, groupNews)
 app.use(`${API_VERSION}/sys`, system)
 app.use(`${API_VERSION}/validate`, validate)
 app.use(`${API_VERSION}/pyq`, pyq)
+app.get('/', (req, res) => {
+  res.sendfile(__dirname + '/index.html')
+})
 
 const { insertNewNews } = require('./controller/news')
 const { insertValidateNews, changeValidateNewsStatus } = require('./controller/validateNews')
@@ -136,6 +139,7 @@ io.on('connection', (socket) => {
     const { roomid, reveiverId, senderId } = data
     const senderRoomId = roomid.replace(reveiverId, senderId)
     socket.to(senderRoomId).emit('receiveAgreeFriendValidate', data)
+    socket.to(roomid).emit('receiveAgreeFriendValidate', data)
     changeValidateNewsStatus(data, 1) // 用户同意加好友之后改变验证消息的状态
   })
   socket.on('sendAgreeGroupValidate', data => {
