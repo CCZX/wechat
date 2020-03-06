@@ -1,7 +1,8 @@
 const state = {
   sysUsers: '' || JSON.parse(window.localStorage.getItem('sysusers')),
   isToCoArtBoard: false,
-  currentConversation: {}
+  currentConversation: {},
+  agreeFriendValidate: false
 }
 
 const mutations = {
@@ -16,6 +17,9 @@ const mutations = {
   },
   setCurrentConversation(state, data) {
     state.currentConversation = data
+  },
+  setAgreeFriendValidate(state, data) {
+    state.agreeFriendValidate = data
   }
 }
 
@@ -28,6 +32,9 @@ const actions = {
   },
   SET_CURRENT_CONVERSATION({commit}, data) {
     commit('setCurrentConversation', data)
+  },
+  SET_AGREE_FRIEND_VALIDATE({commit}, data) {
+    commit('setAgreeFriendValidate', data)
   }
 }
 
