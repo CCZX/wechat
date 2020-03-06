@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { API } from './../index'
 
 export default {
   /**
@@ -7,7 +8,7 @@ export default {
    */
   getMyGroup(data) {
     let { userName } = data
-    return request.get(`/group/getmygroup?userName=${userName}`)
+    return request.get(`${API}/group/getmygroup?userName=${userName}`)
   },
   /**
    * 根据id获取群聊详情
@@ -15,11 +16,11 @@ export default {
    */
   getGroupInfo(data) {
     let { id } = data
-    return request.get(`/group/groupinfo?id=${id}`)
+    return request.get(`${API}/group/groupinfo?id=${id}`)
   },
   preFetchGroup(data) {
     const { type, q, page, pageSize } = data // type可以是title以及code
-    return request.get(`/group/prefetchgroup?type=${type}&q=${q}&page=${page}&pageSize=${pageSize}`)
+    return request.get(`${API}/group/prefetchgroup?type=${type}&q=${q}&page=${page}&pageSize=${pageSize}`)
   },
   /**
    * ------------------华丽分界线，以下是和群组消息有关的API------------------------
@@ -30,6 +31,6 @@ export default {
    */
   getRecentGroupNews(data) {
     const { roomid, page, pageSize } = data
-    return request.get(`/groupnews/recentnews?roomid=${roomid}&page=${page}&pageSize=${pageSize}`)
+    return request.get(`${API}/groupnews/recentnews?roomid=${roomid}&page=${page}&pageSize=${pageSize}`)
   }
 }

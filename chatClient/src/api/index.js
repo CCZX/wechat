@@ -7,6 +7,8 @@ import validate from './modules/validate'
 import pyq from './modules/pyq'
 import file from './modules/file'
 
+export const API = 'api/v1'
+
 export default {
   ...user,
   ...friendly,

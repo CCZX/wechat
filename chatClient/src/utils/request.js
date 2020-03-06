@@ -5,7 +5,8 @@ import router from './../router'
 import { getCookie, setCookie, removeCookie } from './token'
 let instance = axios.create({
   timeout: 7000,
-  baseURL: isProduction() ? 'http://localhost:3333' : '/api/v1'
+  // baseURL: '/api/v1'
+  baseURL: '/'
 })
 
 instance.interceptors.request.use(

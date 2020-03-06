@@ -1,7 +1,8 @@
 import request from '@/utils/request'
+import { API } from './../index'
 
 export default {
   getMyFriends(id) {
-    return request.get(`/friendly/myfriends?id=${id}`)
+    return request.get(`${API}/friendly/myfriends?id=${id}`)
   }
 }
