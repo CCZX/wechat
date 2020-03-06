@@ -133,6 +133,7 @@ export default {
       } else if (item.validateType === 1) {
         this.$socket.emit('sendAgreeGroupValidate', item)        
       }
+      this.$store.dispatch('app/SET_AGREE_FRIEND_VALIDATE', true)
       this.isAdding = true
       setTimeout(() => {
         this.isAdding = false

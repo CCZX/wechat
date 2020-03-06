@@ -224,6 +224,14 @@ export default {
       handler() {
         this.joinChatRoom()
       }, deep: true, immediate: true
+    },
+    '$store.state.app.agreeFriendValidate': {
+      async handler(newVal, oldVal) {
+        if (newVal) {
+          await this.getMyFriends()
+          this.getMyGroup()
+        }
+      }, immediate: true, deep: true
     }
   },
   components: {
