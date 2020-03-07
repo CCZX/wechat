@@ -25,7 +25,20 @@ const getRecentNews = async (req, res) => {
   }
 }
 
+const getLastNews = async (req, res) => {
+  const { roomid } = req.body
+  const data = await NEWS.findOne({
+    roomid
+  }).sort({_id: -1})
+  return res.json({
+    status: 2000,
+    data,
+    msg: '获取成功'
+  })
+}
+
 module.exports = {
   insertNewNews,
-  getRecentNews
+  getRecentNews,
+  getLastNews
 }
