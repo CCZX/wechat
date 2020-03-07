@@ -7,24 +7,25 @@ const getMyFriends = (req, res) => {
   FRIEND.findFriendByUserM(id).then(userM => {
     FRIEND.findFriendByUserY(id).then(userY => {
       let data = []
-      userM.forEach(v => {
+      console.log(id, userM, userY)
+      userM.forEach(item => {
         data.push({
-          createDate: v.createDate,
-          nickname: v.userY.nickname,
-          photo: v.userY.photo,
-          signature: v.userY.signature,
-          _id: v.userY._id,
-          roomid: id + '-' + v.userY._id
+          createDate: item.createDate,
+          nickname: item.userY.nickname,
+          photo: item.userY.photo,
+          signature: item.userY.signature,
+          _id: item.userY._id,
+          roomid: id + '-' + item.userY._id
         })
       })
-      userY.forEach(v => {
+      userY.forEach(item => {
           data.push({
-            createDate: v.createDate,
-            nickname: v.userM.nickname,
-            photo: v.userM.photo,
-            signature: v.userM.signature,
-            _id: v.userM._id,
-            roomid: v.userM._id + '-' + id
+            createDate: item.createDate,
+            nickname: item.userM.nickname,
+            photo: item.userM.photo,
+            signature: item.userM.signature,
+            _id: item.userM._id,
+            roomid: item.userM._id + '-' + id
           })
       })
       return res.json({
@@ -42,6 +43,21 @@ const getMyFriends = (req, res) => {
   })
 }
 
+const getRecentConversation = async (req, res) => {
+  const { recentFriendIds = [], userId } = req.body
+  const data = await FRIEND.find({
+    $or: [
+      {userM: {$in: recentFriendIds}, userY: userId},
+      {userY: {$in: recentFriendIds}, userM: userId}
+    ]
+  }).populate({path: 'userY', select: 'signature photo nickname'}).populate({path: 'userM', select: 'signature photo nickname'})
+  return res.json({
+    status: 2000,
+    data,
+    msg: '获取成功'
+  })
+}
+
 // 在同意之后添加好友
 const addFriend = (data) => {
   FRIEND.find(data).then(doc => {
@@ -53,5 +69,6 @@ const addFriend = (data) => {
 
 module.exports = {
   getMyFriends,
-  addFriend
+  addFriend,
+  getRecentConversation
 }
