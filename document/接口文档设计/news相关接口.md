@@ -40,3 +40,23 @@ GET：`/api/v1/validate/myvalidatenews`
   msg: ''
 }
 ```
+
+### 3、获取好友之间的最后一条聊天记录
+
+GET：`/api/v1/news/last`
+
+> 传递参数
+
+```JavaScript
+{
+  roomid: String // 房间ID
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number,
+  data: {},
+  msg: ''
+}
+```
