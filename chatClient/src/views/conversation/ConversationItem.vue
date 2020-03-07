@@ -1,6 +1,7 @@
 <template>
   <div
-    :class="currentConversation._id === conversationInfo._id ? 'conversationitem__com active' : 'conversationitem__com'"
+    :class="currentConversation._id && currentConversation._id === conversationInfo._id ? 'conversationitem__com active' : 'conversationitem__com'"
+    v-if="conversationInfo._id"
   >
     <template v-if="conversationInfo.isGroup">
       <div class="conversation-info">
@@ -52,16 +53,25 @@
           
           <div class="conversation-detail">
             <span class="primary-font detail-item">{{conversationInfo.beizhu ? conversationInfo.beizhu : conversationInfo.nickname}}</span>
-            <span class="ellipsis secondary-font detail-item">{{conversationInfo.signature}}</span>
+            <span class="ellipsis secondary-font detail-item space-bw" style="display: flex">
+              <span v-if="type === 'fenzu'">{{conversationInfo.signature}}</span>
+              <!-- <span>{{conversationInfo.lastNews}}</span> -->
+              <span v-if="type === 'recent'">{{lastNews}}</span>
+              <span v-if="type === 'recent' && lastNews">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
+            </span>
           </div>
         </div>
       </div>
-      <i class="el-icon-more"></i>
+      <!-- <i class="el-icon-more"></i> -->
+      <el-tooltip effect="dark" content="从最近会话中删除" placement="top">
+        <i v-if="type === 'recent'" class="el-icon-circle-close" @click.stop="remove"></i>
+      </el-tooltip>
     </template>
   </div>
 </template>
 
 <script>
+import { formatDateToZH, arrUnique } from '@/utils'
 const conversationObj = {
   createDate: "",
   nickname: "",
@@ -85,6 +95,12 @@ export default {
       default() {
         return conversationObj
       }
+    },
+    type: {
+      type: String
+    },
+    recentConversation: {
+      type: Array
     }
   },
   data() {
@@ -95,6 +111,41 @@ export default {
   computed: {
     unreadNews() {
       return this.$store.state.news.unreadNews
+    },
+    lastNews() {
+      const lastNewsObj = this.conversationInfo.lastNews
+      let res = ''
+      if (lastNewsObj && lastNewsObj.messageType === "img") {
+        res = '[图片]'
+      }
+      if (lastNewsObj && lastNewsObj.messageType === "text") {
+        res = lastNewsObj.message
+      }
+      return res
+    },
+    recentConversationList() {
+      return this.$store.state.app.recentConversation
+    }
+  },
+  methods: {
+    remove() {
+      const recentFriendIdsStr = window.localStorage.getItem('coMessager-recentConversation') || ''
+      const recentFriendIds = arrUnique(recentFriendIdsStr.split(',')).filter(item => item) // 去重
+      const index = recentFriendIds.findIndex(item => item === this.conversationInfo._id)
+      index !== -1 && recentFriendIds.splice(index, 1)
+      window.localStorage.setItem('coMessager-recentConversation', recentFriendIds.join())
+      this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'delete', data: this.conversationInfo})
+      if (this.conversationInfo._id === this.currentConversation._id) {
+        const conversationList = this.recentConversationList.filter(item => Object.keys(item).length > 0)
+        const index = conversationList.findIndex(item => item._id === this.conversationInfo._id)
+        this.$emit('setCurrentConversation', conversationList[0] || {})
+        console.log(index, this.recentConversationList.filter(item => Object.keys(item).length > 0))
+      }
+    }
+  },
+  filters: {
+    formatDateToZH(val) {
+      return formatDateToZH(val)
     }
   }
 };
@@ -118,6 +169,9 @@ export default {
     .el-icon-more {
       display: block;
     }
+    .el-icon-circle-close {
+      opacity: 1;
+    }
   }
   &.active {
     .wrapper {
@@ -135,12 +189,13 @@ export default {
       padding: 0 5px;
       align-items: center;
       border-radius: 10px;
+      overflow: hidden;
       .el-badge {
         top: 4px;
         overflow: visible;
       }
       .conversation-detail {
-        flex-grow: 1;
+        width: calc(100% - 50px);
         margin-left: 10px;
         .detail-item {
           margin-top: 2px;
@@ -157,6 +212,14 @@ export default {
     font-size: 10px;
     border: 1px solid hsla(230, 10%, 30%, 1);
     border-radius: 50%;
+    transition: all 0.5s ease-in;
+  }
+  .el-icon-circle-close {
+    opacity: 0;
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    font-size: 18px;
     transition: all 0.5s ease-in;
   }
 }

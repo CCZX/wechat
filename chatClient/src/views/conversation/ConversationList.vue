@@ -10,13 +10,18 @@
     <el-tabs type="border-card">
       <el-tab-pane>
         <span slot="label"><i class="el-icon-chat-line-round"></i></span>
-        <conversation-item
+        <recent-conversation-list
+          :current-conversation="currentConversation"
+          :set-current-conversation="setCurrentConversation"
+          @setCurrentConversation="setCurrentConversation"
+        />
+        <!-- <conversation-item
           v-for="item in hasBeizhuConversationList"
           :key="item.id"
           :conversationInfo="item"
           :currentConversation="currentConversation"
           @click.native="changeCurrentConversation(item)"
-        />
+        /> -->
       </el-tab-pane>
       <el-tab-pane label="好友">
         <span slot="label"><i class="el-icon-user"></i></span>
@@ -31,6 +36,7 @@
               :key="item.id"
               :conversationInfo="item"
               @click.native="changeCurrentConversation(item)"
+              type="fenzu"
             />
           </el-collapse-item>
         </el-collapse>
@@ -63,6 +69,7 @@
 <script>
 import './../../../static/iconfont/iconfont.css'
 import conversationItem from './ConversationItem'
+import recentConversationList from './RecentConversation'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { conversationTypes } from '@/const'
 import { saveMyFriendsToLocalStorage, saveMyGroupToLocalStorage } from '@/utils'
@@ -70,6 +77,7 @@ export default {
   name: "ConversationListComponent",
   props: {
     currentConversation: Object,
+    setCurrentConversation: Function
   },
   data() {
     return {
@@ -99,6 +107,9 @@ export default {
     userInfo() { // 用户信息
       return this.$store.state.user.userInfo
     },
+    lastNews() {
+      return this.$store.state.news.lastNews
+    },
     friendBeizhu() { // 好友备注Map {id2: '备注1', id1: '备注2'}
       return this.userInfo.friendBeizhu || {}
     },
@@ -112,6 +123,7 @@ export default {
       const conversationList = JSON.parse(JSON.stringify(this.conversationList))
       return conversationList.map(item => {
         item.beizhu = this.friendBeizhu[item._id] ? this.friendBeizhu[item._id] : ''
+        item.lastNews = this.lastNews[item.roomid] ? this.lastNews[item.roomid] : ''
         return item
       })
     },
@@ -235,7 +247,8 @@ export default {
     }
   },
   components: {
-    conversationItem
+    conversationItem,
+    recentConversationList
   },
   async created() {
     await this.getMyFriends()
@@ -253,6 +266,8 @@ export default {
   }
   .el-tabs.el-tabs--top.el-tabs--border-card {
     height: calc(100% - 60px);
+    overflow-x: hidden;
+    overflow-y: scroll;
     .el-tabs__content {
       padding: 0;
       .friend-tab-header {
