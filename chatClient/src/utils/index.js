@@ -179,3 +179,17 @@ export function imgRandomName() {
   const res = `cc-messger-${timestamp}-${random}`
   return res
 }
+
+export const saveRecentConversationToLocal = (data) => {
+  let res = window.localStorage.getItem('coMessager-recentConversation') || ''
+  res = res ? res + ',' + data : data
+  window.localStorage.setItem('coMessager-recentConversation', res)
+}
+
+export const arrUnique = (arr) => {
+  const list = [...arr]
+  return list.reduce((mult, item) => {
+    !mult.includes(item) ? mult.push(item) : null
+    return mult
+  }, [])
+}
