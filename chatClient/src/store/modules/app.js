@@ -2,12 +2,12 @@ const state = {
   sysUsers: '' || JSON.parse(window.localStorage.getItem('sysusers')),
   isToCoArtBoard: false,
   currentConversation: {},
-  agreeFriendValidate: false
+  agreeFriendValidate: false,
+  recentConversation: []
 }
 
 const mutations = {
   setSysUsers(state, data) {
-    console.log('vuex set sysuser')
     state.sysUsers = data
     const dataStr = JSON.stringify(data)
     window.localStorage.setItem('sysusers', dataStr)
@@ -20,6 +20,21 @@ const mutations = {
   },
   setAgreeFriendValidate(state, data) {
     state.agreeFriendValidate = data
+  },
+  setRecentConversation(state, data) {
+    const res = data.data
+    if (data.type === 'init') {
+      state.recentConversation = res
+    } else if (data.type === 'add') {
+      const ids = state.recentConversation.map(item => item._id)
+      const newData = !ids.includes(res._id) ? [...state.recentConversation, res] : [...state.recentConversation]
+      state.recentConversation = newData
+    } else if (data.type === 'delete') {
+      const index = state.recentConversation.findIndex(item => item._id === res._id)
+      const newData = JSON.parse(JSON.stringify(state.recentConversation))
+      index !== -1 && newData.splice(index, 1)
+      state.recentConversation = newData
+    }
   }
 }
 
@@ -35,6 +50,9 @@ const actions = {
   },
   SET_AGREE_FRIEND_VALIDATE({commit}, data) {
     commit('setAgreeFriendValidate', data)
+  },
+  SET_RECENT_CONVERSATION({commit}, data) {
+    commit('setRecentConversation', data)
   }
 }
 

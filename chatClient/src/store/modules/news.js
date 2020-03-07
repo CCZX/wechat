@@ -5,7 +5,8 @@
  */
 import { SET_UNREAD_NEWS_TYPE_MAP } from './../constants'
 const state = {
-  unreadNews: {}
+  unreadNews: {},
+  lastNews: {} // 好友之间最后发送的一条消息 {roomid1: {}, roomid2: {}}
 }
 
 /**
@@ -13,7 +14,6 @@ const state = {
  */
 const mutations = {
   setUnreadNews(state, data) {
-    console.log('vuex set unreadnews')
     const { roomid, count, type } = data
     if (type === SET_UNREAD_NEWS_TYPE_MAP.add) {
       const oldCount = state.unreadNews[roomid] === undefined ? 0 : state.unreadNews[roomid]
@@ -26,12 +26,24 @@ const mutations = {
       const item = {[roomid]: count}
       state.unreadNews = Object.assign({}, state.unreadNews)
     }
+  },
+  setLastNews(state, data) {
+    if (data.type === 'init') {
+      state.lastNews = data.res
+    } else if (data.type === 'edit') {
+      const { roomid, news } = data.res
+      const item = {[roomid]: news}
+      state.lastNews = Object.assign({}, state.lastNews, item)
+    }
   }
 }
 
 const actions = {
   SET_UNREAD_NEWS({ commit }, data) {
     commit('setUnreadNews', data)
+  },
+  SET_LAST_NEWS({commit}, data) {
+    commit('setLastNews', data)
   }
 }
 
