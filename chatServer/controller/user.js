@@ -366,6 +366,17 @@ const modifyBeizhu = async (req, res) => {
   })
 }
 
+const updateUserOnlineTime = async (data) => {
+  const { userId, time } = data
+  console.log(time)
+  const doc = await USER.findByIdAndUpdate({
+    _id: userId
+  }, {
+    $inc: {onlineTime: Number(time)}
+  })
+  return doc
+}
+
 module.exports = {
   login,
   generatorCode,
@@ -377,5 +388,6 @@ module.exports = {
   changeUserStatus,
   addNewFenzu,
   modifyFrienFenzu,
-  modifyBeizhu
+  modifyBeizhu,
+  updateUserOnlineTime
 }

@@ -42,6 +42,10 @@ const userSchema = new Schema({
   friendBeizhu: {
     type: Object,
     default: {}
+  },
+  onlineTime: {
+    type: Number,
+    default: 0
   }
 })
 const user = DB.model('user', userSchema)
