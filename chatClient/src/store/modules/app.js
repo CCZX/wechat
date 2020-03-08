@@ -3,7 +3,8 @@ const state = {
   isToCoArtBoard: false,
   currentConversation: {},
   agreeFriendValidate: false,
-  recentConversation: []
+  recentConversation: [],
+  onlineUser: []
 }
 
 const mutations = {
@@ -35,6 +36,9 @@ const mutations = {
       index !== -1 && newData.splice(index, 1)
       state.recentConversation = newData
     }
+  },
+  setOnlineUser(state, data) {
+    state.onlineUser = data
   }
 }
 
@@ -53,6 +57,9 @@ const actions = {
   },
   SET_RECENT_CONVERSATION({commit}, data) {
     commit('setRecentConversation', data)
+  },
+  SET_ONLINE_USER({commit}, data) {
+    commit('setOnlineUser', data)
   }
 }
 

@@ -50,6 +50,8 @@ export default {
     },
     onlineUser(data) {
       console.log('当前在线用户列表', data)
+      const onlineUserIdArr = Object.values(data).map(item => item._id)
+      this.$store.dispatch('app/SET_ONLINE_USER', onlineUserIdArr)
     },
     receiveMessage(news) {
       this.$refs['audio'].play()
@@ -91,7 +93,7 @@ export default {
       console.log('receiveAgreeFriendValidate', data)
     },
     conversationList(list) {
-      console.log("当前会话列表", list)
+      // console.log("当前会话列表", list)
     }
   },
   methods: {
