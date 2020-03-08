@@ -3,6 +3,7 @@
     <div class="conversation-list">
       <conversation-list
         :currentConversation="currentConversation"
+        :set-current-conversation="setCurrentConversation"
         @setCurrentConversation="setCurrentConversation"
       />
     </div>
@@ -52,7 +53,7 @@
 import ConversationList from '@/views/conversation/ConversationList'
 import ChatArea from '@/views/chat/ChatArea'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
-import { fromatTime } from '@/utils'
+import { fromatTime, saveRecentConversationToLocal } from '@/utils'
 import weather from '@/components/customWeather'
 import partTitle from '@/components/partTitle'
 import chatSvg from '@/SVGComponents/chat'
@@ -75,15 +76,18 @@ export default {
   watch: {
     currentConversation: {
       handler(newVal, oldVal) {
+        if (!newVal || !newVal.roomid) return
         try {
           if(newVal.roomid !== oldVal.roomid) {
-          this.$store.dispatch('news/SET_UNREAD_NEWS', {
-            roomid: this.currentConversation && this.currentConversation.roomid,
-            count: 0,
-            type: SET_UNREAD_NEWS_TYPE_MAP.clear
-          })
-          this.$store.dispatch('app/SET_CURRENT_CONVERSATION', newVal)
-        }
+            this.$store.dispatch('news/SET_UNREAD_NEWS', {
+              roomid: this.currentConversation && this.currentConversation.roomid,
+              count: 0,
+              type: SET_UNREAD_NEWS_TYPE_MAP.clear
+            })
+            this.$store.dispatch('app/SET_CURRENT_CONVERSATION', newVal)
+            this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'add', data: newVal})
+            saveRecentConversationToLocal(newVal._id)
+          }
         } catch (error) {
           console.log('errrrr', error)
         }
