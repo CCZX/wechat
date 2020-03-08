@@ -1,7 +1,12 @@
 <template>
   <div class="fenzu-conversation-list">
     <el-collapse v-model="activeFenzu">
-      <el-collapse-item v-for="(item, index) in fenzu" :key="index" :title="`${item}（${outcomeConversation[item].length}）`" :name="item">
+      <el-collapse-item
+        v-for="(item, index) in fenzu"
+        :key="index"
+        :title="`${item}（${fenzuOnlineUserNum[item]}/${outcomeConversation[item].length}）`"
+        :name="item"
+      >
         <conversation-item
           v-for="item in outcomeConversation[item]"
           :key="item.id"
@@ -29,6 +34,9 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    onlineUserIds() { // 在线用户的id数组
+      return this.$store.state.app.onlineUser
     },
     fenzu() { // 用户的分组列表
       return Object.keys(this.userInfo.friendFenzu || {})
@@ -63,6 +71,21 @@ export default {
       }
       if (conversationList.length) {
         res['我的好友'] = [...res['我的好友'], ...conversationList]
+      }
+      return res
+    },
+    fenzuOnlineUserNum() { // 计算每个分组的在线用户
+      const res = {}
+      const obj = this.outcomeConversation
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          let num = 0
+          const itemIds = obj[key].map(item => item._id)
+          itemIds.forEach(id => {
+            this.onlineUserIds.includes(id) && num++
+          })
+          res[key] = num
+        }
       }
       return res
     }

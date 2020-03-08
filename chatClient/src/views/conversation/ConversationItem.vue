@@ -53,7 +53,7 @@
           </el-badge>
           
           <div class="conversation-detail">
-            <span class="primary-font detail-item">{{conversationInfo.beizhu ? conversationInfo.beizhu : conversationInfo.nickname}}</span>
+            <span class="primary-font detail-item ellipsis">{{conversationInfo.beizhu ? conversationInfo.beizhu : conversationInfo.nickname}}</span>
             <span class="ellipsis secondary-font detail-item space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">{{conversationInfo.signature}}</span>
               <!-- <span>{{conversationInfo.lastNews}}</span> -->
