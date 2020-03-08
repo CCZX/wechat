@@ -98,7 +98,8 @@ io.on('connection', (socket) => {
     if (Object.keys(onLineUser).length < 200) {
       onLineUser[socket.id] = val
     }
-    socket.broadcast.emit('onlineUser', onLineUser)
+    // socket.broadcast.emit('onlineUser', onLineUser)
+    io.emit('onlineUser', onLineUser)
   })
   socket.on('join', val => {
     const { roomid } = val
@@ -185,6 +186,10 @@ io.on('connection', (socket) => {
     console.log('disconnection user', val)
     const id = socket.id
     delete onLineUser[id]
+  })
+  socket.on('leave', () => {
+    delete onLineUser[socket.id]
+    io.emit('onlineUser', onLineUser)
   })
 })
 
