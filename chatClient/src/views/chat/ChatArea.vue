@@ -132,7 +132,8 @@ export default {
         senderAvatar: this.userInfo.photo,
         time: fromatTime(new Date()),
         isReadUser: [this.userInfo.name],
-        conversationType: this.currentConversation.conversationType
+        conversationType: this.currentConversation.conversationType,
+        currentConversation: this.currentConversation
       }
     },
     getImgUploadResult(res) {
@@ -150,6 +151,13 @@ export default {
         }
         this.messages = [...this.messages, newMessage]
         this.$socket.emit("sendNewMessage", newMessage)
+        this.$store.dispatch('news/SET_LAST_NEWS', {
+          type: 'edit',
+          res: {
+            roomid: this.currentConversation.roomid,
+            news: newMessage
+          }
+        })
         this.messageText = ""
       }
     },
@@ -172,6 +180,13 @@ export default {
       }
       this.messages = [...this.messages, newMessage]
       this.$socket.emit("sendNewMessage", newMessage)
+      this.$store.dispatch('news/SET_LAST_NEWS', {
+        type: 'edit',
+        res: {
+          roomid: this.currentConversation.roomid,
+          news: newMessage
+        }
+      })
       this.messageText = ""
     },
     joinChatRoom() {
