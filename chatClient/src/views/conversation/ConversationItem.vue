@@ -56,8 +56,8 @@
             <span class="ellipsis secondary-font detail-item space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">{{conversationInfo.signature}}</span>
               <!-- <span>{{conversationInfo.lastNews}}</span> -->
-              <span v-if="type === 'recent'">{{lastNews}}</span>
-              <span v-if="type === 'recent' && lastNews">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
+              <span v-if="type === 'recent'" style="text-overflow: ellipsis; overflow: hidden;">{{lastNews}}</span>
+              <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
             </span>
           </div>
         </div>
