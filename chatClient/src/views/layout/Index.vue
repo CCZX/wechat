@@ -15,6 +15,7 @@ import { mapState } from 'vuex'
 import myHeader from './components/Header'
 import bgImgUrl from './../../../static/image/bg.jpg'
 import { APP_VERSION } from '@/const'
+import { saveRecentConversationToLocal } from '@/utils'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import NotifyAudio from './../../../static/audio/notify.mp3'
 export default {
@@ -64,6 +65,18 @@ export default {
         count: 1,
         type: 'ADD'
       })
+      this.$store.dispatch('app/SET_RECENT_CONVERSATION', {
+        type: 'add',
+        data: news.currentConversation
+      })
+      this.$store.dispatch('news/SET_LAST_NEWS', {
+        type: 'edit',
+        res: {
+          roomid: news.roomid,
+          news: news
+        }
+      })
+      saveRecentConversationToLocal(news.senderId)
     },
     receiveValidateMessage(news) {
       this.$refs['audio'].play()
