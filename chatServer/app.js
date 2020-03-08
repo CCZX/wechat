@@ -89,6 +89,7 @@ const { insertValidateNews, changeValidateNewsStatus } = require('./controller/v
 const { insertNewGroupNews } = require('./controller/groupNews')
 const { addFriend } = require('./controller/friendly')
 const { addNewGroupUser } = require('./controller/group')
+const { updateUserOnlineTime } = require('./controller/user')
 const { conversationTypes } = require('./const')
 
 const conversationList = {}
@@ -96,6 +97,7 @@ io.on('connection', (socket) => {
   console.log('连接成功')
   socket.on('goOnline', val => {
     if (Object.keys(onLineUser).length < 200) {
+      val.loginTime = Date.now()
       onLineUser[socket.id] = val
     }
     // socket.broadcast.emit('onlineUser', onLineUser)
@@ -187,8 +189,14 @@ io.on('connection', (socket) => {
     const id = socket.id
     delete onLineUser[id]
   })
-  socket.on('leave', () => {
-    delete onLineUser[socket.id]
+  socket.on('leave', async () => {
+    const id = socket.id
+    // 计算在线时间
+    const logoutTime = Date.now()
+    const { loginTime, _id } = onLineUser[id]
+    const onlineTime = logoutTime - loginTime
+    await updateUserOnlineTime({userId: _id, time: onlineTime})
+    delete onLineUser[id]
     io.emit('onlineUser', onLineUser)
   })
 })
