@@ -43,6 +43,7 @@
                 size="large"
                 :src="'http://localhost:3333' + conversationInfo.photo"
                 @error="() => true"
+                :class="!onlineUserIds.includes(conversationInfo._id) ? 'offline' : 'online'"
               >
                 <img
                   src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
@@ -125,6 +126,9 @@ export default {
     },
     recentConversationList() {
       return this.$store.state.app.recentConversation
+    },
+    onlineUserIds() { // 在线用户的id数组
+      return this.$store.state.app.onlineUser
     }
   },
   methods: {

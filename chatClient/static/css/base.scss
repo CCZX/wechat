@@ -100,6 +100,14 @@
   @extend .curp
 }
 
+// 用户不在线时图片置灰
+.offline {
+  color: $normalfont;
+  &>img {
+    opacity: .5;
+  }
+}
+
 // 文字类操作
 .operation-text {
   &:hover {
