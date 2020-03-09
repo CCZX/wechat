@@ -31,7 +31,7 @@
       </div>
     </template>
     <template v-else>
-      <div class="conversation-info">
+      <div class="conversation-info" @contextmenu.prevent.stop="showMenu">
         <div class="wrapper">
           <el-badge
             :value="unreadNews[conversationInfo.roomid]"
@@ -53,10 +53,12 @@
           </el-badge>
           
           <div class="conversation-detail">
-            <span class="primary-font detail-item ellipsis">{{conversationInfo.beizhu ? conversationInfo.beizhu : conversationInfo.nickname}}</span>
+            <span class="primary-font detail-item ellipsis space-bw" style="display: flex">
+              <span class="ellipsis">{{conversationInfo.beizhu ? conversationInfo.beizhu : conversationInfo.nickname}}</span>
+              <i :class="'level '+ 'lv' + conversationInfo.level"></i>
+            </span>
             <span class="ellipsis secondary-font detail-item space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">{{conversationInfo.signature}}</span>
-              <!-- <span>{{conversationInfo.lastNews}}</span> -->
               <span v-if="type === 'recent'" style="text-overflow: ellipsis; overflow: hidden;">{{lastNews}}</span>
               <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
             </span>
@@ -64,15 +66,19 @@
         </div>
       </div>
       <!-- <i class="el-icon-more"></i> -->
-      <el-tooltip effect="dark" content="从最近会话中删除" placement="top">
+      <!-- <el-tooltip effect="dark" content="从最近会话中删除" placement="top">
         <i v-if="type === 'recent'" class="el-icon-circle-close" @click.stop="remove"></i>
-      </el-tooltip>
+      </el-tooltip> -->
+      <div class="menu" v-if="isShowMenu" :style="{'left': menuLeft + 'px', 'top': menuTop + 'px'}">
+        <conversation-menu @remove="remove" />
+      </div>
     </template>
   </div>
 </template>
 
 <script>
-import { formatDateToZH, arrUnique } from '@/utils'
+import { formatDateToZH, arrUnique, findParentNode } from '@/utils'
+import conversationMenu from './Menu'
 const conversationObj = {
   createDate: "",
   nickname: "",
@@ -106,7 +112,11 @@ export default {
   },
   data() {
     return {
-      unreadnewsNum: 0
+      unreadnewsNum: 0,
+      levelIcons: require('./../../../static/image/icons.png'),
+      isShowMenu: false,
+      menuTop: 0,
+      menuLeft: 0
     }
   },
   computed: {
@@ -133,6 +143,7 @@ export default {
   },
   methods: {
     remove() {
+      this.isShowMenu = false
       const recentFriendIdsStr = window.localStorage.getItem('coMessager-recentConversation') || ''
       const recentFriendIds = arrUnique(recentFriendIdsStr.split(',')).filter(item => item) // 去重
       const index = recentFriendIds.findIndex(item => item === this.conversationInfo._id)
@@ -145,13 +156,32 @@ export default {
         this.$emit('setCurrentConversation', conversationList[0] || {})
         console.log(index, this.recentConversationList.filter(item => Object.keys(item).length > 0))
       }
+    },
+    showMenu(e) {
+      this.isShowMenu = true
+      this.menuLeft = e.pageX
+      this.menuTop = e.pageY
     }
   },
   filters: {
     formatDateToZH(val) {
       return formatDateToZH(val)
     }
-  }
+  },
+  components: {
+    conversationMenu
+  },
+  created() {
+    document.addEventListener('click', () => {
+      this.isShowMenu = false
+    })
+    document.addEventListener('mousedown', (e) => {
+      const { button } = e
+      if (button === 2) {
+        this.isShowMenu = false        
+      }
+    })
+  },
 };
 </script>
 
@@ -207,6 +237,13 @@ export default {
         }
       }
     }
+  }
+  .menu {
+    position: fixed;
+    z-index: 1004;
+    background-color: #fff;
+    border-radius: 5px;
+    // width: 100px;
   }
   .el-icon-more {
     display: none;
