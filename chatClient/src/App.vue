@@ -8,10 +8,12 @@
     <!-- 不需要缓存的视图组件 -->
     <router-view v-if="!$route.meta.keepAlive">
     </router-view>
+    <pop-ups />
   </div>
 </template>
 
 <script>
+import popUps from './PopUps'
 export default {
   name: 'App',
   data() {
@@ -39,5 +41,8 @@ export default {
       }, 1000);
     }
   },
+  components: {
+    popUps
+  }
 }
 </script>

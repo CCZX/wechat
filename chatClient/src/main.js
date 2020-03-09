@@ -35,8 +35,7 @@ VueAMap.initAMapApiLoader({
 // socket连接
 Vue.use(new VueSocketIO({
   // debug: true,
-  // connection: socketIO('http://localhost:3333'),
-  connection: 'http://localhost:3333',
+  connection: process.env.SOCKET_URL,
   // vuex: {
   //   store,
   //   actionPrefix: "SOCKET_",
@@ -50,6 +49,7 @@ Object.keys(directives).forEach(i => Vue.directive(i, directives[i]))
 Vue.config.productionTip = false
 Vue.prototype.$toast = Toast
 Vue.prototype.$http = axios
+Vue.prototype.$eventBus = new Vue()
 
 /* eslint-disable no-new */
 new Vue({
