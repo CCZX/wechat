@@ -69,6 +69,13 @@ function mapArrIncludesItem(arr, id) {
   return index >= 0
 }
 
+// 根据用户在线时间计算用户等级
+function computedLevel(onlineTime) {
+  const toHour = onlineTime / 1000 / 60 /60
+  const res = Math.ceil(toHour)
+  return res > 8 ? 8 : res
+}
+
 module.exports = {
   fromatTime,
   formatNumber,
@@ -76,7 +83,8 @@ module.exports = {
   md5,
   randomNickname,
   monthAgo,
-  mapArrIncludesItem
+  mapArrIncludesItem,
+  computedLevel
 }
 
 
