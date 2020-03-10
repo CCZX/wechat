@@ -1,18 +1,42 @@
 <template>
   <div class="conversation-item-menu box-shadow1">
     <span class="menu-item operation-text" @click.stop="remove">关闭会话</span>
-    <span class="menu-item operation-text">查看资料</span>
-    <span class="menu-item operation-text">修改备注</span>
-    <span class="menu-item operation-text">切换分组</span>
+    <span class="menu-item operation-text" @click.stop="viewProfile">查看资料</span>
+    <span class="menu-item operation-text" @click.stop="modifyBeizhu">修改备注</span>
+    <span class="menu-item operation-text" @click.stop="switchFenzu">切换分组</span>
   </div>
 </template>
 
 <script>
 export default {
+  props: ['conversation'],
   methods: {
     remove() {
-      console.log('remove')
       this.$emit('remove')
+    },
+    viewProfile() {
+      this.$http.getUserInfo(this.conversation._id).then(res => {
+        console.log(res)
+      })
+      // this.$eventBus.$emit('showUserProfile')
+    },
+    switchFenzu() {
+      this.$eventBus.$emit('toggleFenzuModal', {
+        show: true,
+        data: {
+          currentConversation: this.conversation
+        }
+      })
+      this.$emit('hiddenMenu')
+    },
+    modifyBeizhu() {
+      this.$eventBus.$emit('toggleBeizhuModal', {
+        show: true,
+        data: {
+          currentConversation: this.conversation
+        }
+      })
+      this.$emit('hiddenMenu')
     }
   },
 }

@@ -70,7 +70,11 @@
         <i v-if="type === 'recent'" class="el-icon-circle-close" @click.stop="remove"></i>
       </el-tooltip> -->
       <div class="menu" v-if="isShowMenu" :style="{'left': menuLeft + 'px', 'top': menuTop + 'px'}">
-        <conversation-menu @remove="remove" />
+        <conversation-menu
+          :conversation="conversationInfo"
+          @remove="remove"
+          @hiddenMenu="hiddenMenu"
+        />
       </div>
     </template>
   </div>
@@ -161,6 +165,9 @@ export default {
       this.isShowMenu = true
       this.menuLeft = e.pageX
       this.menuTop = e.pageY
+    },
+    hiddenMenu() {
+      this.isShowMenu = false
     }
   },
   filters: {
