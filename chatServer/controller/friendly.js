@@ -1,6 +1,8 @@
 const FRIEND = require('./../models/friendly')
 const NEWS = require('./../models/news')
 
+const { computedLevel } = require('./../utils')
+
 // 查询我的好友列表
 const getMyFriends = (req, res) => {
   let { id } = req.query
@@ -15,6 +17,7 @@ const getMyFriends = (req, res) => {
           photo: item.userY.photo,
           signature: item.userY.signature,
           _id: item.userY._id,
+          level: computedLevel(item.userY.onlineTime),
           roomid: id + '-' + item.userY._id
         })
       })
@@ -25,6 +28,7 @@ const getMyFriends = (req, res) => {
             photo: item.userM.photo,
             signature: item.userM.signature,
             _id: item.userM._id,
+            level: computedLevel(item.userM.onlineTime),
             roomid: item.userM._id + '-' + id
           })
       })
@@ -50,10 +54,15 @@ const getRecentConversation = async (req, res) => {
       {userM: {$in: recentFriendIds}, userY: userId},
       {userY: {$in: recentFriendIds}, userM: userId}
     ]
-  }).populate({path: 'userY', select: 'signature photo nickname'}).populate({path: 'userM', select: 'signature photo nickname'})
+  }).populate({path: 'userY', select: 'signature photo nickname onlineTime'}).populate({path: 'userM', select: 'signature photo nickname onlineTime'})
+  const tmp = JSON.parse(JSON.stringify(data))
+  tmp.forEach(item => {
+    item.userM.level = computedLevel(item.userM.onlineTime)
+    item.userY.level = computedLevel(item.userY.onlineTime)
+  })
   return res.json({
     status: 2000,
-    data,
+    data: tmp,
     msg: '获取成功'
   })
 }

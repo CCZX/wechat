@@ -16,12 +16,12 @@ const friendlySchema = new Schema({
 
 friendlySchema.statics.findFriendByUserM = function (userId, cb) { // 联表查询
   return this
-        .find({userM: userId}).populate({path: 'userY', select: 'signature photo nickname'})
+        .find({userM: userId}).populate({path: 'userY', select: 'signature photo nickname onlineTime'})
         .exec(cb)
 }
 friendlySchema.statics.findFriendByUserY = function (userId, cb) {
   return this
-        .find({userY: userId}).populate({path: 'userM', select: 'signature photo nickname'})
+        .find({userY: userId}).populate({path: 'userM', select: 'signature photo nickname onlineTime'})
         .exec(cb)
 }
 
