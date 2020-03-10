@@ -117,6 +117,7 @@ export default {
   methods: {
     logout() {
       this.$router.replace('/login')
+      this.$socket.emit('leave')
       removeCookie()
     }
   },
