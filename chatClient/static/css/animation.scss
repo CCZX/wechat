@@ -13,19 +13,6 @@
   }
 }
 
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.6s ease;
-}
-
 .roll-enter {
   opacity: 0;
   transform: translateY(30px);
@@ -73,3 +60,53 @@
   opacity: 0;
   transition: all 1s ease-out;
 }
+
+
+// dowm
+.slide-down-enter-active { transition: all .4s ease;}
+.slide-down-leave-active { transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0);}
+.slide-down-enter, .slide-down-leave-active { transform: translateY(20px); opacity: 0;}
+.slide-down-move { transition: all .4s;}
+.slide-down-leave-active { position: absolute !important; width: 100%;}
+
+// up
+.slide-up-enter-active { transition: all .5s ease .3s;}
+.slide-up-leave-active { transition: all .5s ease;}
+.slide-up-enter, .slide-up-leave-active{ transform: translateY(-20px); opacity: 0;}
+.slide-up-move { transition: all .5s; }
+
+// left
+.slide-left-enter-active { transition: all .5s ease;}
+.slide-left-leave-active { transition: all .5s cubic-bezier(.55,0,.1,1);}
+.slide-left-enter,{ transform: translateX(20px); opacity: 0;}
+.slide-left-leave-active { transform: translateX(20px); opacity: 0;}
+.slide-left-move { transition: all .5s;}
+
+// right
+.slide-right-enter-active { transition: all .5s ease;}
+.slide-right-leave-active { transition: all .5s cubic-bezier(.55,0,.1,1);}
+.slide-right-enter { transform: translateX(-20px); opacity: 0;}
+.slide-right-leave-active { transform: translateX(20px); opacity: 0;}
+.slide-right-move { transition: all .5s;}
+
+
+// list
+.list-enter-active { transition: all .5s ease-in-out;}
+.list-leave-active { transition: all .2s ease; opacity: 0;}
+.list-enter { transform: translateY(20px); opacity: 0;}
+.list-move { transition: all .5s;}
+.list-leave-active { position: absolute; width: 100%;}
+
+// fade
+.fade-enter-active, .fade-leave-active { transition: opacity .3s; }
+.fade-enter, .fade-leave-active { opacity: 0; }
+.fade-move { transition: transform .3s; }
+.fade-leave-active { position: absolute; }
+
+// btn 
+.btn-enter-active, .btn-leave-active { transition: all .5s; }
+.btn-enter, .btn-leave-active { opacity: 0; transform: translateX(30px); }
+.btn-move { transition: all .5s; }
+.btn-leave-active { position: absolute; }
+
+
