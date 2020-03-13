@@ -4,9 +4,14 @@
       <el-collapse-item
         v-for="(item, index) in fenzu"
         :key="index"
-        :title="`${item}（${fenzuOnlineUserNum[item]}/${outcomeConversation[item].length}）`"
         :name="item"
+        class="collapse-item"
+        :data-title="item"
       >
+        <template slot="title">
+          {{outcomeConversation[item] && `${item}（${fenzuOnlineUserNum[item]}/${outcomeConversation[item].length}）`}}
+          <!-- <el-input /> -->
+        </template>
         <conversation-item
           v-for="item in outcomeConversation[item]"
           :key="item.id"
@@ -16,6 +21,9 @@
         />
       </el-collapse-item>
     </el-collapse>
+    <fenzu-menu v-if="showMenu" :top="menuTop" :left="menuLeft"
+      @addFenzu="addFenzu" @deleteFenzu="deleteFenzu" @close="closeFenzuMenu"
+    />
   </div>
 </template>
 
@@ -23,12 +31,18 @@
 import { saveMyFriendsToLocalStorage } from '@/utils'
 import { conversationTypes } from '@/const'
 import conversationItem from './ConversationItem'
+import fenzuMenu from './FenzuMenu'
 export default {
   props: ['currentConversation', 'setCurrentConversation'],
   data() {
     return {
       conversationList: [],
-      activeFenzu: ''
+      activeFenzu: '',
+      menuTop: 0,
+      menuLeft: 0,
+      showMenu: false,
+      currClickFenzu: '',
+      newFenzu: ''
     }
   },
   computed: {
@@ -39,7 +53,7 @@ export default {
       return this.$store.state.app.onlineUser
     },
     fenzu() { // 用户的分组列表
-      return Object.keys(this.userInfo.friendFenzu || {})
+      return this.newFenzu ? Object.keys(this.userInfo.friendFenzu || {}).concat(this.newFenzu) : Object.keys(this.userInfo.friendFenzu || {})
     },
     beizhu() { // 备注map
       return this.userInfo.friendBeizhu || {}
@@ -121,6 +135,27 @@ export default {
       this.conversationList.forEach(item => {
         this.$socket.emit("join", item)
       })
+    },
+    handlerCollapseItemClick(e, item) {
+      e.preventDefault()
+      const { button } = e
+      if(button !== 2) return
+      this.showMenu = true
+      this.menuLeft = e.pageX
+      this.menuTop = e.pageY
+      this.currClickFenzu = item.dataset.title
+    },
+    closeFenzuMenu() {
+      this.showMenu = false
+    },
+    addFenzu() {
+      this.newFenzu = "分组名"
+    },
+    async deleteFenzu() {
+      const params = {fenzuName: this.currClickFenzu, userId: this.userInfo._id}
+      await this.$http.deleteFenzu(params)
+      const userInfo = await this.$http.getUserInfo(this.userInfo._id)
+      this.$store.dispatch('user/LOGIN', userInfo.data.data)
     }
   },
   watch: {
@@ -131,11 +166,23 @@ export default {
     },
   },
   components: {
-    conversationItem
+    conversationItem,
+    fenzuMenu
   },
   created() {
     this.getMyFriends()
+    this.$nextTick(() =>{
+      const collapseItems = [...document.getElementsByClassName('collapse-item')]
+      collapseItems.forEach(item => {
+        item.addEventListener('contextmenu', (e) => {
+          this.handlerCollapseItemClick(e, item)
+        })
+      })
+    })
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('el-popover__reference')) return
+      this.showMenu = false
+    })
   },
 }
 </script>
-
