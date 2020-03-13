@@ -13,6 +13,8 @@ const { checkToken } = require('./utils/auth')
 
 const onLineUser = {}
 
+exports.onLineUser = onLineUser
+
 const user = require('./routes/user')
 const friendly = require('./routes/friendly')
 const group = require('./routes/group')
@@ -47,7 +49,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-// app.use(checkToken) // 验证token
+app.use(checkToken) // 验证token
 
 // app.use(`${API_VERSION}/*`, (req, res, next)　=> {
 //   console.log(req.session)
@@ -98,7 +100,11 @@ io.on('connection', (socket) => {
   socket.on('goOnline', val => {
     if (Object.keys(onLineUser).length < 200) {
       val.loginTime = Date.now()
-      onLineUser[socket.id] = val
+      onLineUser[socket.id] = {
+        _id: val._id,
+        name: val.name,
+        nickname: val.nickname
+      }
     }
     // socket.broadcast.emit('onlineUser', onLineUser)
     io.emit('onlineUser', onLineUser)
@@ -184,10 +190,16 @@ io.on('connection', (socket) => {
     console.log('1v1hangup', data)
     socket.to(data.roomid).emit('1v1hangup', data)
   })
-  socket.on('disconnect', (val) => {
+  socket.on('disconnect', async (val) => {
     console.log('disconnection user', val)
     const id = socket.id
+    const logoutTime = Date.now()
+    const { loginTime, _id } = onLineUser[id]
+    const onlineTime = logoutTime - loginTime
+    console.log(onlineTime)
+    await updateUserOnlineTime({userId: _id, time: onlineTime})
     delete onLineUser[id]
+    io.emit('onlineUser', onLineUser)
   })
   socket.on('leave', async () => {
     const id = socket.id
@@ -195,6 +207,7 @@ io.on('connection', (socket) => {
     const logoutTime = Date.now()
     const { loginTime, _id } = onLineUser[id]
     const onlineTime = logoutTime - loginTime
+    console.log(onlineTime)
     await updateUserOnlineTime({userId: _id, time: onlineTime})
     delete onLineUser[id]
     io.emit('onlineUser', onLineUser)

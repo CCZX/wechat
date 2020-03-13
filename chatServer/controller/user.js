@@ -4,6 +4,7 @@ const md5 = require('./../utils').md5
 const cvCode = require('./../utils/cvCode').cvCode
 const { createToken } = require('./../utils/auth')
 const randomNickname = require('./../utils/index').randomNickname
+const { onLineUser } = require('./../app')
 let verificationCode = ''
 
 // 验证码
@@ -64,6 +65,14 @@ const login = (req, res) => {
     if (doc) {
       let pass = md5(password)
       if (doc.pass === pass) {
+        const onlineUserIds = Object.values(onLineUser).map(item => item._id)
+        if (onlineUserIds.includes((doc._id).toString())) {
+          return res.json({
+            status: 1001,
+            data: null,
+            msg: '用户已经在别处登录了！'
+          })
+        }
         USER.update({
           $or: [{"name": account}, {"code": account}]
         }, {
