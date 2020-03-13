@@ -46,10 +46,13 @@ export default {
     },
     hasBeizhuList() { // 给会话列表加上分组
       const conversationList = JSON.parse(JSON.stringify(this.conversationList))
-      return conversationList.map(item => {
+      const offlineUsers = []
+      const onlineUsers = []
+      conversationList.forEach(item => {
         item.beizhu = this.beizhu[item._id] ? this.beizhu[item._id] : ''
-        return item
+        this.onlineUserIds.includes(item._id) ? onlineUsers.push(item) : offlineUsers.push(item)
       })
+      return [...onlineUsers, ...offlineUsers]
     },
     outcomeConversation() { // 根据分组来分类不同的好友
       const conversationList = JSON.parse(JSON.stringify(this.hasBeizhuList))
