@@ -19,8 +19,8 @@
       <el-tab-pane label="好友">
         <span slot="label"><i class="el-icon-user"></i></span>
         <div class="friend-tab-header space-bw">
-          <el-input v-model="newFenzuName" placeholder="请输入分组名" style="marginRight: 5px" />
-          <el-button type="success" @click="addNewFenzu" :loading="isAdding">添加分组</el-button>
+          <el-input size="mini" v-model="newFenzuName" placeholder="请输入分组名" style="marginRight: 5px" />
+          <el-button size="mini" type="success" @click="addNewFenzu" :loading="isAdding">添加</el-button>
         </div>
         <fenzu-conversation-list
           :current-conversation="currentConversation"
