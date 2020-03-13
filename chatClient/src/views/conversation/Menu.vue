@@ -1,6 +1,6 @@
 <template>
   <div class="conversation-item-menu box-shadow1">
-    <span class="menu-item operation-text" @click.stop="remove">关闭会话</span>
+    <span class="menu-item operation-text" v-if="type === 'recent'" @click.stop="remove">关闭会话</span>
     <span class="menu-item operation-text" @click.stop="viewProfile">查看资料</span>
     <span class="menu-item operation-text" @click.stop="modifyBeizhu">修改备注</span>
     <span class="menu-item operation-text" @click.stop="switchFenzu">切换分组</span>
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  props: ['conversation'],
+  props: ['conversation', 'type'],
   methods: {
     remove() {
       this.$emit('remove')

@@ -53,11 +53,11 @@
           </el-badge>
           
           <div class="conversation-detail">
-            <span class="primary-font detail-item ellipsis space-bw" style="display: flex">
+            <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex">
               <span class="ellipsis">{{conversationInfo.beizhu ? conversationInfo.beizhu : conversationInfo.nickname}}</span>
               <i :class="'level '+ 'lv' + conversationInfo.level"></i>
             </span>
-            <span class="ellipsis secondary-font detail-item space-bw" style="display: flex">
+            <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">{{conversationInfo.signature}}</span>
               <span v-if="type === 'recent'" style="text-overflow: ellipsis; overflow: hidden;">{{lastNews}}</span>
               <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
@@ -65,13 +65,10 @@
           </div>
         </div>
       </div>
-      <!-- <i class="el-icon-more"></i> -->
-      <!-- <el-tooltip effect="dark" content="从最近会话中删除" placement="top">
-        <i v-if="type === 'recent'" class="el-icon-circle-close" @click.stop="remove"></i>
-      </el-tooltip> -->
       <div class="menu" v-if="isShowMenu" :style="{'left': menuLeft + 'px', 'top': menuTop + 'px'}">
         <conversation-menu
           :conversation="conversationInfo"
+          :type="type"
           @remove="remove"
           @hiddenMenu="hiddenMenu"
         />
@@ -240,8 +237,14 @@ export default {
         width: calc(100% - 50px);
         margin-left: 10px;
         .detail-item {
-          margin-top: 2px;
           display: block;
+        }
+        .top-item {
+          height: 18px;
+        }
+        .bottom-item {
+          height: 13px;
+          margin-top: 4px;
         }
       }
     }
@@ -253,24 +256,5 @@ export default {
     border-radius: 5px;
     // width: 100px;
   }
-  .el-icon-more {
-    display: none;
-    position: absolute;
-    right: 15px;
-    padding: 2px 3px 2px 2px;
-    font-size: 10px;
-    border: 1px solid hsla(230, 10%, 30%, 1);
-    border-radius: 50%;
-    transition: all 0.5s ease-in;
-  }
-  .el-icon-circle-close {
-    opacity: 0;
-    position: absolute;
-    right: 15px;
-    top: 5px;
-    font-size: 18px;
-    transition: all 0.5s ease-in;
-  }
 }
 </style>
-
