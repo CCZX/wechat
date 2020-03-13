@@ -1,15 +1,17 @@
 <template>
   <div class="recent-conversation-list" v-loading="isLoading">
-    <conversation-item
-      v-for="item in outcomeConversationList"
-      :key="item.id"
-      :conversationInfo="item"
-      :currentConversation="currentConversation"
-      :recent-conversation="conversationList"
-      @setCurrentConversation="setCurrentConversation"
-      @click.native="changeCurrentConversation(item)"
-      type="recent"
-    />
+    <transition-group name="slide-up" appear>
+      <conversation-item
+        v-for="item in outcomeConversationList"
+        :key="item._id"
+        :conversationInfo="item"
+        :currentConversation="currentConversation"
+        :recent-conversation="conversationList"
+        @setCurrentConversation="setCurrentConversation"
+        @click.native="changeCurrentConversation(item)"
+        type="recent"
+      />
+    </transition-group>
     <div class="empty hor-ver-center" v-if="!outcomeConversationList.length">
       <empty-svg width="200" height="200" />
       <span class="secondary-font">最近没有聊天好友</span>
@@ -49,7 +51,12 @@ export default {
       return conversationList.length && conversationList.map(item => {
         item.beizhu = this.friendBeizhu[item._id] ? this.friendBeizhu[item._id] : ''
         item.lastNews = this.lastNewsMap[item.roomid] ? this.lastNewsMap[item.roomid] : ''
+        item.lastNewsTime = this.lastNewsMap[item.roomid] ?
+            (this.lastNewsMap[item.roomid].time ? new Date(this.lastNewsMap[item.roomid].time) : new Date()) :
+            new Date()
         return item
+      }).sort((a, b) => {
+        return b.lastNewsTime - a.lastNewsTime
       })
       // let res = []
       // this.conversationList.forEach(item => {
@@ -151,6 +158,7 @@ export default {
 
 <style lang="scss">
 .recent-conversation-list {
+  @import './../../../static/css/animation.scss';
   position: relative;
   min-height: 400px;
   .empty {
