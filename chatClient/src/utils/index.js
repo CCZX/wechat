@@ -193,3 +193,13 @@ export const arrUnique = (arr) => {
     return mult
   }, [])
 }
+
+export const findParentNode = (target, parentClassName) => {
+  let cur = target
+  while (cur !== null) {
+    if (cur.classList.contains(parentClassName)) {
+      return cur
+    }
+    cur = cur.parentNode
+  }
+}
