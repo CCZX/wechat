@@ -50,10 +50,10 @@
         <el-button @click="send" type="danger" size="small" round>清空</el-button>
       </div>
       <textarea class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true" @keydown.enter="send($event)"></textarea>
-      <transition name="roll">
+      <transition name="fade">
         <up-img class="emoji-component" v-if="showUpImgCom" :token="token" @getstatus="getImgUploadResult" :getstatus="getImgUploadResult" />
       </transition>
-      <transition name="roll">
+      <transition name="fade">
         <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />        
       </transition>
     </div>
@@ -119,7 +119,7 @@ export default {
       }
     },
     conversationList(list) {
-      console.log("当前会话列表", list)
+      // console.log("当前会话列表", list)
     }
   },
   methods: {
