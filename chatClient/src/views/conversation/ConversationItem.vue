@@ -13,7 +13,7 @@
           >
             <el-avatar
               size="large"
-              :src="'http://localhost:3333' + conversationInfo.groupId.img"
+              :src="IMG_URL + conversationInfo.groupId.img"
               @error="() => true"
             >
               <img
@@ -41,7 +41,7 @@
             <router-link :to="`/user/${conversationInfo._id}`">
               <el-avatar
                 size="large"
-                :src="'http://localhost:3333' + conversationInfo.photo"
+                :src="IMG_URL + conversationInfo.photo"
                 @error="() => true"
                 :class="!onlineUserIds.includes(conversationInfo._id) ? 'offline' : 'online'"
               >
@@ -119,6 +119,7 @@ export default {
       unreadnewsNum: 0,
       levelIcons: require('./../../../static/image/icons.png'),
       isShowMenu: false,
+      IMG_URL: process.env.IMG_URL,
       menuTop: 0,
       menuLeft: 0
     }

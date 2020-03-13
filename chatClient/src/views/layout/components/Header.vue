@@ -25,7 +25,7 @@
             <el-badge :is-dot="validateUnReadCount > 0" class="badge-item">
               <el-avatar size="large"
                 class="avatar"
-                :src="'http://localhost:3333' + userInfo.photo"
+                :src="IMG_URL + userInfo.photo"
                 @error="() => true"
               >
                 <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt="" srcset="">
@@ -94,7 +94,8 @@ let timer
 export default {
   data() {
     return {
-      coArtBoardState: 'apply' // 用于定义进入CoArtBoard组件时的状态，如果时apply就发起请求，如果是reply就回复
+      coArtBoardState: 'apply', // 用于定义进入CoArtBoard组件时的状态，如果时apply就发起请求，如果是reply就回复
+      IMG_URL: process.env.IMG_URL
     }
   },
   computed: {

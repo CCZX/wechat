@@ -7,7 +7,7 @@
       v-if="messageitem.messageType !== 'sys'"
       class="avatar"
       size="large"
-      :src="messageitem.senderId === userInfo._id ? 'http://localhost:3333' + userInfo.photo : 'http://localhost:3333' + messageitem.senderAvatar"
+      :src="messageitem.senderId === userInfo._id ? IMG_URL + userInfo.photo : IMG_URL + messageitem.senderAvatar"
       @error="() => true"
     >
       <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt srcset>
@@ -79,6 +79,7 @@ export default {
   props: ["messageitem"],
   data() {
     return {
+      IMG_URL: process.env.IMG_URL,
       currentMsg: {}
     }
   },
