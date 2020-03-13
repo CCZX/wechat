@@ -85,58 +85,6 @@ const router = new Router({
           meta: {
             requiresAuth: true
           },
-        },
-        {
-          path: '/main',
-          name: 'MainBox',
-          component: () => import('@/views/MainBox'),
-          redirect: 'main/chat',
-          meta: {
-            requiresAuth: true
-          },
-          children: [
-            {
-              path: 'chat',
-              name: 'ChatList',
-              component: () => import('@/views/chatuserlist/index'),
-              redirect: 'chat/friend',
-              meta: {
-                requiresAuth: true
-              },
-              children: [
-                {
-                  path: 'friend',
-                  name: 'Friend',
-                  component: () => import('@/views/chatuserlist/components/Friend'),
-                  meta: {
-                    requiresAuth: true
-                  }
-                },
-                {
-                  path: 'group',
-                  name: 'Group',
-                  component: () => import('@/views/chatuserlist/components/Group'),
-                  meta: {
-                    requiresAuth: true
-                  }
-                }
-              ]
-            },
-            {
-              path: 'user/:id',
-              name: 'UserDetail',
-              component: () => import('@/views/UserDetail')
-            },
-            {
-              path: 'group/:id',
-              nameL: 'GroupDetail',
-              component: () => import('@/views/GroupDetail')
-            },
-            {
-              path: 'add',
-              component: () => import('@/views/chatuserlist/components/Add')
-            }
-          ]
         }
       ]
     },
