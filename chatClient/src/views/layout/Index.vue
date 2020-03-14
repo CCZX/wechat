@@ -29,7 +29,10 @@ export default {
   computed: {
     ...mapState('user', {
       userInfo: 'userInfo'
-    })
+    }),
+    allConversation() {
+      return this.$store.state.app.allConversation
+    }
   },
   watch: {
     userInfo: {
@@ -67,9 +70,10 @@ export default {
         count: 1,
         type: 'ADD'
       })
+      const senderConversation = this.allConversation.find(item => item.roomid === news.roomid)
       this.$store.dispatch('app/SET_RECENT_CONVERSATION', {
         type: 'add',
-        data: news.currentConversation
+        data: senderConversation
       })
       this.$store.dispatch('news/SET_LAST_NEWS', {
         type: 'edit',
