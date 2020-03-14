@@ -1,14 +1,14 @@
 <template>
   <div class="custom-group-user-list-com">
     <header class="header">
-      <span class="title">群成员({{userlist.length}})</span>
+      <span class="title">群成员（{{groupOnlineUser.length}}/{{userlist.length}}）</span>
     </header>
-    <div class="user-item" v-for="item in userlist" :key="item._id">
+    <div class="user-item" v-for="item in outcomeUserList" :key="item._id">
       <div class="wrapper">
         <el-avatar
-          class="avatar"
-          size="large"
-          :src="'http://localhost:3333' + item.userId.photo"
+          :class="onlineUser.includes(item.userId._id) ? '' : 'offline'"
+          :size="20"
+          :src="IMG_URL + item.userId.photo"
           @error="() => true"
         >
           <img
@@ -16,8 +16,9 @@
           >
         </el-avatar>
         <div class="user-detail">
-          <span class="primary-font detail-item ">{{item.userId.nickname}}</span>
-          <!-- <span class="ellipsis secondary-font detail-item">{{item.userId.signature}}</span> -->
+          <span class="normal-font detail-item ellipsis">
+            {{item.userId.beizhu ? item.userId.beizhu : item.userId.nickname}}
+          </span>
         </div>
       </div>
     </div>
@@ -30,6 +31,33 @@ export default {
   props: {
     userlist: Array
   },
+  data() {
+    return {
+      IMG_URL: process.env.IMG_URL
+    }
+  },
+  computed: {
+    onlineUser() { // 所有的在线用户
+      return this.$store.state.app.onlineUser
+    },
+    groupOnlineUser() {
+      return this.userlist.filter(item => {
+        return this.onlineUser.includes(item.userId._id)
+      })
+    },
+    beizhu() { // 备注Map {好友id1: 备注1, 好友id2: 备注2}
+      return this.$store.state.user.userInfo.friendBeizhu || {}
+    },
+    outcomeUserList() {
+      const userList = JSON.parse(JSON.stringify(this.userlist))
+      return userList.map(item => {
+        if (item.userId) {
+          item.userId.beizhu = this.beizhu[item.userId._id] ? this.beizhu[item.userId._id] : ''
+        }
+        return item
+      })
+    }
+  },
 };
 </script>
 
@@ -39,21 +67,17 @@ export default {
   padding: 5px;
   overflow-y: scroll;
   .header {
-    border-bottom: 1px solid #cccccc;
+    width: 100%;
+    padding: 5px 0;
   }
   .user-item {
-    height: 30px;
-    margin-top: 4px;
+    padding: 5px 0;
     .wrapper {
       display: flex;
-      justify-content: space-around;
       align-items: center;
-      .avatar {
-        width: 30px;
-        height: 30px;
-      }
       .user-detail {
         width: 70%;
+        margin-left: 5px;
       }
     }
   }

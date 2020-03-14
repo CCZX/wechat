@@ -46,10 +46,10 @@ export default {
 .group-desc-com {
   height: 100%;
   width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+  border-left: 1px solid #cccccc;
   .notice {
     height: 50%;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #cccccc;
   }
   .member {
     height: 50%;
