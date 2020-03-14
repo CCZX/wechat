@@ -327,8 +327,9 @@ export default {
     },
     handlerShowEmoji(e, id) {
       this.currentPyq = id
-      this.emojiTop = e.pageY + 20 + 'px'
-      this.emojiLeft = e.pageX - 200 + 'px'
+      console.log(e.pageX, e.pageY)
+      this.emojiTop = e.pageY - 410 + 'px'
+      this.emojiLeft = e.pageX - 400 + 'px'
       this.showEmojiCom = true
     },
     handleDocmentScroll: debounce(function () {
