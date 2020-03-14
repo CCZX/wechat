@@ -139,10 +139,10 @@ export default {
   data() {
     return {
       IMG_URL: process.env.IMG_URL,
-      replyContent: '',
-      replyAreaShowMap: {},
-      replyContentMap: {},
-      viewMoreReplyMap: {},
+      replyContent: '', // 回复内容
+      replyAreaShowMap: {}, // 展示当前回复的那一条评论
+      replyContentMap: {}, // 回复的内容，键为被回复的评论ID，值为回复内容
+      viewMoreReplyMap: {}, // 那一条评论的子评论是处于查看更多状态的
       replyContentPlaceholderMap: {},
       showMaxReply: 3,
       currentReplyCommentLevel: 0,

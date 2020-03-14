@@ -309,13 +309,12 @@ export default {
             })
             const tmp = JSON.parse(JSON.stringify(this.pyqList))
             tmp[index].comments.push({
-              ['_id']: Date.now(),
-              content: this.commentsObj[id],
-              createDate: Date.now(),
+              ...data.data[0],
               authorId: {
                 nickname: this.userInfo.nickname,
                 photo: this.userInfo.photo
-              }
+              },
+              reply: []
             })
             this.pyqList = tmp
           }
