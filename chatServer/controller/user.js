@@ -317,6 +317,47 @@ const addNewFenzu = async (req, res) => {
   })
 }
 
+// 删除分组
+const deleteFenzu = async (req, res) => {
+  const { fenzuName, userId } = req.body
+  const userInfo = await USER.findOne({_id: userId})
+  const friendFenzu = userInfo.friendFenzu
+  const newFriendFenzu = JSON.parse(JSON.stringify(friendFenzu))
+  delete newFriendFenzu[fenzuName]
+  const upDoc = await USER.findByIdAndUpdate({
+    _id: userId
+  }, {
+    $set: {friendFenzu: newFriendFenzu}
+  })
+  return res.json({
+    status: 2000,
+    data: upDoc,
+    msg: '删除成功！'
+  })
+}
+
+// 编辑某项分组的名称
+const editFenzu = async (req, res) => {
+  const { oldFenzu, newFenzu, userId } = req.body
+  const userInfo = await USER.findOne({_id: userId})
+  const friendFenzu = userInfo.friendFenzu
+  const newFriendFenzu = JSON.parse(JSON.stringify(friendFenzu))
+  const oldFenzuUsers = friendFenzu[oldFenzu]
+  delete newFriendFenzu[oldFenzu]
+  newFriendFenzu[newFenzu] = oldFenzuUsers
+  const upDoc = await USER.findByIdAndUpdate({
+    _id: userId
+  }, {
+    $set: {friendFenzu: newFriendFenzu}
+  })
+  return res.json({
+    status: 2000,
+    data: upDoc,
+    msg: '更新成功！'
+  })
+}
+
+// 修改好友分组
 const modifyFrienFenzu = async (req, res) => {
   const { userId, friendId, newFenzu } = req.body
   const userInfo = await USER.findOne({_id: userId})
@@ -358,6 +399,7 @@ const modifyFrienFenzu = async (req, res) => {
   })
 }
 
+// 修改好友备注
 const modifyBeizhu = async (req, res) => {
   const {userId, friendId, friendBeizhu} = req.body
   const userInfo = await USER.findOne({_id: userId})
@@ -375,6 +417,7 @@ const modifyBeizhu = async (req, res) => {
   })
 }
 
+// 更新在线时长
 const updateUserOnlineTime = async (data) => {
   const { userId, time } = data
   console.log(time)
@@ -396,6 +439,8 @@ module.exports = {
   getUserBySignUpTime,
   changeUserStatus,
   addNewFenzu,
+  deleteFenzu,
+  editFenzu,
   modifyFrienFenzu,
   modifyBeizhu,
   updateUserOnlineTime
