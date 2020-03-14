@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 import { API } from './../index'
+const BASE_URL = `${API}/user`
 
 export default {
   login(data) {
@@ -26,5 +27,11 @@ export default {
   },
   modifyFriendBeizhu(data) {
     return request.post(`${API}/user/modifyfriendbeizhu`, data)
+  },
+  deleteFenzu(data) {
+    return request.post(`${API}/user/delfenzu`, data)
+  },
+  editFeznu(data) { // 编辑某项分组名称
+    return request.post(`${API}/user/editfenzu`, data)
   }
 }
