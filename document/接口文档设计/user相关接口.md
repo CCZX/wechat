@@ -213,3 +213,34 @@ POST: `/api/v1/user/modifyfriendbeizhu`
     friendBeizhu: String // 备注名称
 }
 ```
+
+### 11、删除某个分组
+
+> 描述：删除后该分组下的好友会默认添加至【我的好友】分组
+
+POST: `/api/v1/user/delfenzu`
+
+> 传参
+
+```javascript
+{
+    userId: String, // 用户Id
+    fenzuName: String, // 分组名称
+}
+```
+
+### 12、修改某个分组
+
+> 描述：删默分组【我的好友】不可以配置
+
+POST: `/api/v1/user/editfenzu`
+
+> 传参
+
+```javascript
+{
+    oldFenzu: String, // 分组原来的名字
+    newFenzu: String, // 分组新的名字
+    userId： String // 用户Id
+}
+```
