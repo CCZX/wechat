@@ -1,17 +1,14 @@
 <template>
   <div class="group-conversation-list">
     <el-collapse v-model="activeFenzu">
-      <el-collapse-item :title="`我创建的群聊（${myHolderGroup.length}）`" name="holder">
+      <el-collapse-item
+        v-for="item in groupCategory"
+        :key="item.id"
+        :title="`${item.text}（${groupCategoryMap[item.category].length}）`"
+        :name="item.category"
+      >
         <conversation-item
-          v-for="item in myHolderGroup"
-          :key="item.id"
-          :conversationInfo="item"
-          @click.native="changeCurrentConversation(item)"
-        />
-      </el-collapse-item>
-      <el-collapse-item :title="`我加入的群聊（${myJoinGroup.length}）`" name="join">
-        <conversation-item
-          v-for="item in myJoinGroup"
+          v-for="item in groupCategoryMap[item.category]"
           :key="item.id"
           :conversationInfo="item"
           @click.native="changeCurrentConversation(item)"
@@ -30,7 +27,12 @@ export default {
   data() {
     return {
       conversationList: [],
-      activeFenzu: ''
+      activeFenzu: '',
+      groupCategory: [
+        {id: 0, category: 'myHolderGroup', text: '我创建的群聊'},
+        {id: 1, category: 'myManagerGroup', text: '我管理的群聊'},
+        {id: 2, category: 'myJoinGroup', text: '我加入的群聊'}
+      ]
     }
   },
   computed: {
@@ -40,8 +42,18 @@ export default {
     myHolderGroup() {
       return this.conversationList.filter(item => item.holder)
     },
+    myManagerGroup() {
+      return this.conversationList.filter(item => item.manager)
+    },
     myJoinGroup() {
-      return this.conversationList.filter(item => !item.holder)
+      return this.conversationList.filter(item => !item.holder && !item.manager)
+    },
+    groupCategoryMap() {
+      return {
+        myHolderGroup: this.myHolderGroup,
+        myManagerGroup: this.myManagerGroup,
+        myJoinGroup: this.myJoinGroup
+      }
     }
   },
   methods: {
