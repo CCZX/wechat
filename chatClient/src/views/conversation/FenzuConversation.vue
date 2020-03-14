@@ -9,8 +9,14 @@
         :data-title="item"
       >
         <template slot="title">
-          {{outcomeConversation[item] && `${item}（${fenzuOnlineUserNum[item]}/${outcomeConversation[item].length}）`}}
-          <!-- <el-input /> -->
+          <span v-if="currEditFenzu !== item">
+            {{outcomeConversation[item] && `${item}（${fenzuOnlineUserNum[item]}/${outcomeConversation[item].length}）`}}
+          </span>
+          <el-input
+            v-else style="margin-right: 20px"
+            v-model="currEditFenzuTo" size="mini"
+            @keydown.enter.native="confirmEdit"
+          />
         </template>
         <conversation-item
           v-for="item in outcomeConversation[item]"
@@ -23,6 +29,7 @@
     </el-collapse>
     <fenzu-menu v-if="showMenu" :top="menuTop" :left="menuLeft"
       @addFenzu="addFenzu" @deleteFenzu="deleteFenzu" @close="closeFenzuMenu"
+      @editFenzu="setEditFenzu"
     />
   </div>
 </template>
@@ -41,8 +48,10 @@ export default {
       menuTop: 0,
       menuLeft: 0,
       showMenu: false,
-      currClickFenzu: '',
-      newFenzu: ''
+      currClickFenzu: '', // 当前点击的分组
+      currEditFenzu: '', // 当前编辑的分组
+      currEditFenzuTo: '', // 被编辑分组的新名字
+      newFenzu: '' // 新添加分组的名称
     }
   },
   computed: {
@@ -108,7 +117,7 @@ export default {
     }
   },
   methods: {
-    async getMyFriends() {
+    async getMyFriends() { // 获取所有的好友
       const id = this.userInfo._id
       const { data, status } = await this.$http.getMyFriends(id)
       if (data.status === 2000 && (100 <= status <= 400)) {
@@ -120,6 +129,7 @@ export default {
           item.myAvatar = this.userInfo.photo
         })
         this.conversationList = friendList
+        this.$store.dispatch('app/SET_ALL_CONVERSATION', friendList)
         // this.changeCurrentConversation(this.conversationList[0] || {})
         // 把好友的id保存到本地，可能会用到
         const saveLocalData = friendList.map(item => {
@@ -152,8 +162,27 @@ export default {
       this.newFenzu = "分组名"
     },
     async deleteFenzu() {
+      if (this.currClickFenzu === '我的好友') {
+        return this.$message({
+          message: '该分组是默认分组，不能删除',
+          type: 'warning'
+        })
+      }
       const params = {fenzuName: this.currClickFenzu, userId: this.userInfo._id}
       await this.$http.deleteFenzu(params)
+      const userInfo = await this.$http.getUserInfo(this.userInfo._id)
+      this.$store.dispatch('user/LOGIN', userInfo.data.data)
+    },
+    setEditFenzu() {
+      this.currEditFenzu = this.currEditFenzuTo = this.currClickFenzu
+    },
+    async confirmEdit() {
+      console.log('ok')
+      const data = await this.$http.editFeznu({
+        oldFenzu: this.currEditFenzu,
+        newFenzu: this.currEditFenzuTo,
+        userId: this.userInfo._id
+      })
       const userInfo = await this.$http.getUserInfo(this.userInfo._id)
       this.$store.dispatch('user/LOGIN', userInfo.data.data)
     }
@@ -180,8 +209,13 @@ export default {
       })
     })
     document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('el-popover__reference')) return
-      this.showMenu = false
+      console.log(e)
+      if (!e.target.classList.contains('el-input__inner')) {
+        this.currEditFenzu = ''
+      }
+      if (!e.target.classList.contains('el-popover__reference')) {
+        this.showMenu = false
+      }
     })
   },
 }

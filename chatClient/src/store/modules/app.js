@@ -1,10 +1,11 @@
 const state = {
   sysUsers: '' || JSON.parse(window.localStorage.getItem('sysusers')),
-  isToCoArtBoard: false,
-  currentConversation: {},
-  agreeFriendValidate: false,
-  recentConversation: [],
-  onlineUser: []
+  isToCoArtBoard: false, // 是否在白板协作
+  currentConversation: {}, // 当前的会话，在白板协作会使用
+  agreeFriendValidate: false, // 同意好友申请
+  recentConversation: [], // 最近的会话列表
+  onlineUser: [], // 在线用户
+  allConversation: [] // 所有会话
 }
 
 const mutations = {
@@ -39,6 +40,9 @@ const mutations = {
   },
   setOnlineUser(state, data) {
     state.onlineUser = data
+  },
+  setAllConversation(state, data) {
+    state.allConversation = [...state.allConversation, ...data]
   }
 }
 
@@ -60,6 +64,9 @@ const actions = {
   },
   SET_ONLINE_USER({commit}, data) {
     commit('setOnlineUser', data)
+  },
+  SET_ALL_CONVERSATION({commit}, data) {
+    commit('setAllConversation', data)
   }
 }
 
