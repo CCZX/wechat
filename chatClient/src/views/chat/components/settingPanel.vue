@@ -6,20 +6,12 @@
         @click.stop="showFenzu"
         v-if="currentConversation.conversationType === conversationTypes.friend"
       >切换分组</span>
-      
-      <el-popover
-        placement="top-start"
-        width="300"
-        trigger="click"
-      >
-        <el-input placeholder="请输入备注" v-model="newBeizhu" @keydown.enter.native="modifyBeizhu" />
-        <span
-          class="item operation-text"
-          slot="reference"
-          @click.stop="()=>{}"
-          v-if="currentConversation.conversationType === conversationTypes.friend"
-        >修改备注</span>
-      </el-popover>
+      <span
+        class="item operation-text"
+        slot="reference"
+        @click.stop="showBeizhu"
+        v-if="currentConversation.conversationType === conversationTypes.friend"
+      >修改备注</span>
       <span
         class="item operation-text__danger"
         v-if="currentConversation.conversationType === conversationTypes.friend"
@@ -29,22 +21,15 @@
         v-if="currentConversation.conversationType === conversationTypes.group"
       >退出群聊</span>
     </div>
-    <fenzu-modal
-      v-if="isShowFenzu"
-      :current-conversation="currentConversation"
-      @hidden-fenzu="hiddenFenzu"
-    />
   </div>
 </template>
 
 <script>
-import fenzuModal from '@/components/fenzuModal'
 import { conversationTypes } from '@/const'
 export default {
   props: ['currentConversation'],
   data() {
     return {
-      isShowFenzu: false,
       conversationTypes,
       newBeizhu: ''
     }
@@ -56,26 +41,21 @@ export default {
   },
   methods: {
     showFenzu() {
-      this.isShowFenzu = true
+      this.$eventBus.$emit('toggleFenzuModal', {
+        show: true,
+        data: {
+          currentConversation: this.currentConversation
+        }
+      })
     },
-    hiddenFenzu() {
-      this.isShowFenzu = false
-    },
-    async modifyBeizhu() {
-      const params = {
-        userId: this.userInfo._id,
-        friendId: this.currentConversation._id,
-        friendBeizhu: this.newBeizhu
-      }
-      await this.$http.modifyFriendBeizhu(params)
-      const userInfo = await this.$http.getUserInfo(this.userInfo._id)
-      this.$store.dispatch('user/LOGIN', userInfo.data.data)
-      this.$emit('setCurrentConversation', {...this.currentConversation, beizhu: this.newBeizhu})
-      this.newBeizhu = ''
+    showBeizhu() {
+      this.$eventBus.$emit('toggleBeizhuModal', {
+        show: true,
+        data: {
+          currentConversation: this.currentConversation
+        }
+      })
     }
-  },
-  components: {
-    fenzuModal
   }
 }
 </script>

@@ -1,7 +1,9 @@
 <template>
   <div class="group-desc-com">
     <div class="notice">
-      notice
+      <span>
+        富强、民主、文明、和谐、自由、平等、公正、法治，倡导爱国、敬业、诚信、友善
+      </span>
     </div>
     <div class="member">
       <group-user-list :userlist="groupMembers" />

@@ -44,13 +44,16 @@ export default {
     userInfo() {
       return this.$store.state.user.userInfo
     },
+    beizhu() { // 备注map
+      return this.userInfo.friendBeizhu || {}
+    },
     haderTitle() {
       const currentConversation = this.currentConversation
       let res = ''
       if (currentConversation.isGroup) {
         res = currentConversation.groupId.title
       } else {
-        res = currentConversation.beizhu ? currentConversation.beizhu : currentConversation.nickname
+        res = this.beizhu[currentConversation._id] ? this.beizhu[currentConversation._id] : currentConversation.nickname
       }
       return res
     }

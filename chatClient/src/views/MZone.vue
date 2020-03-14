@@ -19,13 +19,15 @@
           <span class="nickname">{{userDetails.nickname}}</span>
         </div>
       </div>
-      <div class="mzone-nav">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-          <el-menu-item index="1">好友动态</el-menu-item>
-          <el-menu-item index="3">我的档案</el-menu-item>
-          <el-menu-item index="4">不知带</el-menu-item>
-        </el-menu>
-      </div>
+      <!-- <suck-top :top="60" parent="document" :z-index="1004" width="1020"> -->
+        <div class="mzone-nav">
+          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+            <el-menu-item index="1">好友动态</el-menu-item>
+            <el-menu-item index="3">我的空间</el-menu-item>
+            <el-menu-item index="4">我的档案</el-menu-item>
+          </el-menu>
+        </div>
+      <!-- </suck-top> -->
       <div class="mzone-body">
         <div class="menulist">
           <el-menu
@@ -63,6 +65,7 @@
 import mPyq from '@/components/mzonePyq'
 import sendMzone from '@/components/sendMZone'
 import backTop from '@/components/backTop'
+import suckTop from '@/components/suckTop'
 export default {
   name: 'MZone',
   data() {
@@ -95,7 +98,8 @@ export default {
   components: {
     mPyq,
     sendMzone,
-    backTop
+    backTop,
+    suckTop
   }
 }
 </script>
@@ -137,6 +141,7 @@ export default {
       }
     }
     .mzone-nav {
+      width: 1020px;
       .el-tabs {
         box-shadow: none;
         background-color: #e9ebee;

@@ -1,16 +1,17 @@
 // 生成验证码
-export function createCanvas(value, dom, imgUrl) {
-  let tempArr = value.split('')
-  let canvasStr = tempArr.join(' ')
-  let canvas = dom
-  let ctx = canvas.getContext('2d')
-  let x = canvas.width / 2
-  let oImg = new Image()
+export function createCanvas(value, dom, imgUrl, loadedCb) {
+  const tempArr = value.split('')
+  const canvasStr = tempArr.join(' ')
+  const canvas = dom
+  const ctx = canvas.getContext('2d')
+  const x = canvas.width / 2
+  const oImg = new Image()
   oImg.src = imgUrl
   oImg.width = 120
   oImg.width = 40
   oImg.onload = function () {
-    var pattern = ctx.createPattern(oImg,'repeat');//在指定的方向内重复指定的元素
+    loadedCb && typeof(loadedCb) === 'function' && loadedCb()
+    const pattern = ctx.createPattern(oImg,'repeat');//在指定的方向内重复指定的元素
     ctx.fillStyle = pattern;//填充绘画的颜色
     ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.textAlign = 'center';

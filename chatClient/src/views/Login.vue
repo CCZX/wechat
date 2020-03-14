@@ -1,5 +1,8 @@
 <template>
   <div class="login-page" :style="'background-image: url('+ bgUrl +')'">
+    <div class="ceshi" style="'marginTop': '30px'">
+      <el-alert :closable="false" show-icon title="测试账号密码" description="账号1：cc1218，密码1：123456 | 账号2：lt0623，密码2：123456" type="success" />
+    </div>
     <div class="wrapper">
       <el-card>
         <div class="title">
@@ -18,7 +21,8 @@
               </el-form-item>
               <el-form-item class="cv-code">
                 <el-input class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
-                <canvas width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
+                <canvas v-show="!cvCodeing" width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
+                <span style="width: 150px" v-show="cvCodeing">获取中...</span>
               </el-form-item>
               <el-button class="login-btn" type="primary" @click="login">登录</el-button>
             </el-form>
@@ -58,6 +62,7 @@ import {createCanvas} from '@/utils/cvcode'
 import canvasImg from './../../static/image/canvas2.jpg'
 import { accountReg, passwordReg } from '@/utils/index'
 let timer = null
+let isFirst = true
 export default {
   name: 'Login',
   data() {
@@ -75,13 +80,9 @@ export default {
         cvCode: ''
       },
       cvCode: '', // 验证码
+      cvCodeing: true, // 正在获取验证码？
       isLoginState: true,
       bgUrl: bgUrl2
-    }
-  },
-  computed: {
-    currCanvas() {
-      return this.isLoginState ? this.$refs.loginCanvas : this.$refs.registerCanvas
     }
   },
   methods: {
@@ -150,11 +151,17 @@ export default {
       })
     },
     getCVCode() { // 获取验证码
+      this.cvCodeing = true
       this.$http.getCVCode().then(res => {
         let { data, status, timestamp } = res.data
         this.cvCode = data
         this.loginInfo.cvCodeTimestamp = timestamp
-        createCanvas(this.cvCode, this.currCanvas, canvasImg)
+        this.$nextTick(() => {
+          const currCanvas = this.isLoginState ? this.$refs.loginCanvas : this.$refs.registerCanvas
+          createCanvas(this.cvCode, currCanvas, canvasImg, () => {
+            this.cvCodeing = false
+          })
+        })
       })
     },
     changeState(flag) {
@@ -177,6 +184,14 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   transition: all .8s ease;
+  .ceshi {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0 auto;
+    width: 60%;
+  }
   .wrapper {
     width: 400px;
     position: absolute;
