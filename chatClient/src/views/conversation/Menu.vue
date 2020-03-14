@@ -12,6 +12,7 @@ export default {
   props: ['conversation', 'type'],
   methods: {
     remove() {
+      this.$emit('hiddenMenu')
       this.$emit('remove')
     },
     viewProfile() {
