@@ -52,8 +52,8 @@ export default {
         item.beizhu = this.friendBeizhu[item._id] ? this.friendBeizhu[item._id] : ''
         item.lastNews = this.lastNewsMap[item.roomid] ? this.lastNewsMap[item.roomid] : ''
         item.lastNewsTime = this.lastNewsMap[item.roomid] ?
-            (this.lastNewsMap[item.roomid].time ? new Date(this.lastNewsMap[item.roomid].time) : new Date()) :
-            new Date()
+            (this.lastNewsMap[item.roomid].time ? new Date(this.lastNewsMap[item.roomid].time) : new Date(Date.now()-2000)) :
+            new Date(Date.now()-2000) // -2000ms为了解决没有最近消息的会话的lastNews一直为当前时间（这样会和新发送的消息的会话冲突）
         return item
       }).sort((a, b) => {
         return b.lastNewsTime - a.lastNewsTime
@@ -166,4 +166,3 @@ export default {
   }
 }
 </style>
-
