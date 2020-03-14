@@ -16,6 +16,7 @@
       />
       <div class="no-conversation hor-ver-center" v-else>
         <chat-svg width="400" height="300" />
+        <p>聊天~打开心灵的窗户</p>
       </div>
     </div>
     <div class="detail">
@@ -146,7 +147,7 @@ export default {
     width: 55%;
     border-right: 1px solid #cccccc;
     .no-conversation {
-      
+      text-align: center;
     }
   }
   .detail {
