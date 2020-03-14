@@ -177,14 +177,22 @@ export default {
       this.currEditFenzu = this.currEditFenzuTo = this.currClickFenzu
     },
     async confirmEdit() {
-      console.log('ok')
-      const data = await this.$http.editFeznu({
+      if (this.currEditFenzu === '我的好友') {
+        this.currEditFenzu = ''
+        return this.$message({type: 'warning', message: '默认分组不能修改！'})
+      }
+      const { data } = await this.$http.editFeznu({
         oldFenzu: this.currEditFenzu,
         newFenzu: this.currEditFenzuTo,
         userId: this.userInfo._id
       })
-      const userInfo = await this.$http.getUserInfo(this.userInfo._id)
-      this.$store.dispatch('user/LOGIN', userInfo.data.data)
+      if (data.status === 2000) {
+        const userInfo = await this.$http.getUserInfo(this.userInfo._id)
+        this.$store.dispatch('user/LOGIN', userInfo.data.data)
+        this.$message({type: 'success', message: '修改成功！'})
+      } else {
+        this.$message({type: 'error', message: '修改失败！'})
+      }
     }
   },
   watch: {
