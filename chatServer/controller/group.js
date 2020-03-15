@@ -1,5 +1,6 @@
 const GROUP_USER = require('./../models/group').groupUser
 const GROUP = require('./../models/group').group
+const ACCOUNTBASE = require('./../models/accountpool')
 const { insertNewGroupNews } = require('./groupNews')
 
 const getMyGroup = (req, res) => { // 获取我的群聊
@@ -93,9 +94,56 @@ const addNewGroupUser = (data) => {
   })
 }
 
+// 创建群聊
+const createGroup = async (req, res) => {
+  try {
+    const account = await ACCOUNTBASE.findOne({status: '0', type: '2'})
+    await ACCOUNTBASE.findOneAndUpdate({
+      code: account.code
+    }, {
+      status: '1'
+    })
+    console.log('req body', account)
+    const { title, desc = '', holderName, holderUserId } = req.body
+    const img = req.body.img || '/img/zwsj5.png'
+    const newGroup = {
+      title,
+      desc,
+      img,
+      code: account.code,
+      holderName,
+      holderUserId
+    }
+    const groupData = await GROUP.insertMany(newGroup)
+    const newGroupUserMember = {
+      groupId: groupData[0]._id,
+      userId: holderUserId,
+      userName: holderName,
+      manager: 0,
+      holder: 1,
+      card: ''
+    }
+    const groupUserData = await GROUP_USER.insertMany(newGroupUserMember)
+    return res.json({
+      status: 2000,
+      data: {
+        groupData,
+        groupUserData
+      }
+    })
+  } catch (error) {
+    return res.json({
+      status: 2003,
+      data: error,
+      msg: '服务器错误，请稍后重试！'
+    })
+  }
+}
+
 module.exports = {
   getMyGroup,
   getGroupInfo,
   searchGroup,
-  addNewGroupUser
+  addNewGroupUser,
+  createGroup
 }
