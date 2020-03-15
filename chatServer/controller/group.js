@@ -68,10 +68,12 @@ const searchGroup = async (req, res) => { // 在客户端搜索群聊
 // 给群聊添加新成员
 const addNewGroupUser = (data) => {
   const { userId, groupId, userName } = data
-  GROUP_USER.find({
-    userId: userId
+  GROUP_USER.findOne({
+    userId: userId,
+    groupId: groupId
   }).then(doc => {
-    if (doc.length === 0) {
+    console.log('doclength', doc)
+    if (!doc) {
       GROUP_USER.insertMany(data).then(doc => {
         GROUP.update({
           _id: groupId
