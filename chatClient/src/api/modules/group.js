@@ -23,6 +23,13 @@ export default {
     return request.get(`${API}/group/prefetchgroup?type=${type}&q=${q}&page=${page}&pageSize=${pageSize}`)
   },
   /**
+   * 创建群聊
+   * @param {*} data 
+   */
+  createGroup(data) {
+    return request.post(`${API}/group/create`, data)
+  },
+  /**
    * ------------------华丽分界线，以下是和群组消息有关的API------------------------
    */
   /**
