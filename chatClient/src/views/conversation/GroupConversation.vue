@@ -15,6 +15,13 @@
         />
       </el-collapse-item>
     </el-collapse>
+    <div class="create">
+      <i
+        title="创建群聊"
+        class="el-icon-circle-plus box-shadow1 circle"
+        @click="createGroup"
+      />
+    </div>
   </div>
 </template>
 
@@ -72,6 +79,9 @@ export default {
         saveMyGroupToLocalStorage(saveLocalData)
       }
     },
+    createGroup() {
+      this.$eventBus.$emit('toggleCreateGroup', { show: true })
+    },
     changeCurrentConversation(item) {
       this.$emit('setCurrentConversation', item)
     },
@@ -93,7 +103,22 @@ export default {
   },
   created() {
     this.getMyGroup()
+    this.$eventBus.$on('createGroupSuccess', () => {
+      this.getMyGroup()
+    })
   },
 }
 </script>
 
+<style lang="scss">
+.group-conversation-list {
+  .create {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 40px;
+    color: hsla(201, 100%, 55%, 1);
+    cursor: pointer;
+  }
+}
+</style>

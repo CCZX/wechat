@@ -155,6 +155,8 @@ export default {
     overflow-y: scroll;
     .el-tabs__content {
       padding: 0;
+      min-height: calc(100% - 40px);
+      position: relative;
       .friend-tab-header {
         padding: 10px;
       }
