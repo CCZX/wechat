@@ -44,6 +44,10 @@
   cursor: pointer;
 }
 
+.circle {
+  border-radius: 50%;
+}
+
 // 文字类CSS样式
 .primary-font {
   color: $primaryfont;
@@ -53,6 +57,11 @@
 .secondary-font {
   color: $secondaryfont;
   font-size: 12px;
+}
+
+.normal-font {
+  color: $normalfont;
+  font-size: 14px;
 }
 
 .ellipsis{
@@ -110,7 +119,7 @@
 
 // 用户不在线时图片置灰
 .offline {
-  color: $normalfont;
+  // color: $normalfont;
   &>img {
     opacity: .5;
   }
