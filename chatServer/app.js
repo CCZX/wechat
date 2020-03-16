@@ -99,11 +99,11 @@ io.on('connection', (socket) => {
   console.log('连接成功')
   socket.on('goOnline', val => {
     if (Object.keys(onLineUser).length < 200) {
-      val.loginTime = Date.now()
       onLineUser[socket.id] = {
         _id: val._id,
         name: val.name,
-        nickname: val.nickname
+        nickname: val.nickname,
+        loginTime: Date.now()
       }
     }
     // socket.broadcast.emit('onlineUser', onLineUser)
