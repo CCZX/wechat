@@ -10,25 +10,45 @@
       v-if="isShowBeizhuModal"
       :current-conversation="currentConversation"
     />
+    <transition name="fade">
+      <bearing-modal
+      v-if="showModal && isShowCreateGroup"
+      @close="$eventBus.$emit('toggleCreateGroup', { show: false })"
+      title="创建群聊"
+    >
+      <template slot="body">
+        <create-group />
+      </template>
+    </bearing-modal>
+    </transition>
+    
   </div>
 </template>
 
 <script>
+import './../static/css/animation.scss'
 import userProfile from '@/components/userProfile'
 import fenzuModal from '@/components/fenzuModal'
 import beizhuModal from '@/components/beizhuModal'
+import createGroup from '@/components/createGroup'
+import bearingModal from '@/components/bearingModal'
 export default {
   data() {
     return {
+      showModal: false,
       isShowUserProfile: false,
       isShowFenzuModal: false,
       isShowBeizhuModal: false,
+      isShowCreateGroup: false,
       currentConversation: {}
     }
   },
   methods: {
     hiddenFenzuModal() {
       this.isShowFenzuModal = false
+    },
+    close() {
+      this.showModal = false
     }
   },
   created() {
@@ -45,11 +65,18 @@ export default {
       this.isShowBeizhuModal = show
       this.currentConversation = data.currentConversation || {}
     })
+    this.$eventBus.$on('toggleCreateGroup', (e) => {
+      const { show } = e
+      this.showModal = show
+      this.isShowCreateGroup = show
+    })
   },
   components: {
     userProfile,
     fenzuModal,
-    beizhuModal
+    beizhuModal,
+    createGroup,
+    bearingModal
   }
 }
 </script>
