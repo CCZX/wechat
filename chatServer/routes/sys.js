@@ -1,26 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const qiniu = require('qiniu')
 const OSUtils = require('os-utils')
 const OS = require('os')
-const { ACCESS_KEY, SECRET_KEY, BUCKET } = require('./../utils/config')
-const sysUserController = require('./../controller/systemUser')
+const sysController = require('../controller/system')
 
-router.get('/sysusers', sysUserController.getSysUser)
-
-router.get('/qiniutoken', async (req, res) => {
-  const mac = new qiniu.auth.digest.Mac(ACCESS_KEY, SECRET_KEY)
-  const options = {
-    scope: BUCKET
-  }
-  const putPolicy = new qiniu.rs.PutPolicy(options)
-  const token = putPolicy.uploadToken(mac)
-  res.json({
-    status: 2000,
-    data: token,
-    msg: 'success'
-  })
-})
+router.get('/sysusers', sysController.getSysUser) // 获取系统用户
+router.get('/qiniutoken', sysController.getQiniuToken) // 七牛云token
 
 router.get('/syssituation', (req, res) => {
   let freeMem = OS.freemem() / 1024 / 1024 / 1024
