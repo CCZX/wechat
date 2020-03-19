@@ -13,7 +13,7 @@
         <video src id="rtcB" controls autoplay></video>
       </div>
     </div>
-    <div class="audio-container">
+    <div class="audio-container" v-if="webRtcType === 'audio'">
       <el-tooltip class="item" effect="dark" content="点击关闭通话" placement="top">
         <i class="icon el-icon-mic" @click="hangup"></i>
       </el-tooltip>
@@ -80,6 +80,9 @@ export default {
       this.onIce(data)
     },
     '1v1hangup'(data) {
+      this.localstream.getTracks().forEach(function (track) {
+        track.stop()
+      })
       this.$message({message: "聊天结束~", type: "warning"})
       this.peer.close()
       this.peer = null
@@ -92,6 +95,11 @@ export default {
   methods: {
     hangup() {
       // 挂断通话
+
+      // 关闭摄像头
+      this.localstream.getTracks().forEach(function (track) {
+        track.stop()
+      })
       this.$message({message: "聊天结束~", type: "warning"})
       this.$socket.emit("1v1hangup", {...this.conversation, webRtcType: this.webRtcType})
       this.peer.close()
