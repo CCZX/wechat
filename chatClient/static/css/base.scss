@@ -117,6 +117,10 @@
   @extend .curp
 }
 
+.cur-disable {
+  cursor: not-allowed;
+}
+
 // 用户不在线时图片置灰
 .offline {
   // color: $normalfont;

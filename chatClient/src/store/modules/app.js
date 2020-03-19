@@ -1,7 +1,10 @@
 const state = {
   sysUsers: '' || JSON.parse(window.localStorage.getItem('sysusers')),
   isToCoArtBoard: false, // 是否在白板协作
-  currentConversation: {}, // 当前的会话，在白板协作会使用
+  // isAudioOrVideo: false, // 是否正在语音通话或者视频通话
+  isVideoing: false,
+  isAudioing: false,
+  currentConversation: {}, // 当前的会话，在白板协作、音视频通话会使用
   agreeFriendValidate: false, // 同意好友申请
   recentConversation: [], // 最近的会话列表
   onlineUser: [], // 在线用户
@@ -15,7 +18,13 @@ const mutations = {
     window.localStorage.setItem('sysusers', dataStr)
   },
   setIsToCoArtBoard(state, data) {
-    state.isToCoArtBoard = !state.isToCoArtBoard
+    state.isToCoArtBoard = data
+  },
+  setIsAudioing(state, data) {
+    state.isAudioing = data
+  },
+  setIsVideoing(state, data) {
+    state.isVideoing = data
   },
   setCurrentConversation(state, data) {
     state.currentConversation = data
@@ -52,6 +61,12 @@ const actions = {
   },
   SET_ISTOCOARTBOARD({commit}, data) {
     commit('setIsToCoArtBoard', data)
+  },
+  SET_IS_AUDIOING({commit}, data) {
+    commit('setIsAudioing', data)
+  },
+  SET_IS_VIDEOING({commit}, data) {
+    commit('setIsVideoing', data)
   },
   SET_CURRENT_CONVERSATION({commit}, data) {
     commit('setCurrentConversation', data)

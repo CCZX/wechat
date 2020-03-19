@@ -77,7 +77,21 @@
         drag-cancel=".drawingarea"
       >
         <div class="co-art-board">
-          <co-art-board :currentconversation="currentConversation" :state="coArtBoardState" />
+          <co-art-board :currentconversation="currentConversation" :state="webRTCState" :web-rtc-type="WEB_RTC_TYPE.artBoard" />
+        </div>
+      </vue-draggable-resizable>
+    </transition>
+    <transition name="fade">
+      <vue-draggable-resizable
+        v-if="isVideoing || isAudioing"
+        drag-cancel=".drawingarea"
+      >
+        <div class="co-art-board box-shadow1">
+          <co-video
+            :currentconversation="currentConversation"
+            :state="webRTCState"
+            :web-rtc-type="coVideoWebRtcType"
+          />
         </div>
       </vue-draggable-resizable>
     </transition>
@@ -88,14 +102,26 @@
 import { mapState } from 'vuex'
 import vueDraggableResizable from 'vue-draggable-resizable'
 import CoArtBoard from '@/views/CoArtBoard'
+import CoVideo from '@/views/CoVideo'
 import { coArtBoardReplyTypes } from '@/const'
 import { removeCookie } from '@/utils/token'
+const WEB_RTC_TYPE = {
+  artBoard: 'artBoard',
+  video: 'video',
+  audio: 'audio'
+}
+const WEB_RTC_TYPE_TEXT = {
+  artBoard: '白板协作',
+  video: '视频通话',
+  audio: '语音通话'
+}
 let timer
 export default {
   data() {
     return {
-      coArtBoardState: 'apply', // 用于定义进入CoArtBoard组件时的状态，如果时apply就发起请求，如果是reply就回复
-      IMG_URL: process.env.IMG_URL
+      webRTCState: 'apply', // 用于定义进入webRTC通信组件时的状态，如果时apply就发起请求，如果是reply就回复
+      IMG_URL: process.env.IMG_URL,
+      WEB_RTC_TYPE
     }
   },
   computed: {
@@ -112,8 +138,19 @@ export default {
     },
     ...mapState('app', {
       isToCoArtBoard: 'isToCoArtBoard',
+      isVideoing: 'isVideoing',
+      isAudioing: 'isAudioing',
       currentConversation: 'currentConversation'
-    })
+    }),
+    coVideoWebRtcType () {
+      let res = null
+      if (this.isVideoing) {
+        res = WEB_RTC_TYPE.video
+      } else if (this.isAudioing) {
+        res = WEB_RTC_TYPE.audio
+      }
+      return res
+    }
   },
   methods: {
     logout() {
@@ -124,26 +161,42 @@ export default {
   },
   components: {
     CoArtBoard,
+    CoVideo,
     vueDraggableResizable
   },
   sockets: {
     apply(data) {
       // 收到了对方的请求
       console.log('收到协作请求', data)
-      if (this.isToCoArtBoard) {
+      const webRtcType = data.webRtcType
+      if (this.isToCoArtBoard || this.isVideoing || this.isAudioing) {
         this.$socket.emit('reply', {...data, type: coArtBoardReplyTypes.busy})
         return
       } else {
-        this.$confirm(`您的好友${data.myNickname}请求与你进行白板协作, 是否同意?`, "提示", {
+        let text = ''
+        if (webRtcType === WEB_RTC_TYPE.artBoard) {
+          text = '白板协作'
+        } else if (webRtcType === WEB_RTC_TYPE.audio) {
+          text = '语音通话'
+        } else if (webRtcType === WEB_RTC_TYPE.video) {
+          text = '视频通话'
+        }
+        this.$confirm(`您的好友${data.myNickname}请求与你进行${text}, 是否同意?`, "提示", {
           confirmButtonText: "同意",
           cancelButtonText: "拒绝",
           type: "warning"
         })
           .then(async () => {
             console.log('ok')
-            this.coArtBoardState = 'reply'
+            this.webRTCState = 'reply'
             this.$store.dispatch('app/SET_CURRENT_CONVERSATION', data)
-            this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+            if (webRtcType === WEB_RTC_TYPE.artBoard) {
+              this.$store.dispatch('app/SET_ISTOCOARTBOARD', true)
+            } else if (webRtcType === WEB_RTC_TYPE.audio) {
+              this.$store.dispatch('app/SET_IS_AUDIOING', true)
+            } else if (webRtcType === WEB_RTC_TYPE.video) {
+              this.$store.dispatch('app/SET_IS_VIDEOING', true)
+            }
             setTimeout(() => {
               clearTimeout(timer)
             }, 1000)
@@ -159,18 +212,22 @@ export default {
       switch (data.type) {
         case coArtBoardReplyTypes.disagree:
           this.$message.error('对方拒绝了你的请求，发个消息试试吧')
-          this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+          this.$store.dispatch('app/SET_ISTOCOARTBOARD', false)
+          this.$store.dispatch('app/SET_IS_AUDIOING', false)
+          this.$store.dispatch('app/SET_IS_VIDEOING', false)
           break;
         case coArtBoardReplyTypes.busy:
           this.$message.error('对方忙线中请稍后重试...')
-          this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+          this.$store.dispatch('app/SET_ISTOCOARTBOARD', false)
+          this.$store.dispatch('app/SET_IS_AUDIOING', false)
+          this.$store.dispatch('app/SET_IS_VIDEOING', false)
           break;
         case coArtBoardReplyTypes.agree:
           this.$message({
             message: '对方同意你的请求',
             type: 'success'
           })
-          this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+          // this.$store.dispatch('app/SET_ISTOCOARTBOARD', false)
           break;
         default:
           break;
@@ -186,13 +243,18 @@ export default {
               confirmButtonText: '确定',
               type: 'warning',
               callback: action => {
-                this.$store.dispatch('app/SET_ISTOCOARTBOARD')                
+                this.$store.dispatch('app/SET_ISTOCOARTBOARD', false)                
               }
             });
           }, 10000)
         }
       }, deep: true, immediate: true
     }
+  },
+  created() {
+    this.$eventBus.$on('hangup', () => {
+      this.webRTCState = 'apply'
+    })
   },
 }
 </script>
@@ -286,8 +348,9 @@ export default {
     position: absolute;
     z-index: 1007;
     padding: 10px;
-    width: 70vw;
-    height: 70vh;
+    border-radius: 5px;
+    // width: 70vw;
+    // height: 70vh;
     background-color: #ffffff;
   }
 }

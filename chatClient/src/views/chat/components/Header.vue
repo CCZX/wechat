@@ -10,10 +10,15 @@
         </div>
         <div class="header-operation" v-if="!currentConversation.isGroup">
           <el-tooltip class="item" effect="dark" content="白板协作需要良好的网络环境" placement="top">
-            <i class="operation-item iconfont icon-huaban" @click="enterArtBoard"></i>
+            <i
+              class="operation-item iconfont icon-huaban"
+              @click="enterArtBoard"></i>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
-            <i class="operation-item iconfont icon-shipin"></i>
+            <i class="operation-item iconfont icon-shipin" @click="videoCall"></i>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
+            <i class="operation-item el-icon-phone-outline" @click="audioCall"></i>
           </el-tooltip>
           <i class="operation-item el-icon-s-tools" title="设置" @click="setShowSider"></i>
         </div>
@@ -30,6 +35,7 @@
 <script>
 import './../../../../static/iconfont/iconfont.css'
 import settingPanel from './settingPanel'
+import { mapState } from 'vuex'
 export default {
   props: {
     currentConversation: Object,
@@ -56,11 +62,25 @@ export default {
         res = this.beizhu[currentConversation._id] ? this.beizhu[currentConversation._id] : currentConversation.nickname
       }
       return res
-    }
+    },
+    ...mapState('app', {
+      isToCoArtBoard: 'isToCoArtBoard',
+      isVideoing: 'isVideoing',
+      isAudioing: 'isAudioing'
+    })
   },
   methods: {
     enterArtBoard() {
-      this.$store.dispatch('app/SET_ISTOCOARTBOARD')
+      if (this.isToCoArtBoard || this.isVideoing || this.isAudioing) return
+      this.$store.dispatch('app/SET_ISTOCOARTBOARD', true)
+    },
+    videoCall() {
+      if (this.isToCoArtBoard || this.isVideoing || this.isAudioing) return
+      this.$store.dispatch('app/SET_IS_VIDEOING', true)
+    },
+    audioCall() {
+      if (this.isToCoArtBoard || this.isVideoing || this.isAudioing) return
+      this.$store.dispatch('app/SET_IS_AUDIOING', true)
     },
     setShowSider() {
       this.$emit('setshowsider')

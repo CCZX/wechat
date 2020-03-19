@@ -147,7 +147,7 @@ export default {
         const newMessage = {
           ...common,
           message: img_URL,
-          messageType: "img", // emoji/text/img/file/sys
+          messageType: "img", // emoji/text/img/file/sys/artboard/audio/video
         }
         this.messages = [...this.messages, newMessage]
         this.$socket.emit("sendNewMessage", newMessage)
