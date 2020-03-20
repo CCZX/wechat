@@ -246,6 +246,27 @@ export default {
     },
     setShowSider() {
       this.showSider = !this.showSider
+    },
+    watchWebRtcMsg() {
+      this.$eventBus.$on('web_rtc_msg', (e) => {
+        const { type } = e
+        // const 
+        const common = this.generatorMessageCommon()
+        const newMessage = {
+          ...common,
+          message: '',
+          messageType: type
+        }
+        this.messages = [...this.messages, newMessage]
+        this.$socket.emit("sendNewMessage", newMessage)
+        this.$store.dispatch('news/SET_LAST_NEWS', {
+          type: 'edit',
+          res: {
+            roomid: this.currentConversation.roomid,
+            news: newMessage
+          }
+        })
+      })
     }
   },
   components: {
@@ -277,6 +298,9 @@ export default {
       const { data } = res
       this.token = data.data
     })
+  },
+  mounted() {
+    this.watchWebRtcMsg()
   },
   beforeDestroy() {
     document.removeEventListener('click', this.handlerShowEmoji)

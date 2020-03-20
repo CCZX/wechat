@@ -35,6 +35,7 @@
 <script>
 import './../../../../static/iconfont/iconfont.css'
 import settingPanel from './settingPanel'
+import { WEB_RTC_MSG_TYPE } from '@/const'
 import { mapState } from 'vuex'
 export default {
   props: {
@@ -73,14 +74,17 @@ export default {
     enterArtBoard() {
       if (this.isToCoArtBoard || this.isVideoing || this.isAudioing) return
       this.$store.dispatch('app/SET_ISTOCOARTBOARD', true)
+      this.$eventBus.$emit('web_rtc_msg', { type: WEB_RTC_MSG_TYPE.artBoard})
     },
     videoCall() {
       if (this.isToCoArtBoard || this.isVideoing || this.isAudioing) return
       this.$store.dispatch('app/SET_IS_VIDEOING', true)
+      this.$eventBus.$emit('web_rtc_msg', { type: WEB_RTC_MSG_TYPE.video})
     },
     audioCall() {
       if (this.isToCoArtBoard || this.isVideoing || this.isAudioing) return
       this.$store.dispatch('app/SET_IS_AUDIOING', true)
+      this.$eventBus.$emit('web_rtc_msg', { type: WEB_RTC_MSG_TYPE.audio})
     },
     setShowSider() {
       this.$emit('setshowsider')

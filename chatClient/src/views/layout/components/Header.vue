@@ -77,7 +77,7 @@
         drag-cancel=".drawingarea"
       >
         <div class="co-art-board">
-          <co-art-board :currentconversation="currentConversation" :state="webRTCState" :web-rtc-type="WEB_RTC_TYPE.artBoard" />
+          <co-art-board :currentconversation="currentConversation" :state="webRTCState" :web-rtc-type="WEB_RTC_MSG_TYPE.artBoard" />
         </div>
       </vue-draggable-resizable>
     </transition>
@@ -103,14 +103,10 @@ import { mapState } from 'vuex'
 import vueDraggableResizable from 'vue-draggable-resizable'
 import CoArtBoard from '@/views/CoArtBoard'
 import CoVideo from '@/views/CoVideo'
-import { coArtBoardReplyTypes } from '@/const'
+import { coArtBoardReplyTypes, WEB_RTC_MSG_TYPE } from '@/const'
 import { removeCookie } from '@/utils/token'
-const WEB_RTC_TYPE = {
-  artBoard: 'artBoard',
-  video: 'video',
-  audio: 'audio'
-}
-const WEB_RTC_TYPE_TEXT = {
+
+const WEB_RTC_MSG_TYPE_TEXT = {
   artBoard: '白板协作',
   video: '视频通话',
   audio: '语音通话'
@@ -121,7 +117,7 @@ export default {
     return {
       webRTCState: 'apply', // 用于定义进入webRTC通信组件时的状态，如果时apply就发起请求，如果是reply就回复
       IMG_URL: process.env.IMG_URL,
-      WEB_RTC_TYPE
+      WEB_RTC_MSG_TYPE
     }
   },
   computed: {
@@ -145,9 +141,9 @@ export default {
     coVideoWebRtcType () {
       let res = null
       if (this.isVideoing) {
-        res = WEB_RTC_TYPE.video
+        res = WEB_RTC_MSG_TYPE.video
       } else if (this.isAudioing) {
-        res = WEB_RTC_TYPE.audio
+        res = WEB_RTC_MSG_TYPE.audio
       }
       return res
     }
@@ -174,11 +170,11 @@ export default {
         return
       } else {
         let text = ''
-        if (webRtcType === WEB_RTC_TYPE.artBoard) {
+        if (webRtcType === WEB_RTC_MSG_TYPE.artBoard) {
           text = '白板协作'
-        } else if (webRtcType === WEB_RTC_TYPE.audio) {
+        } else if (webRtcType === WEB_RTC_MSG_TYPE.audio) {
           text = '语音通话'
-        } else if (webRtcType === WEB_RTC_TYPE.video) {
+        } else if (webRtcType === WEB_RTC_MSG_TYPE.video) {
           text = '视频通话'
         }
         this.$confirm(`您的好友${data.myNickname}请求与你进行${text}, 是否同意?`, "提示", {
@@ -190,11 +186,11 @@ export default {
             console.log('ok')
             this.webRTCState = 'reply'
             this.$store.dispatch('app/SET_CURRENT_CONVERSATION', data)
-            if (webRtcType === WEB_RTC_TYPE.artBoard) {
+            if (webRtcType === WEB_RTC_MSG_TYPE.artBoard) {
               this.$store.dispatch('app/SET_ISTOCOARTBOARD', true)
-            } else if (webRtcType === WEB_RTC_TYPE.audio) {
+            } else if (webRtcType === WEB_RTC_MSG_TYPE.audio) {
               this.$store.dispatch('app/SET_IS_AUDIOING', true)
-            } else if (webRtcType === WEB_RTC_TYPE.video) {
+            } else if (webRtcType === WEB_RTC_MSG_TYPE.video) {
               this.$store.dispatch('app/SET_IS_VIDEOING', true)
             }
             setTimeout(() => {
