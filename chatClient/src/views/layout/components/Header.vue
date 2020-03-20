@@ -153,6 +153,21 @@ export default {
       this.$router.replace('/login')
       this.$socket.emit('leave')
       removeCookie()
+    },
+    webRtcMsgWatch(newVal) {
+      if (newVal) {
+        timer = setTimeout(() => {
+          this.$alert('对方没有答应，请先等待一段时间再尝试', '提示', {
+            confirmButtonText: '确定',
+            type: 'warning',
+            callback: action => {
+              this.$store.dispatch('app/SET_ISTOCOARTBOARD', false)
+              this.$store.dispatch('app/SET_IS_AUDIOING', false)
+              this.$store.dispatch('app/SET_IS_VIDEOING', false)             
+            }
+          });
+        }, 10000)
+      }
     }
   },
   components: {
@@ -233,17 +248,17 @@ export default {
   watch: {
     isToCoArtBoard: {
       handler(newVal) {
-        if (newVal) {
-          timer = setTimeout(() => {
-            this.$alert('对方没有答应，请先等待一段时间再尝试', '提示', {
-              confirmButtonText: '确定',
-              type: 'warning',
-              callback: action => {
-                this.$store.dispatch('app/SET_ISTOCOARTBOARD', false)                
-              }
-            });
-          }, 10000)
-        }
+        this.webRtcMsgWatch(newVal)
+      }, deep: true, immediate: true
+    },
+    isVideoing: {
+      handler(newVal) {
+        this.webRtcMsgWatch(newVal)
+      }, deep: true, immediate: true
+    },
+    isAudioing: {
+      handler(newVal) {
+        this.webRtcMsgWatch(newVal)
       }, deep: true, immediate: true
     }
   },

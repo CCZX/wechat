@@ -106,6 +106,7 @@ export default {
       this.$http.login(params).then(res => {
         let { status, data, msg } = res.data
         if (status === 1002) { // 验证码错误重新获取验证码
+          this.loginInfo.cvCode = ''
           this.getCVCode()
         }
         if (status === 1007) {
