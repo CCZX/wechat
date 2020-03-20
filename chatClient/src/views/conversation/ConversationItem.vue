@@ -79,6 +79,7 @@
 
 <script>
 import { formatDateToZH, arrUnique, findParentNode } from '@/utils'
+import { MSG_TYPES } from '@/const'
 import conversationMenu from './Menu'
 const conversationObj = {
   createDate: "",
@@ -126,15 +127,17 @@ export default {
       return this.$store.state.news.unreadNews
     },
     lastNews() {
-      const lastNewsObj = this.conversationInfo.lastNews
-      let res = ''
-      if (lastNewsObj && lastNewsObj.messageType === "img") {
-        res = '[图片]'
+      const lastNewsObj = this.conversationInfo.lastNews || {}
+      const MSG_TYPE_TEXT = {
+        [MSG_TYPES.text]: lastNewsObj.message || '',
+        [MSG_TYPES.img]: '[图片]',
+        [MSG_TYPES.file]: '[文件]',
+        [MSG_TYPES.sys]: '[系统消息]',
+        [MSG_TYPES.artBoard]: '[白板协作]',
+        [MSG_TYPES.video]: '[视频通话]',
+        [MSG_TYPES.audio]: '[语音通话]',
       }
-      if (lastNewsObj && lastNewsObj.messageType === "text") {
-        res = lastNewsObj.message
-      }
-      return res
+      return MSG_TYPE_TEXT[lastNewsObj.messageType] || ''
     },
     recentConversationList() {
       return this.$store.state.app.recentConversation
