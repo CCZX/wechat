@@ -21,7 +21,12 @@
       </template>
     </bearing-modal>
     </transition>
-    
+    <message-text-menu
+      v-if="isShowMsgTextMenu"
+      :message="currentMessage"
+      :left="msgTextMenuLeft"
+      :top="msgTextMenuTop"
+    />
   </div>
 </template>
 
@@ -32,6 +37,7 @@ import fenzuModal from '@/components/fenzuModal'
 import beizhuModal from '@/components/beizhuModal'
 import createGroup from '@/components/createGroup'
 import bearingModal from '@/components/bearingModal'
+import messageTextMenu from '@/components/messageTypes/messageTextMenu'
 export default {
   data() {
     return {
@@ -40,7 +46,13 @@ export default {
       isShowFenzuModal: false,
       isShowBeizhuModal: false,
       isShowCreateGroup: false,
-      currentConversation: {}
+      isShowMsgTextMenu: false,
+      currentConversation: {}, // 当前操作的会话
+
+      currentMessage: {}, // 当前操作的消息
+      msgTextMenuLeft: 0,
+      msgTextMenuTop: 0
+
     }
   },
   methods: {
@@ -70,12 +82,20 @@ export default {
       this.showModal = show
       this.isShowCreateGroup = show
     })
+    this.$eventBus.$on('toggleMsgTextMenu', (e) => {
+      const { show, data, left, top } = e
+      this.isShowMsgTextMenu = show
+      this.currentMessage = data
+      this.msgTextMenuLeft = left
+      this.msgTextMenuTop = top
+    })
   },
   components: {
     userProfile,
     fenzuModal,
     beizhuModal,
     createGroup,
+    messageTextMenu,
     bearingModal
   }
 }

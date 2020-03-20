@@ -217,7 +217,6 @@ export default {
       })
     })
     document.addEventListener('click', (e) => {
-      console.log(e)
       if (!e.target.classList.contains('el-input__inner')) {
         this.currEditFenzu = ''
       }
