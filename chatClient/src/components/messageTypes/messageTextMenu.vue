@@ -1,7 +1,8 @@
 <template>
-  <div class="message-text__menu" :style="{'top': top + 'px', 'left': left + 'px'}">
+  <div class="message-text__menu box-shadow1" :style="{'top': top + 'px', 'left': left + 'px'}">
     <span class="menu-item operation-text" @mousedown="copy" v-copy="message.message">复制</span>
     <span class="menu-item operation-text">收藏</span>
+    <span class="menu-item operation-text">删除</span>
     <span class="menu-item operation-text">加入代办</span>
   </div>
 </template>
@@ -57,9 +58,10 @@ export default {
   position: fixed;
   z-index: 2003;
   background-color: #fff;
-  padding: 5px;
+  padding: 0 5px 5px 5px;
   .menu-item {
     display: block;
+    margin-top: 5px;
   }
 }
 </style>
