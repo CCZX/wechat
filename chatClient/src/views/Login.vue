@@ -172,6 +172,7 @@ export default {
   },
   async mounted() {
     this.getCVCode()
+    this.$socket.emit('leave')
   }
 };
 </script>

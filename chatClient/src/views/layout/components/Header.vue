@@ -128,7 +128,7 @@ export default {
       unreadNews: 'unreadNews'
     }),
     validateUnReadCount() {
-      const validateSysUser = this.$store.state.app.sysUsers.filter(item => item.code === '111111')[0]
+      const validateSysUser = (this.$store.state.app.sysUsers || []).find(item => item.code === '111111')
       const key = validateSysUser._id + '-' + this.userInfo._id
       return this.unreadNews[key]
     },
