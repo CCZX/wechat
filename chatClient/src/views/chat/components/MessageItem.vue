@@ -4,7 +4,7 @@
     :style="messageItemComStyle"
   >
     <el-avatar
-      v-if="messageitem.messageType !== 'sys'"
+      v-if="messageitem.messageType !== MSG_TYPES.sys"
       class="avatar"
       size="large"
       :src="messageitem.senderId === userInfo._id ? IMG_URL + userInfo.photo : IMG_URL + messageitem.senderAvatar"
@@ -14,7 +14,7 @@
     </el-avatar>
     <div
       class="message-info"
-      :style="messageitem.messageType === 'sys' ? 'width: 100%' : ''"
+      :style="messageitem.messageType === MSG_TYPES.sys ? 'width: 100%' : ''"
     >
       <span class="secondary-font time">
         <span
@@ -24,7 +24,7 @@
       <div
         :class="contentClassName"
       >
-        <el-popover
+        <!-- <el-popover
           placement="top"
           width="30"
           trigger="click"
@@ -46,27 +46,21 @@
               <i class="el-icon-copy-document" />
               <span class="oper-text">点击复制</span>
             </span>
-          </div>
-            <span
+          </div> -->
+            <!-- <span
               slot="reference"
-              v-if="messageitem.messageType === 'text'"
+              v-if="messageitem.messageType === MSG_TYPES.text"
               :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
               class="primary-font text"
             >
               {{messageitem.message}}
-            </span>
-        </el-popover>
+            </span> -->
+        <!-- </el-popover> -->
         <span
-          v-if="messageitem.messageType === 'img'"
-          :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
-          class="primary-font text" style="cursor: zoom-in">
-          <img width="200" :src="messageitem.message" alt="图片" @click="preview(messageitem.message)">
-        </span>
-        <span
-          v-else-if="messageitem.messageType === 'sys'"
-          class="secondary-font sys-tips"
-        >
-          系统提示：{{messageitem.message}}
+          class="primary-font text"
+          :style="messageWraperStyle"
+         >
+          <span :is="messageTypesCmp[messageitem.messageType+'cmp']" :message="messageitem"></span>
         </span>
       </div>
     </div>
@@ -74,13 +68,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "vuex"
+import { MSG_TYPES } from '@/const'
+import messageTypes, { messageTypesCmp } from '@/components/messageTypes'
 export default {
   props: ["messageitem"],
   data() {
     return {
       IMG_URL: process.env.IMG_URL,
-      currentMsg: {}
+      currentMsg: {},
+      MSG_TYPES,
+      messageTypesCmp, // 消息组件Map
     }
   },
   computed: {
@@ -109,13 +107,17 @@ export default {
         res = {'flex-direction': 'row-reverse', 'margin-left': 'calc(100% - 200px)'}
       }
       return res
-    } 
-  },
-  methods: {
-    preview(url) {
-      this.$emit('seturl', url)
+    },
+    messageWraperStyle() {
+      let res = {}
+      if (this.messageitem.messageType === MSG_TYPES.img && this.messageitem.senderId === this.userInfo._id) {
+        res = {'float': 'right'}
+      } else if (this.messageitem.senderId === this.userInfo._id) {
+        res = {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'}
+      }
+      return res
     }
-  },
+  }
 };
 </script>
 
@@ -158,13 +160,6 @@ export default {
       margin-top: 5px;
       white-space: wrap;
       word-break: break-word;
-      .img-wrapper {
-        display: inline-block;
-        cursor: zoom-in;
-        min-height: 50px;
-        min-width: 50px;
-        background-color: #e5e9ef;
-      }
     }
     .content {
       margin-top: 50px;
@@ -209,4 +204,3 @@ export default {
   }
 }
 </style>
-

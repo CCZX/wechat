@@ -1,12 +1,12 @@
 <template>
   <div class="message-type__sys">
-    <i class="iconfont icon-shipin">系统消息</i>
+    <span class="secondary-font">{{message.message}}</span>
   </div>
 </template>
 
 <script>
 import './../../../static/iconfont/iconfont.css'
 export default {
-  
+  props: ['message']
 }
 </script>

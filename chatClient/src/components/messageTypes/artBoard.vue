@@ -6,9 +6,7 @@
 
 <script>
 import './../../../static/iconfont/iconfont.css'
-import { mixins } from './index.js'
 export default {
-  name: 'messageArtBoard',
-  // mixins: [mixins]
+  props: ['message']
 }
 </script>

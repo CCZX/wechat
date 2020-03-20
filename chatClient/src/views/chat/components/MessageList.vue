@@ -12,36 +12,24 @@
     </div>
     <transition-group appear name="hro-scroll">
     <!-- <transition-group appear :name="useanimation ? 'hro-scroll' : ''"> -->
-      <message-item v-for="(item, index) in messagelist" :key="index" :messageitem="item" @seturl="setCurrentImgUrl" />
+      <message-item v-for="(item, index) in messagelist" :key="index" :messageitem="item" />
     </transition-group>
     <div class="flag"></div>
-    <transition name="fade">
-      <picture-preview :imgurl="currentImgUrl" @setshow="setshowPicturePreview" v-if="showPicturePreview" />      
-    </transition>
   </div>
 </template>
 
 <script>
 import messageItem from "./MessageItem"
-import picturePreview from '@/components/picturePreview'
 import { debounce } from '@/utils'
 export default {
   props: ["messagelist", "scrollbottom", "hasmore", "isloading", "useanimation"],
   data() {
     return {
       currentImgUrl: '',
-      showPicturePreview: false,
       showTopOperation: false
     }
   },
   methods: {
-    setCurrentImgUrl(url) {
-      this.currentImgUrl = url
-      this.showPicturePreview = true
-    },
-    setshowPicturePreview(flag) {
-      this.showPicturePreview = flag
-    },
     loadMore() {
       this.$emit('load-message', true)
     },
@@ -53,8 +41,7 @@ export default {
     }, 500)
   },
   components: {
-    messageItem,
-    picturePreview
+    messageItem
   },
   watch: {
     messagelist: {

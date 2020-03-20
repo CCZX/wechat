@@ -1,3 +1,4 @@
+import { MSG_TYPES } from '@/const'
 import messageVideo from './video'
 import messageArtBoard from './artBoard'
 import messageAudio from './audio'
@@ -14,6 +15,16 @@ export default {
   messageSys,
   messageText,
   messageImg
+}
+
+export const messageTypesCmp = {
+  [MSG_TYPES.text+'cmp']: messageText,
+  [MSG_TYPES.img+'cmp']: messageImg,
+  [MSG_TYPES.sys+'cmp']: messageSys,
+  [MSG_TYPES.file+'cmp']: messageFile,
+  [MSG_TYPES.artBoard+'cmp']: messageArtBoard,
+  [MSG_TYPES.video+'cmp']: messageVideo,
+  [MSG_TYPES.audio+'cmp']: messageAudio,
 }
 
 export const mixins = {
