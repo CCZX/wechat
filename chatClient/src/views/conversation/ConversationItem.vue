@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="currentConversation._id && currentConversation._id === conversationInfo._id ? 'conversationitem__com active' : 'conversationitem__com'"
+    :class="currentConversation._id && currentConversation._id === conversationInfo._id ? 'conversationitem__cmp active' : 'conversationitem__cmp'"
     v-if="conversationInfo._id"
   >
     <template v-if="conversationInfo.isGroup">
@@ -23,9 +23,12 @@
           </el-badge>
           
           <div class="conversation-detail">
-            <!-- <i class="icon-qun iconfont"></i> -->
-            <span class="primary-font detail-item">{{conversationInfo.groupId.title}}</span>
-            <span class="ellipsis secondary-font detail-item">{{conversationInfo.groupId.desc}}</span>
+            <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex">
+              <span class="ellipsis">{{conversationInfo.groupId.title}}</span>
+            </span>
+            <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
+              <span>{{conversationInfo.groupId.desc}}</span>
+            </span>
           </div>
         </div>
       </div>
@@ -105,7 +108,7 @@ export default {
         return conversationObj
       }
     },
-    type: {
+    type: { // 定义改组件在哪里被使用，在最近会话中或者分组会话等
       type: String
     },
     recentConversation: {
@@ -115,7 +118,6 @@ export default {
   data() {
     return {
       unreadnewsNum: 0,
-      levelIcons: require('./../../../static/image/icons.png'),
       isShowMenu: false,
       IMG_URL: process.env.IMG_URL,
       menuTop: 0,
@@ -194,7 +196,7 @@ export default {
 </script>
 
 <style lang="scss">
-.conversationitem__com {
+.conversationitem__cmp {
   @import "./../../../static/css/var.scss";
   position: relative;
   height: 60px;
