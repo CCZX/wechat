@@ -127,14 +127,10 @@ export default {
       }
     }
     .img-content {
-      margin-top: 50px;
       position: relative;
       margin-top: 5px;
-      white-space: wrap;
-      word-break: break-word;
     }
     .content {
-      margin-top: 50px;
       position: relative;
       margin-top: 5px;
       white-space: wrap;

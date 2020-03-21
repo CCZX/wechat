@@ -3,10 +3,10 @@
     <div class="top-operations" ref="tips" :key="Date.now()">
       <!-- <span>没有更多消息了</span> -->
       <span v-if="hasmore">
-        <span class="loadmore" @click="loadMore">点击加载更多...</span>
+        <span class="secondary-font operation-text" @click="loadMore">点击加载更多...</span>
         <i class="el-icon-loading" v-if="isloading"></i>
       </span>
-      <span class="no-more secondary-font" v-else>没有更多了...</span>
+      <span class="no-more secondary-font" v-else>没有更多了~</span>
     </div>
     <div class="top-operation" v-if="showTopOperation">
     </div>
@@ -77,13 +77,6 @@ export default {
 .chat-area__message-list__com {
   .top-operations {
     text-align: center;
-    .loadmore {
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
-        color: #409EFF;
-      }
-    }
   }
   box-sizing: border-box;
   height: 100%;
