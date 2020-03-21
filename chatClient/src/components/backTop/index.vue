@@ -8,17 +8,19 @@
 
 <script>
 export default {
+  props: ['target'],
   data() {
     return {
-      show: false
+      show: false,
+      element: null
     }
   },
   methods: {
     goTop() {
-      document.documentElement.scrollTop = 0
+      this.element.scrollTop = 0
     },
     watchDocmentScroll() {
-      const scrollTop = document.documentElement.scrollTop
+      const scrollTop = this.element.scrollTop
       if (scrollTop > 2000) {
         this.show = true
       } else {
@@ -27,11 +29,14 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('scroll', this.watchDocmentScroll)
+    const element = document.querySelector(this.target)
+    if (!element) return
+    this.element = element
+    element.addEventListener('scroll', this.watchDocmentScroll)
     this.watchDocmentScroll()
   },
   beforeDestroy() {
-    document.removeEventListener('scroll', this.watchDocmentScroll)
+    this.element.removeEventListener('scroll', this.watchDocmentScroll)
   },
 }
 </script>
