@@ -3,7 +3,7 @@
     <div class="img-wrapper hor-ver-center" v-if="!error">
       <img :src="img_url" class="img-content" alt="图片" @error="handlerError">
     </div>
-    <div class="operation">
+    <div class="operation" v-if="showOper">
       <span
         class="oper-item el-icon-arrow-left previous"
         title="上一张"
@@ -15,7 +15,7 @@
         @click.stop="next"
       />
     </div>
-    <div class="count">
+    <div class="count" v-if="showOper">
       <span>{{currImgIndex}}</span> / <span>{{this.imgList.length}}</span>
     </div>
     <div class="img-error img-wrapper hor-ver-center" v-if="error">
@@ -36,6 +36,10 @@ export default {
       default() {
         return []
       }
+    },
+    showOper: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

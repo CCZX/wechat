@@ -142,7 +142,7 @@
       <empty-svg width="200" height="200" />
     </div>
     <transition>
-      <picture-preview :imgurl="currentImgUrl" @setshow="setshowPicturePreview" v-if="showPicturePreview" />            
+      <picture-preview :show-oper="false" :current-img="currentImgUrl" @setshow="setshowPicturePreview" v-if="showPicturePreview" />            
     </transition>
     <div class="pyq-edit-box" v-if="showEditPyq">
       <pyq-edit :pyqid="currentEditPyqId" @close="closeEditPyq" @modify="modifyPyqItem" />
