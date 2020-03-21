@@ -1,10 +1,15 @@
 <template>
   <div class="layout-page">
-    <main class="layout-main">
+    <main class="co-messager-layout">
       <my-header></my-header>
-      <el-main class="el-main">
+      <el-main class="co-messager-main">
         <audio :src="NotifyAudio" ref="audio" muted></audio>
-        <router-view></router-view>
+        <div class="co-messager-aside">
+          <my-aside />
+        </div>
+        <div class="co-messager-content">
+          <router-view></router-view>
+        </div>
       </el-main>
     </main>
   </div>
@@ -13,6 +18,7 @@
 <script>
 import { mapState } from 'vuex'
 import myHeader from './components/Header'
+import myAside from './components/Aside'
 import bgImgUrl from './../../../static/image/bg.jpg'
 import { APP_VERSION } from '@/const'
 import { saveRecentConversationToLocal } from '@/utils'
@@ -45,6 +51,7 @@ export default {
   },
   components: {
     myHeader,
+    myAside
     // chatView
   },
   sockets: {
@@ -138,25 +145,35 @@ export default {
 .layout-page {
   @import './../../../static/css/var.scss';
   min-height: 100%;
+  background-image: url('./../../../static/image/1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
   background-color: #e9ebee;
-  background-image: url('./../../../static/image/1.jpg');
-  .layout-main {
+  padding: 30px 0;
+  position: relative;
+  .co-messager-layout {
     box-sizing: border-box;
     min-height: 100%;
-    .el-main {
+    .co-messager-main {
+      display: flex;
       width: 1020px;
-      margin: 60px auto 0;
-      min-height: calc(100vh - 60px);
+      margin:0 auto;
       background-color: #e9ebee;
       color: #333;
-      display: flex;
       padding: 0;
       opacity: .8;
+      .co-messager-aside {
+        width: 7%;
+        height: calc(100vh - 60px);
+        // position: sticky;
+        // top: 60px;
+        border-right: 1px solid #cccccc;
+      }
+      .co-messager-content {
+        width: 93%;
+      }
     }
   }
 }
 </style>
-
-

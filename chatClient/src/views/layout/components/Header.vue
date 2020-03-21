@@ -287,6 +287,7 @@ export default {
   top: 0;
   width: 100%;
   z-index: 1003;
+  transform: translateY(-200px);
   .el-header {
     display: flex;
     justify-content: space-between;

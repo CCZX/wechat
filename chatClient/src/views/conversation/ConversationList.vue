@@ -145,7 +145,7 @@ export default {
 <style lang="scss">
 .conversationlist-com {
   height: 100%;
-  padding: 0 10px;
+  padding: 0 5px;
   .search {
     padding: 10px 0;
   }
