@@ -141,16 +141,19 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   background-color: #e9ebee;
+  background-image: url('./../../../static/image/1.jpg');
   .layout-main {
     box-sizing: border-box;
     min-height: 100%;
     .el-main {
-      margin-top: 60px;
+      width: 1020px;
+      margin: 60px auto 0;
       min-height: calc(100vh - 60px);
       background-color: #e9ebee;
       color: #333;
       display: flex;
       padding: 0;
+      opacity: .8;
     }
   }
 }

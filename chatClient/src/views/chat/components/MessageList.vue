@@ -13,8 +13,8 @@
     <transition-group appear name="hro-scroll">
     <!-- <transition-group appear :name="useanimation ? 'hro-scroll' : ''"> -->
       <message-item
-        v-for="item in messagelist"
-        :key="item._id"
+        v-for="(item, index) in messagelist"
+        :key="index"
         :messageitem="item"
         :img-type-msg-list="imgTypeMsgList"
       />

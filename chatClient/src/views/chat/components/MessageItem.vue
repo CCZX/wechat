@@ -76,7 +76,7 @@ export default {
           'text-align': 'center'
         }
       } else if (this.messageitem.senderId === this.userInfo._id) {
-        res = {'flex-direction': 'row-reverse', 'margin-left': 'calc(100% - 200px)'}
+        res = {'flex-direction': 'row-reverse', 'margin-left': 'calc(100% - 300px)'}
       }
       return res
     },
@@ -104,14 +104,14 @@ export default {
 }
 .chat-area__message-item__com {
   display: flex;
-  width: 200px;
+  width: 300px;
   justify-content: space-between;
   margin-bottom: 10px;
   .avatar {
     margin-top: 10px;
   }
   .message-info {
-    width: 150px;
+    width: 250px;
     .time {
       display: block;
       overflow: hidden;

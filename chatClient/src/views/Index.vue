@@ -19,34 +19,6 @@
         <p>聊天~打开心灵的窗户</p>
       </div>
     </div>
-    <div class="detail">
-      <div class="todo">
-        <part-title text="今日代办" />
-        <el-card class="box-card"  v-for="(item, index) in todos" :key="index">
-          <div class="content">
-            <span class="item ellipsis">待办事项：{{ item.title }}</span>
-            <span class="item ellipsis">开始时间：{{ item.start }}</span>
-            <span class="item ellipsis">结束时间：{{ item.end ? item.end : item.start }}</span>
-            <span class="item ellipsis">事件类型：<el-tag :type="item.cssClass" effect="dark" size="mini">{{ matterLevelMap[item.cssClass] }}</el-tag></span>
-          </div>
-        </el-card>
-        <el-alert v-if="!todos.length" title="今日暂无代办" type="info" center show-icon style="margin: 10px 0" :closable="false" />
-        <el-button type="primary" size="mini" style="width: 100%">
-          <router-link to="/schedule" class="link">
-            前往日程查看更多
-          </router-link>
-        </el-button>
-      </div>
-      <div class="weather">
-        <!-- <el-alert
-          title="最近天气走势"
-          type="success"
-          :closable="false">
-        </el-alert> -->
-        <!-- <weather /> -->
-      </div>
-      <!-- <a-map /> -->
-    </div>
   </div>
 </template>
 
@@ -139,46 +111,15 @@ export default {
   width: 100%;
   height: calc(100vh - 60px);
   .conversation-list {
-    width: 25%;
+    width: 30%;
     border-right: 1px solid #cccccc;
   }
   .conversation-chat-area {
     position: relative;
-    width: 55%;
+    width: 70%;
     border-right: 1px solid #cccccc;
     .no-conversation {
       text-align: center;
-    }
-  }
-  .detail {
-    width: 20%;
-    .todo {
-      max-height: 60%;
-      text-align: center;
-      border-bottom: 1px solid #cccccc;
-      padding: 10px;
-      .box-card {
-        margin: 10px 0;
-        .content {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          .item {
-            text-align: left;
-            padding-top: 10px;
-            &:first-child {
-              padding-top: 0;
-            }
-          }
-        }
-      }
-      .link {
-        text-decoration: none;
-        color: #ffffff;
-      }
-    }
-    .weather {
-      padding: 10px;
     }
   }
 }
