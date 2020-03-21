@@ -12,7 +12,12 @@
     </div>
     <transition-group appear name="hro-scroll">
     <!-- <transition-group appear :name="useanimation ? 'hro-scroll' : ''"> -->
-      <message-item v-for="(item, index) in messagelist" :key="index" :messageitem="item" />
+      <message-item
+        v-for="item in messagelist"
+        :key="item._id"
+        :messageitem="item"
+        :img-type-msg-list="imgTypeMsgList"
+      />
     </transition-group>
     <div class="flag"></div>
   </div>
@@ -27,6 +32,11 @@ export default {
     return {
       currentImgUrl: '',
       showTopOperation: false
+    }
+  },
+  computed: {
+    imgTypeMsgList() {
+      return (this.messagelist || []).filter(item => item.messageType === 'img')
     }
   },
   methods: {

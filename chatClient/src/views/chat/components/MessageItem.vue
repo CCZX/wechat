@@ -24,43 +24,15 @@
       <div
         :class="contentClassName"
       >
-        <!-- <el-popover
-          placement="top"
-          width="30"
-          trigger="click"
-        >
-          <div class="msg-operation-card-body">
-            <span class="operation-text operation-item" v-copy="messageitem.message">
-              <i class="el-icon-copy-document" />
-              <span class="oper-text">点击复制</span>
-            </span>
-            <span class="operation-text operation-item">
-              <i class="el-icon-delete" />
-              <span class="oper-text">点击删除</span>
-            </span>
-            <span class="operation-text operation-item">
-              <i class="el-icon-s-flag" />
-              <span class="oper-text">加入代办</span>
-            </span>
-            <span class="operation-text operation-item" v-copy="messageitem.message">
-              <i class="el-icon-copy-document" />
-              <span class="oper-text">点击复制</span>
-            </span>
-          </div> -->
-            <!-- <span
-              slot="reference"
-              v-if="messageitem.messageType === MSG_TYPES.text"
-              :style="messageitem.senderId === userInfo._id ? {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'} : {}"
-              class="primary-font text"
-            >
-              {{messageitem.message}}
-            </span> -->
-        <!-- </el-popover> -->
         <span
           class="primary-font text"
           :style="messageWraperStyle"
          >
-          <span :is="messageTypesCmp[messageitem.messageType+'cmp']" :message="messageitem"></span>
+          <span
+            :is="messageTypesCmp[messageitem.messageType+'cmp']"
+            :message="messageitem"
+            :img-type-msg-list="imgTypeMsgList"
+          />
         </span>
       </div>
     </div>
@@ -72,7 +44,7 @@ import { mapState } from "vuex"
 import { MSG_TYPES } from '@/const'
 import messageTypes, { messageTypesCmp } from '@/components/messageTypes'
 export default {
-  props: ["messageitem"],
+  props: ["messageitem", "imgTypeMsgList"],
   data() {
     return {
       IMG_URL: process.env.IMG_URL,
