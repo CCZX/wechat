@@ -52,11 +52,8 @@
           <send-mzone @watchsend="watchSendPyq" />
           <m-pyq :newpyqitem="newPyqItem" />
         </div>
-        <div class="slider">
-          slider
-        </div>
       </div>
-      <back-top />
+      <back-top target=".mzone-page" />
     </div>
   </div>
 </template>
@@ -108,9 +105,10 @@ export default {
 .mzone-page {
   width: 100%;
   background-color: #e9ebee;
-  min-height: 100%;
+  height: 100%;
+  overflow-y: scroll;
   .mzone-wrapper {
-    width: 1020px;
+    height: 100%;
     margin: 0 auto;
     .mzone-top {
       height: 190px;
@@ -141,7 +139,6 @@ export default {
       }
     }
     .mzone-nav {
-      width: 1020px;
       .el-tabs {
         box-shadow: none;
         background-color: #e9ebee;
@@ -172,17 +169,13 @@ export default {
     }
     .mzone-body {
       display: flex;
-      justify-content: space-between;
+      // justify-content: space-between;
       margin-top: 10px;
       .menulist {
-        width: 18%;
+        width: 20%;
       }
       .content {
-        width: 60%;
-      }
-      .slider {
-        width: 18%;
-        border: 1px solid red;
+        width: 70%;
       }
     }
   }

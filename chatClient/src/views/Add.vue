@@ -155,9 +155,10 @@ export default {
       this.fetch(false)
     }, 500),
     hanlerScroll: debounce(function() {
-      const scrollTop = document.documentElement.scrollTop
-      const clientHeight = document.documentElement.clientHeight
-      const scrollHeight = document.documentElement.scrollHeight
+      const addPage = document.querySelector('.add-page')
+      const scrollTop = addPage.scrollTop
+      const clientHeight = addPage.clientHeight
+      const scrollHeight = addPage.scrollHeight
       if (scrollTop + clientHeight + 10 >= scrollHeight) {
         if(this.hasMore){ 
           this.page++
@@ -172,19 +173,19 @@ export default {
     EmptySvg
   },
   mounted() {
-    document.addEventListener('scroll', this.hanlerScroll)
-  },
-  beforeDestroy() {
-    document.removeEventListener('scroll', this.hanlerScroll)
-  },
+    const addPage = document.querySelector('.add-page')
+    addPage.addEventListener('scroll', this.hanlerScroll)
+  }
 }
 </script>
 
 <style lang="scss">
 .add-page {
   width: 815px;
-  min-height: 100%;
-  margin: 10px auto 0;
+  height: 100%;
+  padding: 10px 0;
+  overflow-y: scroll;
+  // margin: 0 auto;
   .header {
     .search-area {
       display: flex;

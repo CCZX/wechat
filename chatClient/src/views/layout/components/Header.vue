@@ -84,6 +84,8 @@
     <transition name="fade">
       <vue-draggable-resizable
         v-if="isVideoing || isAudioing"
+        :x="0"
+        :y="500"
         drag-cancel=".drawingarea"
       >
         <div class="co-art-board box-shadow1">
@@ -287,7 +289,7 @@ export default {
   top: 0;
   width: 100%;
   z-index: 1003;
-  transform: translateY(-200px);
+  transform: translateY(-60px);
   .el-header {
     display: flex;
     justify-content: space-between;

@@ -144,7 +144,7 @@ export default {
 <style lang="scss">
 .layout-page {
   @import './../../../static/css/var.scss';
-  min-height: 100%;
+  height: 100%;
   background-image: url('./../../../static/image/1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -154,13 +154,15 @@ export default {
   position: relative;
   .co-messager-layout {
     box-sizing: border-box;
-    min-height: 100%;
+    height: 100%;
     .co-messager-main {
       display: flex;
       width: 1020px;
+      height: 100%;
       margin:0 auto;
       background-color: #e9ebee;
       color: #333;
+      border-radius: 5px;
       padding: 0;
       opacity: .8;
       .co-messager-aside {

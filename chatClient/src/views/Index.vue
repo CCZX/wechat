@@ -117,7 +117,6 @@ export default {
   .conversation-chat-area {
     position: relative;
     width: 70%;
-    border-right: 1px solid #cccccc;
     .no-conversation {
       text-align: center;
     }
