@@ -2,12 +2,9 @@
   <div class="chat-area__com">
     <chat-header
       :currentConversation="currentConversation"
-      @setshowsider="setShowSider"
       :set-current-conversation="setCurrentConversation"
     />
-    <div
-       :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'"
-    >
+    <div :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'">
       <div class="message-list-container">
         <message-list ref='messagelist'
           @load-message="loadmessage"
@@ -21,11 +18,6 @@
       <div class="group-desc" v-if="currentConversation.conversationType === 'GROUP'">
         <group-desc :currentConversation="currentConversation" />
       </div>
-      <transition name="common">
-        <div class="sider" v-if="showSider">
-          <sider />
-        </div>
-      </transition>
     </div>
     <div class="message-edit-container">
       <div class="send-type">
@@ -44,6 +36,9 @@
             </i>
           </el-tooltip>
         </label>
+        <i class="item iconfont icon-huaban" />
+        <i class="item iconfont icon-shipin" />
+        <i class="item el-icon-phone-outline" />
       </div>
       <div class="operation">
         <el-button @click="send" type="success" size="small" round>发送</el-button>
@@ -70,7 +65,6 @@ import { conversationTypes, uploadImgStatusMap, qiniu_URL } from '@/const'
 import customEmoji from '@/components/customEmoji'
 import upImg from '@/components/customUploadImg'
 import groupDesc from './components/GroupDesc'
-import sider from './components/Sider'
 export default {
   props: {
     currentConversation: Object,
@@ -90,8 +84,7 @@ export default {
       showTopOperation: false,
       scrollBottom: true,
       isLoading: false,
-      useAnimation: false,
-      showSider: false
+      useAnimation: false
     }
   },
   computed: {
@@ -244,9 +237,6 @@ export default {
         this.getRecentNews(false)
       }
     },
-    setShowSider() {
-      this.showSider = !this.showSider
-    },
     watchWebRtcMsg() {
       this.$eventBus.$on('web_rtc_msg', (e) => {
         const { type } = e
@@ -274,8 +264,7 @@ export default {
     messageList,
     customEmoji,
     groupDesc,
-    upImg,
-    sider
+    upImg
   },
   watch: {
     currentConversation(newVal, oldVal) {
@@ -354,7 +343,7 @@ export default {
     height: 150px;
     border-top: 1px solid #cccccc;
     .send-type {
-      padding: 0 10px;
+      padding: 5px 10px 0;
       height: 25px;
       .item {
         cursor: pointer;

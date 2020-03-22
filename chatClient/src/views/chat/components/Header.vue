@@ -87,7 +87,6 @@ export default {
       this.$eventBus.$emit('web_rtc_msg', { type: WEB_RTC_MSG_TYPE.audio})
     },
     setShowSider() {
-      this.$emit('setshowsider')
     },
     toggleShowSettingPanel() {
       this.showSettingPanel = !this.showSettingPanel
