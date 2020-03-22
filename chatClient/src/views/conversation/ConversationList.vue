@@ -7,6 +7,9 @@
         v-model="searchKeyWord">
       </el-input>
     </div>
+    <div class="todo">
+      <todo />
+    </div>
     <el-tabs type="border-card">
       <el-tab-pane>
         <span slot="label"><i class="el-icon-chat-line-round"></i></span>
@@ -45,6 +48,7 @@ import './../../../static/iconfont/iconfont.css'
 import recentConversationList from './RecentConversation'
 import fenzuConversationList from './FenzuConversation'
 import groupConversationList from './GroupConversation'
+import todo from '@/components/todo'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { conversationTypes } from '@/const'
 import { saveMyFriendsToLocalStorage, saveMyGroupToLocalStorage } from '@/utils'
@@ -137,7 +141,8 @@ export default {
   components: {
     recentConversationList,
     fenzuConversationList,
-    groupConversationList
+    groupConversationList,
+    todo
   },
 }
 </script>
@@ -149,10 +154,12 @@ export default {
   .search {
     padding: 10px 0;
   }
+  .todo {
+    padding-bottom: 10px;
+  }
   .el-tabs.el-tabs--top.el-tabs--border-card {
-    height: calc(100% - 60px);
+    height: calc(100% - 120px);
     overflow-x: hidden;
-    overflow-y: scroll;
     .el-tabs__content {
       padding: 0;
       min-height: calc(100% - 40px);

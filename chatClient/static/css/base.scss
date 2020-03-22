@@ -44,6 +44,14 @@ html, body {
   box-sizing: border-box;
 }
 
+.aside-menu-link {
+  text-decoration: none;
+  color: $color-grey8;
+  &:hover {
+    color: $color-blue;
+  }
+}
+
 .curp {
   cursor: pointer;
 }

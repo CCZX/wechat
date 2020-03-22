@@ -37,7 +37,6 @@ export default {
     return {
       currentConversation: {},
       loading: false,
-      todos: [],
       matterLevelMap: { 
         'danger': '紧急事项' ,
         'warning': '重要事项' ,
@@ -82,26 +81,7 @@ export default {
     partTitle,
     chatSvg
     // AMap
-  },
-  mounted() {
-    const allTodos = JSON.parse(window.localStorage.getItem('todo')) || []
-    const todayTodos = allTodos.map(item => {
-      if (!item.end || new Date(item.end) === new Date(item.start)) {
-        if (fromatTime(new Date(item.start), false) === fromatTime(new Date(), false)) {
-          item.start = fromatTime(new Date(item.start), false)
-          item.end ? item.end = fromatTime(new Date(item.end), false) : ''
-          return item
-        }
-      } else if (new Date(item.end) > new Date(item.start)) {
-        if (fromatTime(new Date(item.start), false) <= fromatTime(new Date(), false) && fromatTime(new Date(item.end), false) >= fromatTime(new Date(), false)) {
-          item.start = fromatTime(new Date(item.start), false)
-          item.end = fromatTime(new Date(item.end), false)
-          return item
-        }
-      }
-    }).filter(item => item)
-    this.todos = todayTodos
-  },
+  }
 }
 </script>
 

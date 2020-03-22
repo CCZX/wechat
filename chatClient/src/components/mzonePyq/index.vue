@@ -405,13 +405,14 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     this.getFriendlyPyq()
-    document.addEventListener('scroll', this.handleDocmentScroll)
+    const mzonePage = document.querySelector('.mzone-page')
+    mzonePage.addEventListener('scroll', this.handleDocmentScroll)
     document.addEventListener('click', this.handleDocmentClick)
   },
   beforeDestroy() {
-    document.removeEventListener('scroll', this.handleDocmentScroll)    
+    mzonePage.removeEventListener('scroll', this.handleDocmentScroll)    
     document.removeEventListener('click', this.handleDocmentClick)
   },
 }

@@ -1,7 +1,9 @@
 <template>
   <div class="layout-cmp__aside">
     <div class="avatar">
-      <el-avatar shape="square" :size="50" :src="IMG_URL + userInfo.photo"></el-avatar>
+      <router-link to="/index">
+        <el-avatar shape="square" :size="50" :src="IMG_URL + userInfo.photo"></el-avatar>
+      </router-link>
     </div>
     <div class="nav-list">
       <router-link to="/add" tag="span" title="加好友">
@@ -13,18 +15,7 @@
       <span class="nav-item iconfont icon-zhongchuangkongjian-"></span>
     </div>
     <div class="operation">
-      <el-dropdown placement="left">
-        <span class="el-dropdown-link">
-          <i class="oper-item el-icon-s-operation"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>黄金糕</el-dropdown-item>
-          <el-dropdown-item>狮子头</el-dropdown-item>
-          <el-dropdown-item>螺蛳粉</el-dropdown-item>
-          <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-          <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <oper-menu />
     </div>
   </div>
 </template>
