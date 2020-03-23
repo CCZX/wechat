@@ -16,8 +16,16 @@
       class="message-info"
       :style="messageitem.messageType === MSG_TYPES.sys ? 'width: 100%' : ''"
     >
-      <span class="secondary-font time">
+      <span class="secondary-font header"
+        :style="messageitem.senderId === userInfo._id ? {'flex-direction': 'row-reverse'} : {}"
+      >
+        <span v-if="currentConversation.isGroup" class="item name">
+          <router-link :to="`/user/${messageitem.senderId}`" class="not-link" style="color: #606266">
+            {{messageitem.senderNickname}}
+          </router-link>
+        </span>
         <span
+          class="item time"
           :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
         >{{messageitem.time | formatDateToZH}}</span>
       </span>
@@ -45,7 +53,7 @@ import { MSG_TYPES } from '@/const'
 import { formatDateToZH } from '@/utils'
 import messageTypes, { messageTypesCmp } from '@/components/messageTypes'
 export default {
-  props: ["messageitem", "imgTypeMsgList"],
+  props: ["messageitem", "imgTypeMsgList", "currentConversation"],
   data() {
     return {
       IMG_URL: process.env.IMG_URL,
@@ -89,6 +97,9 @@ export default {
         res = {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'}
       }
       return res
+    },
+    senderUserName() { // 发送消息人的名称，如果是好友显示备注，不是好友显示nickname
+
     }
   },
   filters: {
@@ -118,9 +129,26 @@ export default {
   }
   .message-info {
     width: 250px;
-    .time {
-      display: block;
+    &:hover {
+      .header .time {
+        opacity: 1;
+      }
+    }
+    .header {
+      display: flex;
       overflow: hidden;
+      height: 14px;
+      .item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .name {
+        padding: 0 5px;
+        max-width: 50%;
+      }
+      .time {
+        opacity: 0;
+      }
     }
     .sys-content {
       margin-top: 50px;

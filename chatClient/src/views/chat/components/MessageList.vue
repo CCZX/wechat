@@ -17,6 +17,7 @@
         :key="index"
         :messageitem="item"
         :img-type-msg-list="imgTypeMsgList"
+        :currentConversation="currentConversation"
       />
     </transition-group>
     <div class="flag"></div>
@@ -27,7 +28,7 @@
 import messageItem from "./MessageItem"
 import { debounce } from '@/utils'
 export default {
-  props: ["messagelist", "scrollbottom", "hasmore", "isloading", "useanimation"],
+  props: ["messagelist", "scrollbottom", "hasmore", "isloading", "useanimation", "currentConversation"],
   data() {
     return {
       currentImgUrl: '',

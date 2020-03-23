@@ -13,6 +13,7 @@
           :hasmore="hasMore"
           :isloading="isLoading"
           :useanimation="useAnimation"
+          :currentConversation="currentConversation"
         />
       </div>
       <div class="group-desc" v-if="currentConversation.conversationType === 'GROUP'">

@@ -41,18 +41,14 @@
             :hidden="unreadNews[conversationInfo.roomid] === 0"
             class="item el-badge"
           >
-            <router-link :to="`/user/${conversationInfo._id}`">
-              <el-avatar
-                size="large"
-                :src="IMG_URL + conversationInfo.photo"
-                @error="() => true"
-                :class="!onlineUserIds.includes(conversationInfo._id) ? 'offline' : 'online'"
-              >
-                <img
-                  src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-                >
-              </el-avatar>
-            </router-link>
+            <el-avatar
+              size="large"
+              :src="IMG_URL + conversationInfo.photo"
+              @error="() => true"
+              :class="!onlineUserIds.includes(conversationInfo._id) ? 'offline' : 'online'"
+            >
+              <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+            </el-avatar>
           </el-badge>
           
           <div class="conversation-detail">
