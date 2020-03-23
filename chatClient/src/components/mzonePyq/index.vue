@@ -15,22 +15,7 @@
                 width="240"
                 trigger="hover"
               >
-                <div class="user-card-body">
-                  <div class="header">
-                    <div class="user-card-avatar">
-                      <el-avatar :size="50" :src="IMG_URL + item.userId.photo" @error="()=>true">
-                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-                      </el-avatar>
-                    </div>
-                    <div class="user-card-info">
-                      <p class="info-item-nickname ellipsis">{{item.userId.nickname}}</p>
-                      <p class="info-item-signature ellipsis secondary-font">{{item.userId.signature}}</p>
-                    </div>
-                  </div>
-                  <!-- <div class="content">
-                    <el-button type="success" size="mini">加好友</el-button>
-                  </div> -->
-                </div>
+                <user-card :user-details="item.userId" />
                 <router-link slot="reference" :to="`/user/${item.userId._id}`" class="nickname-link">
                   {{item.userId.nickname}}
                 </router-link>
@@ -89,22 +74,7 @@
                 width="240"
                 trigger="hover"
               >
-                <div class="user-card-body">
-                  <div class="header">
-                    <div class="user-card-avatar">
-                      <el-avatar :size="50" :src="IMG_URL + likeitem.authorId.photo" @error="()=>true">
-                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-                      </el-avatar>
-                    </div>
-                    <div class="user-card-info">
-                      <p class="info-item-nickname ellipsis">{{likeitem.authorId.nickname}}</p>
-                      <p class="info-item-signature ellipsis secondary-font">{{likeitem.authorId.signature}}</p>
-                    </div>
-                  </div>
-                  <!-- <div class="content">
-                    <el-button type="success" size="mini">加好友</el-button>
-                  </div> -->
-                </div>
+                <user-card :user-details="likeitem.authorId" />
                 <router-link slot="reference" :to="`/user/${likeitem.authorId._id}`" class="like-user-link">
                   {{likeitem.authorId.nickname}}{{index+1 === item.likes.length ? '' : '、'}}
                 </router-link>
@@ -159,6 +129,7 @@ import pyqEdit from '@/components/mzonePyqEdit'
 import { debounce, formatDateToZH } from '@/utils'
 import { commentTips } from '@/const'
 import EmptySvg from '@/SVGComponents/empty'
+import userCard from '@/components/userCard'
 export default {
   props: {
     newpyqitem: {
@@ -186,7 +157,8 @@ export default {
       showOperationListObj: {}, // 是否显示对本条朋友圈的操作列表
       commentTips,
       showEditPyq: false,
-      currentEditPyqId: ''
+      currentEditPyqId: '',
+      handlerElement: null // 事件监听的DOM元素
     }
   },
   computed: {
@@ -389,7 +361,8 @@ export default {
     customEmoji,
     commentList,
     pyqEdit,
-    EmptySvg
+    EmptySvg,
+    userCard
   },
   filters: {
     formatDateToZH(val) {
@@ -408,11 +381,12 @@ export default {
   mounted() {
     this.getFriendlyPyq()
     const mzonePage = document.querySelector('.mzone-page')
+    this.handlerElement = mzonePage
     mzonePage.addEventListener('scroll', this.handleDocmentScroll)
     document.addEventListener('click', this.handleDocmentClick)
   },
   beforeDestroy() {
-    mzonePage.removeEventListener('scroll', this.handleDocmentScroll)    
+    this.handlerElement.removeEventListener('scroll', this.handleDocmentScroll)    
     document.removeEventListener('click', this.handleDocmentClick)
   },
 }
