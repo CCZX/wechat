@@ -19,7 +19,7 @@
       <span class="secondary-font time">
         <span
           :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
-        >{{messageitem.time}}</span>
+        >{{messageitem.time | formatDateToZH}}</span>
       </span>
       <div
         :class="contentClassName"
@@ -42,6 +42,7 @@
 <script>
 import { mapState } from "vuex"
 import { MSG_TYPES } from '@/const'
+import { formatDateToZH } from '@/utils'
 import messageTypes, { messageTypesCmp } from '@/components/messageTypes'
 export default {
   props: ["messageitem", "imgTypeMsgList"],
@@ -88,6 +89,11 @@ export default {
         res = {'background-color': 'hsla(149, 78%, 53%, 1)', 'float': 'right'}
       }
       return res
+    }
+  },
+  filters: {
+    formatDateToZH(val) {
+      return formatDateToZH(val)
     }
   }
 };

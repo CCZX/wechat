@@ -123,7 +123,7 @@ export default {
         snderName: this.userInfo.name,
         senderNickname: this.userInfo.nickname,
         senderAvatar: this.userInfo.photo,
-        time: fromatTime(new Date()),
+        time: Date.now(),
         isReadUser: [this.userInfo.name],
         conversationType: this.currentConversation.conversationType,
         currentConversation: this.currentConversation
