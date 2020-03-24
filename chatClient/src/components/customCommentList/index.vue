@@ -189,15 +189,17 @@ export default {
      */
     showReplyArea(id, level, authorId) {
       const replyAreaShowMap = this.replyAreaShowMap
-      for (const key in replyAreaShowMap) {
-        if (replyAreaShowMap.hasOwnProperty(key)) {
-          replyAreaShowMap[key] = false
+      const newReplyAreaShowMap = {...replyAreaShowMap}
+      for (const key in newReplyAreaShowMap) {
+        if (newReplyAreaShowMap.hasOwnProperty(key)) {
+          newReplyAreaShowMap[key] = false
         }
       }
-      replyAreaShowMap[id] = true
+      newReplyAreaShowMap[id] = true
+      this.replyAreaShowMap = newReplyAreaShowMap
       const ref = 'reply-inp' + id
       this.$nextTick(() => {
-        this.$refs[ref][0].focus()
+        this.$refs[ref] && this.$refs[ref][0].focus()
       })
       this.currentReplyCommentLevel = level
       this.currentReplyToAuthorId = authorId

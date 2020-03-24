@@ -93,6 +93,7 @@ export default {
           message: '发布成功！',
           type: 'success'
         })
+        console.log(res.data.data[0])
         this.$emit('watchsend', {
           ...res.data.data[0],
           userId: {

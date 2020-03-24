@@ -137,6 +137,16 @@ export default {
       default() {
         return {}
       }
+    },
+    pyqListData: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    hasMore: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -145,7 +155,7 @@ export default {
       IMG_URL: process.env.IMG_URL,
       page: 0,
       pageSize: 7,
-      hasMore: true,
+      // hasMore: true,
       isLoading: false,
       currentImgUrl: '',
       showPicturePreview: false,
@@ -168,7 +178,7 @@ export default {
     hasILike() { // 判断我也没有点赞
       const pyqLikeUserIdsMap = {}
       this.pyqList.forEach(item => {
-        const ids = item.likes.map(item => item.authorId._id)
+        const ids = (item.likes || []).map(item => item.authorId._id)
         pyqLikeUserIdsMap[item._id] = ids
       })
       return pyqLikeUserIdsMap
@@ -202,29 +212,7 @@ export default {
       this.showOperationListObj[id] = !this.showOperationListObj[id]
     },
     getFriendlyPyq() {
-      this.isLoading = true
-      const params = {
-        id: this.userInfo._id,
-        page: this.page,
-        pageSize: this.pageSize
-      }
-      this.$http.getFriendlyPyq(params).then(res => {
-        const { data, status } = res.data
-        if (status === 2000 && res.status < 400) {
-          this.pyqList = [...this.pyqList, ...data]
-          this.pyqList.forEach(item => {
-            this.$set(this.commentsObj, item._id, '')
-            this.$set(this.showOperationListObj, item._id, false)
-          })
-          this.isLoading = false
-          if (data.length < 7) {
-            this.hasMore = false
-          } else {
-            this.hasMore = true
-            this.page++
-          }
-        }
-      })
+      this.$emit('getPyq')
     },
     setCurrentImgUrl(url) {
       this.currentImgUrl = url
@@ -249,8 +237,10 @@ export default {
           tmp[index].likes.push({
             ...data.data[0],
             authorId: {
+              _id: this.userInfo._id,
               nickname: this.userInfo.nickname,
-              _id: this.userInfo._id
+              photo: this.userInfo.photo,
+              signature: this.signature
             }
           })
           this.pyqList = tmp
@@ -299,9 +289,8 @@ export default {
     },
     handlerShowEmoji(e, id) {
       this.currentPyq = id
-      console.log(e.pageX, e.pageY)
-      this.emojiTop = e.pageY - 410 + 'px'
-      this.emojiLeft = e.pageX - 400 + 'px'
+      this.emojiTop = e.pageY - 100 + 'px'
+      this.emojiLeft = e.pageX - 200 + 'px'
       this.showEmojiCom = true
     },
     handleDocmentScroll: debounce(function () {
@@ -347,7 +336,7 @@ export default {
     },
     modifyPyqItem(id, data) {
       const newPyqList = JSON.parse(JSON.stringify(this.pyqList))
-      newPyqList.map(item => {
+      newPyqList.forEach(item => {
         if (item._id === id) {
           item.content = data.content
           item.pictures = data.pictures
@@ -370,24 +359,28 @@ export default {
     }
   },
   watch: {
-    newpyqitem: {
-      handler(val) {
-        const keys = Object.keys(val)
-        if (keys.length < 1) return
-        this.pyqList = [val, ...this.pyqList]
-      }
+    pyqListData: {
+      handler(newPyqListData) {
+        if (!Array.isArray(newPyqListData)) return
+        this.pyqList = newPyqListData
+        newPyqListData.forEach(item => {
+          this.$set(this.commentsObj, item._id, '')
+          this.$set(this.showOperationListObj, item._id, false)
+        })
+      }, deep: true, immediate: true
     }
   },
   mounted() {
     this.getFriendlyPyq()
+    document.addEventListener('click', this.handleDocmentClick)
     const mzonePage = document.querySelector('.mzone-page')
+    if(!mzonePage) return
     this.handlerElement = mzonePage
     mzonePage.addEventListener('scroll', this.handleDocmentScroll)
-    document.addEventListener('click', this.handleDocmentClick)
   },
   beforeDestroy() {
-    this.handlerElement.removeEventListener('scroll', this.handleDocmentScroll)    
     document.removeEventListener('click', this.handleDocmentClick)
+    this.handlerElement && this.handlerElement.removeEventListener('scroll', this.handleDocmentScroll)    
   },
 }
 </script>
@@ -515,7 +508,7 @@ export default {
       }
     }
     .emoji-com {
-      position: absolute;
+      position: fixed;
     }
   }
   .pyq-edit-box {

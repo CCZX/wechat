@@ -27,33 +27,16 @@
       <div class="details-body">
         <el-tabs type="border-card">
           <el-tab-pane>
-            <span slot="label"><i class="el-icon-date"></i> 我的行程</span>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
-            我的行程 <br>
+            <span slot="label"><i class="el-icon-date"></i> TA的动态</span>
+            <pyq-list-cmp
+              :pyq-list-data="pyqList"
+              :has-more="hasMorePyq"
+              @getPyq="getUserPyq"
+            />
           </el-tab-pane>
-          <el-tab-pane label="消息中心">消息中心</el-tab-pane>
+          <el-tab-pane label="消息中心">
+            <span slot="label"><i class="el-icon-date"></i> TA的资料</span>
+          </el-tab-pane>
           <el-tab-pane label="角色管理">角色管理</el-tab-pane>
           <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
         </el-tabs>
@@ -63,16 +46,46 @@
 </template>
 
 <script>
+import pyqListCmp from '@/components/mzonePyq'
 export default {
   name: 'UserDetails',
   data() {
     return {
       userDetails: {},
-      IMG_URL: process.env.IMG_URL
+      IMG_URL: process.env.IMG_URL,
+
+      pyqList: [],
+      hasMorePyq: true,
+      pyqPage: 0,
+      pyqPageSize: 7
     }
+  },
+  methods: {
+    getUserPyq() {
+      const { id } = this.$route.params
+      const params = {userId: id, page: this.pyqPage, pageSize: this.pyqPageSize}
+      this.$http.getUserPyq(params).then(res => {
+        console.log('用户朋友圈', res)
+        const { data, status } = res.data
+        if (status === 2000 && res.status < 400) {
+          this.pyqList = [...this.pyqList, ...data]
+          this.pyqLoading = false
+          if (data.length < 7) {
+            this.hasMorePyq = false
+          } else {
+            this.hasMorePyq = true
+            this.pyqPage++
+          }
+        }
+      })
+    }
+  },
+  components: {
+    pyqListCmp
   },
   async created() {
     const { id } = this.$route.params
+    // this.getUserPyq()
     const { data } = await this.$http.getUserInfo(id)
     const { data: userDetails, status } = data
     if (status === 2000) {
@@ -86,8 +99,9 @@ export default {
 <style lang="scss">
 .user-details-page {
   width: 100%;
-  background-color: #e9ebee;
-  min-height: 100%;
+  // background-color: #e9ebee;
+  height: 100%;
+  overflow: scroll;
   .wrapper {
     width: 850px;
     margin: 0 auto;
@@ -120,9 +134,12 @@ export default {
       }
     }
     .details-body {
+      .el-tabs--border-card {
+        background-color: #e9ebee;
+      }
       .el-tabs {
         box-shadow: none;
-        background-color: #e9ebee;
+        // background-color: #e9ebee;
         .el-tabs__header {
           .is-active {
             position: relative;
@@ -144,7 +161,7 @@ export default {
         }
         .el-tabs__content {
           margin-top: 10px;
-          background: #FFF
+          // background: #FFF
         }
       }
     }

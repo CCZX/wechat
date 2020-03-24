@@ -9,14 +9,14 @@
           <el-avatar
             class="avatar"
             size="large"
-            :src="userDetails.avatar"
+            :src="IMG_URL + userInfo.photo"
             @error="() => true"
           >
             <img
               src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
             >
           </el-avatar>
-          <span class="nickname">{{userDetails.nickname}}</span>
+          <span class="nickname">{{userInfo.nickname}}</span>
         </div>
       </div>
       <!-- <suck-top :top="60" parent="document" :z-index="1004" width="1020"> -->
@@ -50,7 +50,11 @@
         </div>
         <div class="content">
           <send-mzone @watchsend="watchSendPyq" />
-          <m-pyq :newpyqitem="newPyqItem" />
+          <m-pyq
+            :pyq-list-data="myFriendPyqList"
+            :has-more="hasMorePyq"
+            @getPyq="getMyFriendPyq"
+          />
         </div>
       </div>
       <back-top target=".mzone-page" />
@@ -67,10 +71,15 @@ export default {
   name: 'MZone',
   data() {
     return {
-      userDetails: {},
       IMG_URL: process.env.IMG_URL,
       activeIndex: '1',
-      newPyqItem: {}
+
+      newPyqItem: {}, // 用户新发表的朋友圈
+      myFriendPyqList: [], // 我的好友的朋友圈李彪
+      hasMorePyq: true,
+      pyqLoading: true, // 正在获取朋友圈
+      pyqPage: 0,
+      pyqPageSize: 7
     }
   },
   computed: {
@@ -79,17 +88,29 @@ export default {
     }
   },
   methods: {
-    watchSendPyq(newPyqItem) {
-      this.newPyqItem = newPyqItem
-    }
-  },
-  async created() {
-    const { _id: id } = this.$store.state.user.userInfo
-    const { data } = await this.$http.getUserInfo(id)
-    const { data: userDetails, status } = data
-    if (status === 2000) {
-      userDetails.avatar = this.IMG_URL + userDetails.photo
-      this.userDetails = userDetails
+    watchSendPyq(newPyqItem) { // 监听用户发表新的朋友圈
+      this.myFriendPyqList = [newPyqItem, ...this.myFriendPyqList]
+    },
+    getMyFriendPyq() { // 获取我的好友发表的朋友圈
+      this.pyqLoading = true
+      const params = {
+        id: this.userInfo._id,
+        page: this.pyqPage,
+        pageSize: this.pyqPageSize
+      }
+      this.$http.getFriendlyPyq(params).then(res => {
+        const { data, status } = res.data
+        if (status === 2000 && res.status < 400) {
+          this.myFriendPyqList = [...this.myFriendPyqList, ...data]
+          this.pyqLoading = false
+          if (data.length < 7) {
+            this.hasMorePyq = false
+          } else {
+            this.hasMorePyq = true
+            this.pyqPage++
+          }
+        }
+      })
     }
   },
   components: {
