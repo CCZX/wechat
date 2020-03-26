@@ -33,7 +33,7 @@
         :class="contentClassName"
       >
         <span
-          class="primary-font text"
+          class="primary-font message-wrapper"
           :style="messageWraperStyle"
          >
           <span
@@ -41,6 +41,9 @@
             :message="messageitem"
             :img-type-msg-list="imgTypeMsgList"
           />
+          <i class="is-read iconfont icon-RadioSuccess">
+          <!-- <i class="is-read iconfont icon-radio"> -->
+          </i>
         </span>
       </div>
     </div>
@@ -71,9 +74,9 @@ export default {
       if (this.messageitem.messageType === 'sys') {
         res = 'sys-content'
       } else if (this.messageitem.messageType === 'img') {
-        res = 'img-content'        
+        res = 'img-content'      
       } else {
-        res = this.messageitem.senderId === this.userInfo._id ? 'content isme' : 'content'
+        res = this.messageitem.senderId === this.userInfo._id ? 'normal-content isme' : 'normal-content'
       }
       return res
     },
@@ -111,14 +114,7 @@ export default {
 </script>
 
 <style lang="scss">
-.msg-operation-card-body {
-  text-align: center;
-  .operation-item {
-    .oper-text {
-      margin-left: 5px;
-    }
-  }
-}
+@import url('./../../../../static/iconfont/iconfont.css');
 .chat-area__message-item__com {
   display: flex;
   width: 300px;
@@ -150,6 +146,15 @@ export default {
         opacity: 0;
       }
     }
+    .is-read-style {
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      color: #409EFF;
+      font-size: 12px;
+    }
     .sys-content {
       margin-top: 50px;
       position: relative;
@@ -163,19 +168,32 @@ export default {
     .img-content {
       position: relative;
       margin-top: 5px;
+      display: inline-block;
+      width: 100%;
+      .message-wrapper {
+        position: relative;
+        .is-read {
+          @extend .is-read-style
+        }
+      }
     }
-    .content {
+    .normal-content {
       position: relative;
       margin-top: 5px;
+      display: inline-block;
+      width: 100%;
       white-space: wrap;
       word-break: break-word;
-      .text {
+      .message-wrapper {
         cursor: pointer;
         position: relative;
         display: inline-block;
         border-radius: 10px;
         padding: 10px;
         background-color: hsla(201, 100%, 55%, 1);
+        .is-read {
+          @extend .is-read-style
+        }
       }
       &::before {
         content: "";
@@ -188,7 +206,7 @@ export default {
         border-top: 5px solid transparent;
       }
     }
-    .content.isme {
+    .normal-content.isme {
       &::before {
         display: none;
       }

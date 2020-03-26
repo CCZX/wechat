@@ -60,6 +60,13 @@ html, body {
   border-radius: 50%;
 }
 
+.not-link {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline
+  }
+}
+
 // 文字类CSS样式
 .primary-font {
   color: $primaryfont;
