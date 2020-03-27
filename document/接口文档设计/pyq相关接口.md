@@ -180,3 +180,28 @@ POST: `/api/v1/pyq/pyqmodify`
   msg: String
 }
 ```
+
+### 7、获取某个用户的朋友圈
+
+> 描述：
+ 
+POST: `/api/v1/pyq/getuserpyq`
+
+> 传递参数
+
+```javascript
+{
+  userId: String, // 用户Id
+  page: Number, // 
+  pageSize: Number // 
+}
+```
+
+> 返回数
+```javascript
+{
+  status: Number,
+  data: [{}],
+  msg: String
+}
+```

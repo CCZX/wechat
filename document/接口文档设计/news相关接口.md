@@ -60,3 +60,24 @@ GET：`/api/v1/news/last`
   msg: ''
 }
 ```
+
+### 4、设置消息已读
+
+GET：`/api/v1/news/isread`
+
+> 传递参数
+
+```JavaScript
+{
+  roomid: String, // 房间ID
+  userId: String // 用户ID
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number,
+  data: [],
+  msg: ''
+}
+```
