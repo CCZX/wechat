@@ -32,7 +32,7 @@
         />
       </el-tab-pane>
       <el-tab-pane label="群">
-        <span slot="label"><i style="fontSize: 16px" class="icon-qun iconfont iconic iconic-group"></i></span>
+        <span slot="label"><i style="fontSize: 16px" class="icon-qunzu iconfont"></i></span>
         <group-conversation-list
           :current-conversation="currentConversation"
           :set-current-conversation="setCurrentConversation"

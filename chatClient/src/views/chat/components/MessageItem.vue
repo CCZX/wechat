@@ -16,7 +16,9 @@
       class="message-info"
       :style="messageitem.messageType === MSG_TYPES.sys ? 'width: 100%' : ''"
     >
-      <span class="secondary-font header"
+      <span
+        v-if="messageitem.messageType !== MSG_TYPES.sys"
+        class="secondary-font header"
         :style="messageitem.senderId === userInfo._id ? {'flex-direction': 'row-reverse'} : {}"
       >
         <span v-if="currentConversation.isGroup" class="item name">
@@ -179,14 +181,11 @@ export default {
       cursor: pointer;
     }
     .sys-content {
-      margin-top: 50px;
       position: relative;
-      margin-top: 5px;
+      display: inline-block;
+      margin: 5px 0;
       white-space: wrap;
       word-break: break-word;
-      .sys-tips {
-        color: hsla(201, 100%, 55%, 1);
-      }
     }
     .img-content {
       position: relative;
