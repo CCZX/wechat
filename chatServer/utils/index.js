@@ -76,6 +76,15 @@ function computedLevel(onlineTime) {
   return res > 8 ? 8 : res
 }
 
+const todayAndTomorrow = (date) => {
+  const today = new Date(date)
+  const tomorrow = new Date(today.getTime() + 24*60*60*1000)
+  return {
+    today,
+    tomorrow
+  }
+}
+
 module.exports = {
   fromatTime,
   formatNumber,
@@ -84,7 +93,8 @@ module.exports = {
   randomNickname,
   monthAgo,
   mapArrIncludesItem,
-  computedLevel
+  computedLevel,
+  todayAndTomorrow
 }
 
 

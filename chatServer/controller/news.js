@@ -1,4 +1,5 @@
 const NEWS = require('./../models/news')
+const { todayAndTomorrow } = require('./../utils')
 
 // 存入新的消息
 const insertNewNews = async (news) => {
@@ -56,9 +57,42 @@ const userIsReadMsg = async (req, res) => {
   })
 }
 
+const getHistoryMsg = async (req, res) => {
+  const { roomid, type, query, date, page, pageSize } = req.body
+  const queryReg = new RegExp(query)
+  const params = {
+    roomid,
+    message: {$regex: queryReg}
+  }
+  if (type !== 'all') {
+    params['messageType'] = type
+    delete params['message']
+  }
+  if (!!date) {
+    const { today, tomorrow } = todayAndTomorrow(date)
+    params['time'] = {$gte: today, $lt: tomorrow}
+  }
+  console.log('getHistoryMsg', params)
+  const msgList = await NEWS.find({
+    ...params
+  }).skip(Number(page*pageSize)).limit(Number(pageSize))
+  const count = await await NEWS.find({
+    ...params
+  }).count()
+  return res.json({
+    status: 2000,
+    data: {
+      data: msgList,
+      total: count
+    },
+    msg: 'success'
+  })
+}
+
 module.exports = {
   insertNewNews,
   getRecentNews,
   getLastNews,
-  userIsReadMsg
+  userIsReadMsg,
+  getHistoryMsg
 }
