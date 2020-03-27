@@ -27,5 +27,12 @@ export default {
   },
   modifyPyqItem(data) {
     return request.post(`${API}/pyq/pyqmodify`, data)
+  },
+  /**
+   * 获取某个用户的朋友圈
+   * @param {*} data 
+   */
+  getUserPyq(data) {
+    return request.post(`${API}/pyq/getuserpyq`, data)
   }
 }

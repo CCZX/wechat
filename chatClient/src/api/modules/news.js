@@ -8,5 +8,8 @@ export default {
   },
   getLastNews(data) {
     return request.post(`${API}/news/last`, data)
+  },
+  userIsReadMsg(data) { // 当用户在切换会话阅读消息后
+    return request.post(`${API}/news/isread`, data)
   }
 }
