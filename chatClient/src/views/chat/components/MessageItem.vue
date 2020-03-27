@@ -41,11 +41,12 @@
             :message="messageitem"
             :img-type-msg-list="imgTypeMsgList"
           />
-          <i
-            v-if="messageitem.senderId === userInfo._id"
-            :class="isAllRead ? 'is-read iconfont icon-RadioSuccess' : 'is-read iconfont icon-radio'"
-          />
-          <!-- <i class="is-read iconfont icon-radio"> -->
+          <el-tooltip class="item" effect="dark" :content="isAllRead ? '已读' : '未读'" placement="top">
+            <i
+              v-if="!currentConversation.isGroup && messageitem.senderId === userInfo._id"
+              :class="isAllRead ? 'is-read iconfont icon-RadioSuccess' : 'is-read iconfont icon-radio'"
+            />
+          </el-tooltip>
         </span>
       </div>
     </div>
@@ -172,9 +173,10 @@ export default {
       right: 100%;
       top: 50%;
       transform: translateY(-50%);
-      width: 20px;
+      margin-right: 7px;
       color: #409EFF;
       font-size: 12px;
+      cursor: pointer;
     }
     .sys-content {
       margin-top: 50px;
@@ -206,7 +208,7 @@ export default {
       white-space: wrap;
       word-break: break-word;
       .message-wrapper {
-        cursor: pointer;
+        cursor: default;
         position: relative;
         display: inline-block;
         border-radius: 10px;
