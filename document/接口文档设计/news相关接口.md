@@ -81,3 +81,31 @@ GET：`/api/v1/news/isread`
   msg: ''
 }
 ```
+
+### 5、获取历史消息
+
+GET：`/api/v1/news/historymsg`
+
+> 传递参数
+
+```JavaScript
+{
+  roomid: String, // 房间ID
+  type: String, // 搜索的类型，all、img、file等
+  query: String, // 查询关键字
+  date: String, // 查询日期
+  page: Number,
+  pageSize: Number
+}
+```
+> 返回数据
+```javascript
+{
+  status: Number,
+  data: {
+    data: [], // 数据
+    count: Number // 数据总数
+  },
+  msg: ''
+}
+```
