@@ -49,7 +49,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-app.use(checkToken) // 验证token
+// app.use(checkToken) // 验证token
 
 // app.use(`${API_VERSION}/*`, (req, res, next)　=> {
 //   console.log(req.session)
@@ -117,7 +117,7 @@ io.on('connection', (socket) => {
       io.in(roomid).emit('conversationList', conversationList)
     })
   })
-  socket.on('sendNewMessage', news => {
+  socket.on('sendNewMessage', async news => {
     // console.log('newmessage',news)
     /**
      * 接收到新的消息对消息类型所属的会话进行判断
@@ -125,7 +125,8 @@ io.on('connection', (socket) => {
     if (news.conversationType === conversationTypes.friend) {
       console.log('friend')
       delete news['conversationType']
-      insertNewNews(news)
+      const data = await insertNewNews(news)
+      console.log('插入的数据', data)
     } else if (news.conversationType === conversationTypes.group) {
       console.log('group')
       delete news['conversationType']
@@ -163,38 +164,47 @@ io.on('connection', (socket) => {
     console.log('groupUser', groupUser)
     addNewGroupUser(groupUser)
   })
+  socket.on('isReadMsg', data => {
+    console.log('isReadMsg', data)
+    const { roomid } = data
+    if (!roomid) return
+    console.log(roomid)
+    socket.to(roomid).emit('isReadMsg', data)
+  })
 
 
   socket.on('apply', data=>{ // 转发申请
-    console.log('apply user to', data)
+    console.log('apply user to', data.myNickname)
     // sockS[data.account].emit('apply', data);
     socket.to(data.roomid).emit('apply', data);
   })
   socket.on('reply', data=>{ // 转发回复
-    console.log('reply', data)
+    console.log('reply', data.myNickname)
     socket.to(data.roomid).emit('reply', data)
   })
   socket.on('1v1answer', data=>{ // 转发 answer
-    console.log('1v1anwser', data)
+    console.log('1v1anwser', data.myNickname)
     socket.to(data.roomid).emit('1v1answer', data)
   })
   socket.on('1v1ICE', data=>{ // 转发 ICE
-    console.log('1v1ICE', data)
+    console.log('1v1ICE', data.myNickname)
     socket.to(data.roomid).emit('1v1ICE', data)
   })
   socket.on('1v1offer', data=>{ // 转发 Offer
-    console.log('1v1offer', data)
+    console.log('1v1offer', data.myNickname)
     socket.to(data.roomid).emit('1v1offer', data)
   })
   socket.on('1v1hangup', data=>{ // 转发 hangup
-    console.log('1v1hangup', data)
+    console.log('1v1hangup', data.myNickname)
     socket.to(data.roomid).emit('1v1hangup', data)
   })
   socket.on('disconnect', async (val) => {
     console.log('disconnection user', val)
     const id = socket.id
+    if (!id) return
     const logoutTime = Date.now()
-    const { loginTime, _id } = onLineUser[id]
+    const { loginTime, _id } = onLineUser[id] || {}
+    if (!loginTime || !_id) return
     const onlineTime = logoutTime - loginTime
     console.log(onlineTime)
     await updateUserOnlineTime({userId: _id, time: onlineTime})
@@ -203,9 +213,11 @@ io.on('connection', (socket) => {
   })
   socket.on('leave', async () => {
     const id = socket.id
+    if (!id) return
     // 计算在线时间
     const logoutTime = Date.now()
-    const { loginTime, _id } = onLineUser[id]
+    const { loginTime, _id } = onLineUser[id] || {}
+    if (!loginTime || !_id) return
     const onlineTime = logoutTime - loginTime
     console.log(onlineTime)
     await updateUserOnlineTime({userId: _id, time: onlineTime})
