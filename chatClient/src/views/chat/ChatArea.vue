@@ -4,6 +4,11 @@
       :currentConversation="currentConversation"
       :set-current-conversation="setCurrentConversation"
     />
+    <transition name="slide-up">
+      <div class="history-msg-container" v-if="showHistoryMsg">
+        <history-msg :current-conversation="currentConversation" />
+      </div>
+    </transition>
     <div :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'">
       <div class="message-list-container">
         <message-list ref='messagelist'
@@ -42,6 +47,9 @@
         <i class="item iconfont icon-huaban" />
         <i class="item iconfont icon-shipin" />
         <i class="item el-icon-phone-outline" />
+        <span
+          :class="showHistoryMsg ? 'history-btn normal-font el-icon-caret-bottom' : 'history-btn normal-font el-icon-caret-top'"
+          @click="setShowHistoryMsg">历史记录</span>
       </div>
       <div class="operation">
         <el-button @click="send" type="success" size="small" round>发送</el-button>
@@ -68,6 +76,7 @@ import { conversationTypes, uploadImgStatusMap, qiniu_URL } from '@/const'
 import customEmoji from '@/components/customEmoji'
 import upImg from '@/components/customUploadImg'
 import groupDesc from './components/GroupDesc'
+import historyMsg from './components/HistoryMsg'
 export default {
   props: {
     currentConversation: Object,
@@ -88,7 +97,8 @@ export default {
       scrollBottom: true,
       isLoading: false,
       useAnimation: false,
-      lastEnterTime: Date.now() // 对方进入该会话的时间
+      lastEnterTime: Date.now(), // 对方进入该会话的时间
+      showHistoryMsg: false
     }
   },
   computed: {
@@ -120,6 +130,9 @@ export default {
     }
   },
   methods: {
+    setShowHistoryMsg() {
+      this.showHistoryMsg = !this.showHistoryMsg
+    },
     setLastEnterTime(time) {
       this.lastEnterTime = time
     },
@@ -271,13 +284,15 @@ export default {
     messageList,
     customEmoji,
     groupDesc,
-    upImg
+    upImg,
+    historyMsg
   },
   watch: {
     currentConversation(newVal, oldVal) {
       if (newVal && newVal._id) {
         this.page = 0
         this.scrollBottom = true
+        this.showHistoryMsg = false
         this.setLoading(true)
         this.messageText = ""
         this.messages = []
@@ -309,7 +324,14 @@ export default {
 <style lang="scss">
 @import './../../../static/css/animation.scss';
 .chat-area__com {
+  position: relative;
   height: 100%;
+  .history-msg-container {
+    position: absolute;
+    z-index: 1004;
+    height: calc(100% - 210px);
+    width: 100%;
+  }
   .main {
     display: flex;
     position: relative;
@@ -327,15 +349,6 @@ export default {
       height: 100%;
       width: 25%;
     }
-    .sider {
-      position: absolute;
-      right: 0;
-      top: 0;
-      border: 1px solid red;
-      width: 150px;
-      height: 100%;
-      background-color: #e9ebee;
-    }
   }
   .main.no-group {
     .message-list-container {
@@ -352,6 +365,7 @@ export default {
     height: 150px;
     border-top: 1px solid #cccccc;
     .send-type {
+      position: relative;
       padding: 5px 10px 0;
       height: 25px;
       .item {
@@ -362,6 +376,11 @@ export default {
           display: none;
           border: none;
         }
+      }
+      .history-btn {
+        position: absolute;
+        right: 5px;
+        cursor: pointer;
       }
     }
     .operation {
@@ -389,4 +408,3 @@ export default {
   }
 }
 </style>
-
