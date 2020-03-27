@@ -39,9 +39,7 @@
             <span>{{item.content}}</span>
           </p>
           <span class="time-content secondary-font">{{item.createDate | formatDate}}</span>
-          <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
-            <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, item.level, item.authorId)">回复</span>
-          </el-tooltip>
+          <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, item.level, item.authorId)">回复</span>
           <div class="reply-box">
             <div class="reply-item" v-for="replyItem in item.reply.slice(0, showMaxReply)" :key="replyItem._id">
               <div class="reply-item-avatar">
@@ -59,9 +57,7 @@
                   {{replyItem.content}}
                 </p>
                 <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
-                <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
-                  <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
-                </el-tooltip>
+                <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
               </div>
             </div>
             <transition-group v-if="viewMoreReplyMap[item._id]">
@@ -82,9 +78,7 @@
                     {{replyItem.content}}
                   </p>
                   <span class="time secondary-font">{{replyItem.createDate | formatDate}}</span>
-                  <el-tooltip class="item" effect="dark" :content="replyTips" placement="top">
-                    <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
-                  </el-tooltip>
+                  <span class="reply secondary-font operation-text" @click="showReplyArea(item._id, replyItem.level, replyItem.authorId)">回复</span>
                 </div>
               </div>
             </transition-group>
@@ -133,7 +127,6 @@
 
 <script>
 import { formatDateToZH } from '@/utils'
-import { commentTips } from '@/const'
 export default {
   props: ["commentlist", "pyqid"],
   data() {
@@ -147,7 +140,6 @@ export default {
       showMaxReply: 3,
       currentReplyCommentLevel: 0,
       currentReplyToAuthorId: {},
-      replyTips: commentTips,
       viewMoreComment: false
     }
   },

@@ -368,6 +368,13 @@ export default {
           this.$set(this.showOperationListObj, item._id, false)
         })
       }, deep: true, immediate: true
+    },
+    pyqList: {
+      handler(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.$emit('modifyPyq', newVal)
+        }
+      }, deep: true
     }
   },
   mounted() {

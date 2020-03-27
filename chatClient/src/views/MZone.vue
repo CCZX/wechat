@@ -53,6 +53,7 @@
           <m-pyq
             :pyq-list-data="myFriendPyqList"
             :has-more="hasMorePyq"
+            @modifyPyq="modifyPyq"
             @getPyq="getMyFriendPyq"
           />
         </div>
@@ -111,6 +112,9 @@ export default {
           }
         }
       })
+    },
+    modifyPyq(newPyqList) {
+      this.myFriendPyqList = newPyqList
     }
   },
   components: {
