@@ -105,6 +105,14 @@ export default {
     },
     conversationList(list) {
       // console.log("当前会话列表", list)
+    },
+    isReadMsg(val) {
+      console.log('isReadMsg', val)
+      const { roomid, status } = val
+      this.$store.dispatch('news/SET_USER_IS_READ_MSG', {
+        roomid,
+        status
+      })
     }
   },
   methods: {

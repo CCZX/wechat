@@ -41,9 +41,11 @@
             :message="messageitem"
             :img-type-msg-list="imgTypeMsgList"
           />
-          <i class="is-read iconfont icon-RadioSuccess">
+          <i
+            v-if="messageitem.senderId === userInfo._id"
+            :class="isAllRead ? 'is-read iconfont icon-RadioSuccess' : 'is-read iconfont icon-radio'"
+          />
           <!-- <i class="is-read iconfont icon-radio"> -->
-          </i>
         </span>
       </div>
     </div>
@@ -56,13 +58,14 @@ import { MSG_TYPES } from '@/const'
 import { formatDateToZH } from '@/utils'
 import messageTypes, { messageTypesCmp } from '@/components/messageTypes'
 export default {
-  props: ["messageitem", "imgTypeMsgList", "currentConversation"],
+  props: ["messageitem", "imgTypeMsgList", "currentConversation", "lastEnterTime", "setLastEnterTime"],
   data() {
     return {
       IMG_URL: process.env.IMG_URL,
       currentMsg: {},
       MSG_TYPES,
       messageTypesCmp, // 消息组件Map
+      outTime: Date.now()
     }
   },
   computed: {
@@ -103,13 +106,31 @@ export default {
     },
     senderUserName() { // 发送消息人的名称，如果是好友显示备注，不是好友显示nickname
 
+    },
+    userIsReadMsg() {
+      return this.$store.state.news.userIsReadMsg
+    },
+    isAllRead() { // 是否两个用户都阅读了消息
+      const roomidArr = this.messageitem.roomid.split("-")
+      // const roomidArrHash = roomidArr[0]&roomidArr[1]
+      const isReadUserArr = this.messageitem.isReadUser
+      const flag1 = isReadUserArr.includes(roomidArr[0]) && isReadUserArr.includes(roomidArr[1])
+      const flag2 = this.userIsReadMsg[this.messageitem.roomid] || false
+      return this.messageitem.time < this.lastEnterTime || flag1 || flag2
     }
   },
   filters: {
     formatDateToZH(val) {
       return formatDateToZH(val)
     }
-  }
+  },
+  watch: {
+    userIsReadMsg: {
+      handler(newVal, oldVal) {
+        this.setLastEnterTime(Date.now())
+      }, deep: true
+    }
+  },
 };
 </script>
 

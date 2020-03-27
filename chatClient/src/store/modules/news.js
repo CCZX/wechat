@@ -6,7 +6,10 @@
 import { SET_UNREAD_NEWS_TYPE_MAP } from './../constants'
 const state = {
   unreadNews: {},
-  lastNews: {} // 好友之间最后发送的一条消息 {roomid1: {}, roomid2: {}}
+  lastNews: {}, // 好友之间最后发送的一条消息 {roomid1: {}, roomid2: {}}
+  userIsReadMsg: { // 好友是否已读你发送的消息
+
+  }
 }
 
 /**
@@ -35,6 +38,17 @@ const mutations = {
       const item = {[roomid]: news}
       state.lastNews = Object.assign({}, state.lastNews, item)
     }
+  },
+  setUserIsReadMsg(state, data) {
+    const { roomid, status } = data
+    const newData = {...state.userIsReadMsg} || {}
+    for (const key in newData) {
+      if (newData.hasOwnProperty(key)) {
+        newData[key] = false
+      }
+    }
+    newData[roomid] = status
+    state.userIsReadMsg = newData
   }
 }
 
@@ -44,6 +58,9 @@ const actions = {
   },
   SET_LAST_NEWS({commit}, data) {
     commit('setLastNews', data)
+  },
+  SET_USER_IS_READ_MSG({commit}, data) {
+    commit('setUserIsReadMsg', data)
   }
 }
 

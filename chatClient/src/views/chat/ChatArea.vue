@@ -14,6 +14,8 @@
           :isloading="isLoading"
           :useanimation="useAnimation"
           :currentConversation="currentConversation"
+          :last-enter-time="lastEnterTime"
+          :set-last-enter-time="setLastEnterTime"
         />
       </div>
       <div class="group-desc" v-if="currentConversation.conversationType === 'GROUP'">
@@ -85,7 +87,8 @@ export default {
       showTopOperation: false,
       scrollBottom: true,
       isLoading: false,
-      useAnimation: false
+      useAnimation: false,
+      lastEnterTime: Date.now() // 对方进入该会话的时间
     }
   },
   computed: {
@@ -117,6 +120,9 @@ export default {
     }
   },
   methods: {
+    setLastEnterTime(time) {
+      this.lastEnterTime = time
+    },
     generatorMessageCommon() {
       return {
         roomid: this.currentConversation.roomid,
@@ -125,7 +131,7 @@ export default {
         senderNickname: this.userInfo.nickname,
         senderAvatar: this.userInfo.photo,
         time: Date.now(),
-        isReadUser: [this.userInfo.name],
+        isReadUser: [this.userInfo._id],
         conversationType: this.currentConversation.conversationType,
         currentConversation: this.currentConversation
       }
@@ -282,6 +288,7 @@ export default {
     }, deep: true, immediate: true
   },
   created() {
+    console.log('chatArea created')
     document.addEventListener('click', this.handlerShowEmoji)
     this.getRecentNews()
     this.$http.getQiniuToken().then(res => {
@@ -293,6 +300,7 @@ export default {
     this.watchWebRtcMsg()
   },
   beforeDestroy() {
+    console.log('chatArea BeforeDestroy')
     document.removeEventListener('click', this.handlerShowEmoji)
   },
 };

@@ -18,6 +18,8 @@
         :messageitem="item"
         :img-type-msg-list="imgTypeMsgList"
         :currentConversation="currentConversation"
+        :last-enter-time="lastEnterTime"
+        :set-last-enter-time="setLastEnterTime"
       />
     </transition-group>
     <div class="flag"></div>
@@ -28,7 +30,33 @@
 import messageItem from "./MessageItem"
 import { debounce } from '@/utils'
 export default {
-  props: ["messagelist", "scrollbottom", "hasmore", "isloading", "useanimation", "currentConversation"],
+  // props: ["messagelist", "scrollbottom", "hasmore", "isloading", "useanimation", "currentConversation"],
+  props: {
+    messagelist: {
+      type: Array
+    },
+    scrollbottom: {
+      type: Boolean
+    },
+    hasmore: {
+      type: Boolean
+    },
+    isloading: {
+      type: Boolean
+    },
+    useanimation: {
+      type: Boolean
+    },
+    currentConversation: {
+      type: Object
+    },
+    lastEnterTime: {
+      type: Number
+    },
+    setLastEnterTime: {
+      type: Function
+    }
+  },
   data() {
     return {
       currentImgUrl: '',

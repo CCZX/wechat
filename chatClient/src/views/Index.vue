@@ -45,6 +45,11 @@ export default {
       }
     }
   },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo
+    }
+  },
   watch: {
     currentConversation: {
       handler(newVal, oldVal) {
@@ -58,6 +63,23 @@ export default {
             })
             this.$store.dispatch('app/SET_CURRENT_CONVERSATION', newVal)
             this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'add', data: newVal})
+            newVal.conversationType === "FRIEND" && this.$http.userIsReadMsg({
+              roomid: newVal.roomid, userId: this.userInfo._id
+            }).then(res => {
+              console.log('阅读消息', res)
+              // 用户切换会话来阅读消息
+              this.$socket.emit('isReadMsg', {
+                roomid: newVal.roomid,
+                status: true
+              }) // 1. 提示对方用户进入该会话
+              if (oldVal.conversationType === "FRIEND") {
+                this.$socket.emit('isReadMsg', {
+                  roomid: oldVal.roomid || '',
+                  status: false
+                })
+              } // 2. 提示对方用户退出该会话
+              // end
+            })
             saveRecentConversationToLocal(newVal._id)
           }
         } catch (error) {
