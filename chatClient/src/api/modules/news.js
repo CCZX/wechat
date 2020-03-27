@@ -11,5 +11,8 @@ export default {
   },
   userIsReadMsg(data) { // 当用户在切换会话阅读消息后
     return request.post(`${API}/news/isread`, data)
+  },
+  getHistoryMsg(data) {
+    return request.post(`${API}/news/historymsg`, data)
   }
 }
