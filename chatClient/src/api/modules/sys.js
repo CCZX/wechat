@@ -11,5 +11,8 @@ export default {
   // 获取天气信息
   getWeather(city) {
     return request.get(`http://wthrcdn.etouch.cn/weather_mini?city=${city}`)
+  },
+  getFaceImgs() {
+    return request.get(`${API}/sys/faceimg`)
   }
 }
