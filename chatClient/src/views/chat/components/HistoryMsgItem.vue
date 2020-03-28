@@ -5,7 +5,8 @@
       <span class="time">{{msgItem.time | formatDateToZH}}</span>
     </div>
     <div class="history-msg-item__content">
-      {{msgItem.message}}
+      <img v-if="msgItem.messageType === 'img'" width="200" :src="msgItem.message" />
+      <span v-else>{{msgItem.message}}</span>
     </div>
   </div>
 </template>

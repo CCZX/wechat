@@ -24,7 +24,7 @@
         />
       </div>
       <div class="group-desc" v-if="currentConversation.conversationType === 'GROUP'">
-        <group-desc :currentConversation="currentConversation" />
+        <group-desc :currentConversation="currentConversation" :key="datetamp" />
       </div>
     </div>
     <div class="message-edit-container">
@@ -98,7 +98,8 @@ export default {
       isLoading: false,
       useAnimation: false,
       lastEnterTime: Date.now(), // 对方进入该会话的时间
-      showHistoryMsg: false
+      showHistoryMsg: false,
+      datetamp: Date.now() // 切换群聊重新强制加载群聊详情
     }
   },
   computed: {
@@ -299,6 +300,7 @@ export default {
         this.hasMore = true
         this.joinChatRoom()
         this.getRecentNews()
+        this.datetamp = Date.now()
       }
     }, deep: true, immediate: true
   },

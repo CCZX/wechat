@@ -39,5 +39,8 @@ export default {
   getRecentGroupNews(data) {
     const { roomid, page, pageSize } = data
     return request.get(`${API}/groupnews/recentnews?roomid=${roomid}&page=${page}&pageSize=${pageSize}`)
+  },
+  getGroupHistoryMsg(data) {
+    return request.post(`${API}/groupnews/historymsg`, data)
   }
 }

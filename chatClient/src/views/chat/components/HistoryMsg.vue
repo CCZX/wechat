@@ -10,7 +10,7 @@
       </div>
       <div class="item search">
         <el-input
-          placeholder="请输入内容"
+          placeholder="请输入搜索内容"
           prefix-icon="el-icon-search"
           size="mini"
           v-model="searchWord"
@@ -91,19 +91,24 @@ export default {
         page: this.page - 1,
         pageSize: this.pageSize
       }
-      this.$http.getHistoryMsg(params).then(res => {
+      const fetch = this.currentConversation.isGroup ? this.$http.getGroupHistoryMsg : this.$http.getHistoryMsg
+      fetch(params).then(res => {
+        console.log('历史消息', res)
         this.msgList = res.data.data.data
         this.total = res.data.data.total
         this.isLoading = false
       })
     },
     searchTypeChange() {
+      this.page = 1
       this.getHistoryMsg()
     },
     searchWordChange: debounce(function () {
+      this.page = 1
       this.getHistoryMsg()
     }, 500),
     searchDateChange() {
+      this.page = 1
       this.getHistoryMsg()
     },
     handleSizeChange(pageSize) {

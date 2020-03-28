@@ -87,8 +87,9 @@ export default {
       handler() {
         if (this.scrollbottom) {
           this.$nextTick(() =>{
+            document.querySelectorAll('.chat-area__message-item__com:last-child')[0].scrollIntoView()
             setTimeout(() => {
-              this.$refs['msglist'].scrollTop = this.$refs['msglist'].scrollHeight + 200
+              // this.$refs['msglist'].scrollTop = this.$refs['msglist'].scrollHeight + 200
               setTimeout(() => {
                 this.$refs['tips'].style.opacity = "1"
               }, 100);

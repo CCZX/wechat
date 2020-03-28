@@ -63,11 +63,12 @@ export default {
             })
             this.$store.dispatch('app/SET_CURRENT_CONVERSATION', newVal)
             this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'add', data: newVal})
+            // 将该会话下的消息设置为已读begin
             newVal.conversationType === "FRIEND" && this.$http.userIsReadMsg({
               roomid: newVal.roomid, userId: this.userInfo._id
             }).then(res => {
-              console.log('阅读消息', res)
               // 用户切换会话来阅读消息
+              if (res.status >= 400 || res.data.status !== 2000) return
               this.$socket.emit('isReadMsg', {
                 roomid: newVal.roomid,
                 status: true
@@ -80,6 +81,7 @@ export default {
               } // 2. 提示对方用户退出该会话
               // end
             })
+            // 将该会话下的消息设置为已读end
             saveRecentConversationToLocal(newVal._id)
           }
         } catch (error) {
