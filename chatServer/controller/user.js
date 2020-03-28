@@ -115,7 +115,7 @@ const login = (req, res) => {
 
 // 注册
 const register = (req, res) => {
-  let { account, password, rePassword, cvCode } = req.body
+  let { account, password, rePassword, cvCode, avatar } = req.body
   if (password !== rePassword) {
     return res.json({
       status: 1004,
@@ -157,6 +157,7 @@ const register = (req, res) => {
             name: account,
             pass: pass,
             code: doc1.code,
+            photo: avatar,
             nickname: randomNickname()
           }).then(doc2 => {
             console.log(doc2)

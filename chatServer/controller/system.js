@@ -1,3 +1,5 @@
+const resolve = require('path').resolve
+const fs = require('fs')
 const qiniu = require('qiniu')
 const SYS_USER = require('../models/systemUser')
 const { ACCESS_KEY, SECRET_KEY, BUCKET } = require('./../utils/config')
@@ -33,7 +35,23 @@ const getQiniuToken = (req, res) => {
   })
 }
 
+const readFaceImg = (req, res) => {
+  const facePath = resolve(__dirname, './../public/face')
+  fs.readdir(facePath, (err, files) => {
+    if (err) {
+      return
+    }
+    // fs.stat()
+    return res.json({
+      status: 2000,
+      data: files,
+      msg: '成功！'
+    })
+  })
+}
+
 module.exports = {
   getSysUser,
-  getQiniuToken
+  getQiniuToken,
+  readFaceImg
 }
