@@ -3,32 +3,48 @@
     <div class="ceshi" style="'marginTop': '30px'">
       <el-alert :closable="false" show-icon title="测试账号密码" description="账号1：cc1218，密码1：123456 | 账号2：lt0623，密码2：123456" type="success" />
     </div>
-    <div class="wrapper">
+    <transition name="fade">
+      <avatar-choose
+        v-if="showChooseAvatar"
+        @close="setShowChooseAvatar(false)"
+        @choose="chooseAvatar"
+      />
+    </transition>
+    <div class="wrapper hor-ver-center">
       <el-card>
-        <div class="title">
-          <p class="title-name">Wellcome to Co-Messager</p>
-          <span class="login" :class="isLoginState ? 'active' : ''" @click="changeState(true)">登录</span>
-          <span class="register" :class="!isLoginState ? 'active' : ''" @click="changeState(false)">注册</span>
-        </div>
         <main class="body">
-          <!-- <transition name="hor-scroll"> -->
+          <!-- <transition name="fade"> -->
             <el-form class="login-form" v-if="isLoginState">
+              <div class="avatar">
+                <el-avatar :size="100" :src="IMG_URL + loginInfo.avatar" @error="()=>true">
+                  <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+                </el-avatar>
+              </div>
               <el-form-item>
-                <el-input v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
+                <el-input autocomplete="on" v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-input type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+                <el-input autocomplete="on" type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
               </el-form-item>
               <el-form-item class="cv-code">
-                <el-input class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
+                <el-input autocomplete="on" class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
                 <canvas v-show="!cvCodeing" width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
-                <span style="width: 150px" v-show="cvCodeing">获取中...</span>
+                <span style="width: 200px" v-show="cvCodeing">获取中...</span>
               </el-form-item>
-              <el-button class="login-btn" type="primary" @click="login">登录</el-button>
+              <el-form-item>
+                <el-button class="login-btn" type="primary" @click="login">登录</el-button>
+                <span>没有账号？<span class="operation-text" style="display: inline" @click="changeState(false)">注册</span></span>
+              </el-form-item>
             </el-form>
           <!-- </transition> -->
-          <!-- <transition name="hor-scroll"> -->
+          <!-- <transition name="fade"> -->
             <el-form class="register-form" v-if="!isLoginState">
+              <div class="avatar" @click="setShowChooseAvatar(true)">
+                <el-avatar :size="100" :src="IMG_URL + registerInfo.avatar" />
+                <span class="secondary-font" style="display: inline-block; margin-bottom: 5px">
+                  点击头像切换头像
+                </span>
+              </div>
               <el-form-item>
                 <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
                 <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
@@ -45,7 +61,10 @@
                 <el-input class="cv-code-inp" v-model="registerInfo.cvCode" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
                 <canvas width="120" height="40" ref="registerCanvas" @click="getCVCode"></canvas>
               </el-form-item>
-              <el-button class="login-btn" type="primary" @click="register">注册</el-button>
+              <el-form-item class="oper">
+                <el-button class="login-btn" type="primary" @click="register">注册</el-button>
+                <span>已有账号？<span class="operation-text" style="display: inline" @click="changeState(true)">登录</span></span>
+              </el-form-item>
             </el-form>
           <!-- </transition> -->
         </main>
@@ -58,11 +77,12 @@
 <script>
 import bgUrl1 from './../../static/image/zw1.jpg'
 import bgUrl2 from './../../static/image/zw2.jpg'
+import ocean1 from './../../static/image/ocean1.jpg'
 import {createCanvas} from '@/utils/cvcode'
 import canvasImg from './../../static/image/canvas2.jpg'
 import { accountReg, passwordReg } from '@/utils/index'
-let timer = null
-let isFirst = true
+import avatarChoose from '@/components/avatarChoose'
+const faceRandom = Math.ceil(Math.random()*10)
 export default {
   name: 'Login',
   data() {
@@ -71,18 +91,22 @@ export default {
         account: '',
         password:'',
         cvCode: '',
-        cvCodeTimestamp: ''
+        cvCodeTimestamp: '',
+        avatar: JSON.parse(window.localStorage.getItem('userInfo') || '{}').photo || ''
       },
       registerInfo: {
         account: '',
         password: '',
         rePassword: '',
-        cvCode: ''
+        cvCode: '',
+        avatar: `face/face${faceRandom}.jpg`
       },
       cvCode: '', // 验证码
       cvCodeing: true, // 正在获取验证码？
       isLoginState: true,
-      bgUrl: bgUrl2
+      bgUrl: ocean1,
+      showChooseAvatar: false,
+      IMG_URL: process.env.IMG_URL
     }
   },
   methods: {
@@ -169,6 +193,16 @@ export default {
       this.isLoginState = flag
       this.getCVCode()
     },
+    setShowChooseAvatar(flag) {
+      console.log(123)
+      this.showChooseAvatar = flag
+    },
+    chooseAvatar(item) {
+      this.registerInfo.avatar = item
+    }
+  },
+  components: {
+    avatarChoose
   },
   async mounted() {
     this.getCVCode()
@@ -196,34 +230,22 @@ export default {
   }
   .wrapper {
     width: 400px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     opacity: .9;
-    .title {
-      text-align: center;
-      padding: 0 0 20px;
-      .title-name {
-        margin: 7px;
-      }
-      .login, .register {
-        box-sizing: border-box;
-        padding: 4px;
-        cursor: pointer;
-        color: $secondaryfont;
-      }
-      .active {
-        color: $primaryfont;
-        font-size: 18px;
-      }
-    }
     .body {
       height: 100%;
-      // position: relative;
+      padding: 35px 10px 0;
       display: flex;
       .login-form, .register-form {
         width: 100%;
+        .avatar {
+          position: absolute;
+          top: -50px;
+          text-align: center;
+          margin-bottom: 10px;
+          .el-avatar {
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+          }
+        }
       }
       .cv-code {
         .el-form-item__content {
