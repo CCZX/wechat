@@ -28,7 +28,40 @@ const getRecentGroupNews = async (req, res) => {
   }
 }
 
+const getGroupHistoryNews = async (req, res) => {
+  const { roomid, type, query, date, page, pageSize } = req.body
+  const queryReg = new RegExp(query)
+  const params = {
+    roomid,
+    message: {$regex: queryReg}
+  }
+  if (type !== 'all') {
+    params['messageType'] = type
+    delete params['message']
+  }
+  if (!!date) {
+    const { today, tomorrow } = todayAndTomorrow(date)
+    params['time'] = {$gte: today, $lt: tomorrow}
+  }
+  const msgList = await GROUP_NEWS.find({
+    ...params
+  }).skip(Number(page*pageSize)).limit(Number(pageSize))
+  const count = await await GROUP_NEWS.find({
+    ...params
+  }).count()
+  console.log('groupHistory', msgList, count)
+  return res.json({
+    status: 2000,
+    data: {
+      data: msgList,
+      total: count
+    },
+    msg: 'success'
+  })
+}
+
 module.exports = {
   insertNewGroupNews,
-  getRecentGroupNews
+  getRecentGroupNews,
+  getGroupHistoryNews
 }
