@@ -6,7 +6,7 @@ const sysController = require('../controller/system')
 
 router.get('/sysusers', sysController.getSysUser) // 获取系统用户
 router.get('/qiniutoken', sysController.getQiniuToken) // 七牛云token
-
+router.get('/faceimg', sysController.readFaceImg)
 router.get('/syssituation', (req, res) => {
   let freeMem = OS.freemem() / 1024 / 1024 / 1024
   let totalMem = OS.totalmem() / 1024 / 1024 / 1024
