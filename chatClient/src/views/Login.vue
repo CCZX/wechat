@@ -21,10 +21,10 @@
                 </el-avatar>
               </div>
               <el-form-item>
-                <el-input autocomplete="on" v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
+                <el-input autocomplete="new-password" v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-input autocomplete="on" type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+                <el-input autocomplete="new-password" type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
               </el-form-item>
               <el-form-item class="cv-code">
                 <el-input autocomplete="on" class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
@@ -46,11 +46,11 @@
                 </span>
               </div>
               <el-form-item>
-                <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
+                <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号" autocomplete="new-password"></el-input>
                 <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
               </el-form-item>
               <el-form-item>
-                <el-input type="password" v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+                <el-input type="password" v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码" autocomplete="new-password"></el-input>
                 <!-- <span class="password-errinfo">{{ registerErrInfo.password }}</span> -->
               </el-form-item>
               <el-form-item>
