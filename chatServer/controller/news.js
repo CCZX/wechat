@@ -1,5 +1,10 @@
 const NEWS = require('./../models/news')
 const { todayAndTomorrow } = require('./../utils')
+const defaultNews = { // 如果没有消息记录设置默认的
+  message: '',
+  messageType: 'text',
+  time: Date.now()
+}
 
 // 存入新的消息
 const insertNewNews = async (news) => {
@@ -32,12 +37,12 @@ const getRecentNews = async (req, res) => {
 // 获取好友之间的最后一条聊天记录
 const getLastNews = async (req, res) => {
   const { roomid } = req.body
-  const data = await NEWS.findOne({
+  const news = await NEWS.findOne({
     roomid
   }).sort({_id: -1})
   return res.json({
     status: 2000,
-    data,
+    data: news || {roomid, ...defaultNews},
     msg: '获取成功'
   })
 }

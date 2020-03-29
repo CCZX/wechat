@@ -1,4 +1,9 @@
 const GROUP_NEWS = require('./../models/groupNews')
+const defaultNews = { // 如果没有消息记录设置默认的
+  message: '',
+  messageType: 'text',
+  time: Date.now()
+}
 
 const insertNewGroupNews = async (news) =>  {
   const data = await GROUP_NEWS.insertMany(news)
@@ -60,8 +65,21 @@ const getGroupHistoryNews = async (req, res) => {
   })
 }
 
+const getGroupLastNews = async (req, res) => {
+  const { roomid } = req.body
+  const news = await GROUP_NEWS.findOne({
+    roomid
+  }).sort({_id: -1})
+  return res.json({
+    status: 2000,
+    data: news || {roomid, ...defaultNews},
+    msg: 'success'
+  })
+}
+
 module.exports = {
   insertNewGroupNews,
   getRecentGroupNews,
-  getGroupHistoryNews
+  getGroupHistoryNews,
+  getGroupLastNews
 }

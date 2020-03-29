@@ -20,6 +20,21 @@ const getMyGroup = (req, res) => { // 获取我的群聊
   })
 }
 
+const getRecentGroup = async (req, res) => {
+  const { userId, groupIds } = req.body
+  console.log(userId, groupIds, '最近群里啊')
+  const groups = await GROUP_USER.find({
+    groupId: { $in:  groupIds },
+    userId: userId
+  }).populate('groupId')
+  console.log(groups)
+  return res.json({
+    status: 2000,
+    data: groups,
+    msg: '获取成功！'
+  })
+}
+
 const getGroupInfo = (req, res) => { // 获取群聊详情
   let { id } = req.query
   GROUP.find({_id: id}).then(group => {
@@ -147,5 +162,6 @@ module.exports = {
   getGroupInfo,
   searchGroup,
   addNewGroupUser,
-  createGroup
+  createGroup,
+  getRecentGroup
 }

@@ -9,7 +9,7 @@ const getMyFriends = (req, res) => {
   FRIEND.findFriendByUserM(id).then(userM => {
     FRIEND.findFriendByUserY(id).then(userY => {
       let data = []
-      console.log(id, userM, userY)
+      // console.log(id, userM, userY)
       userM.forEach(item => {
         data.push({
           createDate: item.createDate,
