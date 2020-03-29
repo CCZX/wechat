@@ -11,7 +11,10 @@ const groupNewsSchema = new Schema({
   senderName: String, // 发送者登录名
   senderNickname: String, // 发送者昵称
   senderAvatar: String, // 发送者头像
-  time: String, // 消息发送时间
+  time: {
+    type: Date,
+    default: Date.now()
+  }, // 消息发送时间
   message: String, // 消息内容
   messageType: String, // 消息的类型：emoji/text/img/file/sys
   isReadUser: { // 判断已经读取的用户，在发送消息的时候默认发送发已经读取
