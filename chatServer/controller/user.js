@@ -6,8 +6,10 @@ const { createToken } = require('./../utils/auth')
 const randomNickname = require('./../utils/index').randomNickname
 const { onLineUser } = require('./../app')
 const { addFriend } = require('./friendly')
+const { addNewGroupUser } = require('./group')
 let verificationCode = ''
 const officialID = '5d9d8ee6d9b830535013abaa'
+const officialGroupID = '5e803e809c5b2d2f9416f78c'
 
 // 验证码
 const generatorCode = (req, res) => {
@@ -165,6 +167,7 @@ const register = (req, res) => {
             console.log(doc2)
             if (doc2['_id']) {
               addFriend({userM: officialID, userY: doc2['_id']})
+              addNewGroupUser({userId: doc2['_id'], groupId: officialGroupID, userName: doc2.name})
               return res.json({
                 status: 1005,
                 data: doc1.code,
