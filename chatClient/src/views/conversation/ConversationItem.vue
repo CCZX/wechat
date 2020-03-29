@@ -147,11 +147,11 @@ export default {
   methods: {
     remove() {
       this.isShowMenu = false
-      const recentFriendIdsStr = window.localStorage.getItem('coMessager-recentConversation') || ''
+      const recentFriendIdsStr = window.localStorage.getItem('coMessager-recentConversation-friend') || ''
       const recentFriendIds = arrUnique(recentFriendIdsStr.split(',')).filter(item => item) // 去重
       const index = recentFriendIds.findIndex(item => item === this.conversationInfo._id)
       index !== -1 && recentFriendIds.splice(index, 1)
-      window.localStorage.setItem('coMessager-recentConversation', recentFriendIds.join())
+      window.localStorage.setItem('coMessager-recentConversation-friend', recentFriendIds.join())
       this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'delete', data: this.conversationInfo})
       if (this.conversationInfo._id === this.currentConversation._id) {
         const conversationList = this.recentConversationList.filter(item => Object.keys(item).length > 0)

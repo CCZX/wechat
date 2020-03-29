@@ -61,6 +61,7 @@ export default {
               count: 0,
               type: SET_UNREAD_NEWS_TYPE_MAP.clear
             })
+            this.$store.dispatch('news/SET_LAST_NEWS', {type: 'default', roomid: newVal.roomid})
             this.$store.dispatch('app/SET_CURRENT_CONVERSATION', newVal)
             this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'add', data: newVal})
             // 将该会话下的消息设置为已读begin

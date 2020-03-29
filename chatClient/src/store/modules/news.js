@@ -33,9 +33,16 @@ const mutations = {
   setLastNews(state, data) {
     if (data.type === 'init') {
       state.lastNews = data.res
+    } else if (data.type === 'concat') {
+      state.lastNews = Object.assign({}, state.lastNews, data.res)
     } else if (data.type === 'edit') {
       const { roomid, news } = data.res
       const item = {[roomid]: news}
+      state.lastNews = Object.assign({}, state.lastNews, item)
+    } else if (data.type === 'default') { // 判断是否为新添加的会话
+      const { roomid } = data
+      if (roomid in state.lastNews) return
+      const item = {[roomid]: {time: Date.now(), messageType: 'text', message: ''}}
       state.lastNews = Object.assign({}, state.lastNews, item)
     }
   },

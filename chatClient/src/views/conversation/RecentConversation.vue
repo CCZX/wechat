@@ -143,6 +143,29 @@ export default {
             item.isGroup = true
             item.roomid = item.groupId._id
           })
+          const groupRoomids = groupList.map(item => item.groupId._id)
+          const reqArr = []
+          groupRoomids.forEach(item => {
+            const req = this.$http.getGroupLastNews({roomid: item})
+            reqArr.push(req)
+          })
+          Promise.all(reqArr).then(res => {
+            const lastNewsArr = res.map(item => {
+              return item.data.data
+            })
+            console.log(lastNewsArr)
+            const lastNewsMap = lastNewsArr.reduce((map, item) => {
+              item ? map[item.roomid] = item : null
+              return map
+            }, {})
+            this.$store.dispatch('news/SET_LAST_NEWS', {
+              type: 'concat',
+              res: lastNewsMap
+            })
+            this.isLoading = false
+          }).catch(err => {
+            console.log(err)
+          })
           this.conversationList = [...this.conversationList, ...groupList]
           this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'init', data: this.conversationList})
         }

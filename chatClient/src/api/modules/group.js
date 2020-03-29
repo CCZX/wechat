@@ -45,5 +45,8 @@ export default {
   },
   getGroupHistoryMsg(data) {
     return request.post(`${API}/groupnews/historymsg`, data)
+  },
+  getGroupLastNews(data) {
+    return request.post(`${API}/groupnews/lastnews`, data)
   }
 }
