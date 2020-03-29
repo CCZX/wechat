@@ -4,6 +4,9 @@
       <router-link to="/index">
         <el-avatar shape="square" :size="50" :src="IMG_URL + userInfo.photo"></el-avatar>
       </router-link>
+      <el-tooltip class="item" effect="dark" :content="userInfo.nickname" placement="top">
+        <el-button>上边</el-button><span class="nickname">{{userInfo.nickname}}</span>
+      </el-tooltip>
     </div>
     <div class="nav-list">
       <router-link to="/add" tag="span" title="加好友">
@@ -49,6 +52,20 @@ export default {
   width: 100%;
   height: 100%;
   padding: 10px 0;
+  .avatar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    .nickname {
+      display: inline-block;
+      width: 50px;
+      margin-top: 10px;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
   .nav-list {
     margin-top: 30px;
     .nav-item {
