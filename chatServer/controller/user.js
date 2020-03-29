@@ -5,7 +5,9 @@ const cvCode = require('./../utils/cvCode').cvCode
 const { createToken } = require('./../utils/auth')
 const randomNickname = require('./../utils/index').randomNickname
 const { onLineUser } = require('./../app')
+const { addFriend } = require('./friendly')
 let verificationCode = ''
+const officialID = '5d9d8ee6d9b830535013abaa'
 
 // 验证码
 const generatorCode = (req, res) => {
@@ -162,6 +164,7 @@ const register = (req, res) => {
           }).then(doc2 => {
             console.log(doc2)
             if (doc2['_id']) {
+              addFriend({userM: officialID, userY: doc2['_id']})
               return res.json({
                 status: 1005,
                 data: doc1.code,
