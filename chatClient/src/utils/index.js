@@ -180,10 +180,31 @@ export function imgRandomName() {
   return res
 }
 
+const saveFriend = (id) => {
+  const storage = window.localStorage
+  let recentStr = (storage.getItem('coMessager-recentConversation-friend') || '')
+  const recentArr = recentStr.split(',')
+  if (recentArr.includes(id)) return
+  recentStr = recentStr ? recentStr + ',' + id : id
+  storage.setItem('coMessager-recentConversation-friend', recentStr)
+}
+
+const saveGroup = (id) => {
+  const storage = window.localStorage
+  let recentStr = (storage.getItem('coMessager-recentConversation-group') || '')
+  const recentArr = recentStr.split(',')
+  if (recentArr.includes(id)) return
+  recentStr = recentStr ? recentStr + ',' + id : id
+  storage.setItem('coMessager-recentConversation-group', recentStr)
+}
+
 export const saveRecentConversationToLocal = (data) => {
-  let res = window.localStorage.getItem('coMessager-recentConversation') || ''
-  res = res ? res + ',' + data : data
-  window.localStorage.setItem('coMessager-recentConversation', res)
+  if (data.conversationType === 'FRIEND') {
+    saveFriend(data._id)
+  } else if (data.conversationType === 'GROUP') {
+    saveGroup(data.groupId._id)
+  }
+  
 }
 
 export const arrUnique = (arr) => {

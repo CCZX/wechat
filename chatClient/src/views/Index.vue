@@ -82,7 +82,7 @@ export default {
               // end
             })
             // 将该会话下的消息设置为已读end
-            saveRecentConversationToLocal(newVal._id)
+            saveRecentConversationToLocal(newVal)
           }
         } catch (error) {
           console.log('errrrr', error)

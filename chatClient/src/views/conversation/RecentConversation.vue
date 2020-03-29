@@ -72,7 +72,7 @@ export default {
   methods: {
     async getRecentConversation() {
       this.isLoading = true
-      const recentFriendIdsStr = window.localStorage.getItem('coMessager-recentConversation') || ''
+      const recentFriendIdsStr = window.localStorage.getItem('coMessager-recentConversation-friend') || ''
       const recentFriendIds = arrUnique(recentFriendIdsStr.split(',')).filter(item => item) // 去重
       const { data } = await this.$http.getRecentConversationList({
         userId: this.userInfo._id,
@@ -129,6 +129,25 @@ export default {
       // end
       this.conversationList = conversationList
     },
+    async getRecentGroupConversation() {
+      const recentGroupIdsStr = window.localStorage.getItem('coMessager-recentConversation-group') || ''
+      const recentGroupIds = arrUnique(recentGroupIdsStr.split(',')).filter(item => item) // 去重
+      this.$http.getRecentGroupConversation({
+        userId: this.userInfo._id,
+        groupIds: recentGroupIds
+      }).then(res => {
+        if (res.data.status === 2000) {
+          const groupList = res.data.data
+          groupList.forEach(item => {
+            item.conversationType = 'GROUP'
+            item.isGroup = true
+            item.roomid = item.groupId._id
+          })
+          this.conversationList = [...this.conversationList, ...groupList]
+          this.$store.dispatch('app/SET_RECENT_CONVERSATION', {type: 'init', data: this.conversationList})
+        }
+      })
+    },
     changeCurrentConversation(item) {
       this.$emit('setCurrentConversation', item)
     }
@@ -150,8 +169,9 @@ export default {
     conversationItem,
     EmptySvg
   },
-  created() {
-    this.getRecentConversation()
+  async created() {
+    await this.getRecentConversation()
+    this.getRecentGroupConversation()
   },
 }
 </script>

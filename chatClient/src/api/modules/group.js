@@ -29,6 +29,9 @@ export default {
   createGroup(data) {
     return request.post(`${API}/group/create`, data)
   },
+  getRecentGroupConversation(data) {
+    return request.post(`${API}/group/recent`, data)
+  },
   /**
    * ------------------华丽分界线，以下是和群组消息有关的API------------------------
    */
