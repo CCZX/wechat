@@ -27,7 +27,13 @@
               <span class="ellipsis">{{conversationInfo.groupId.title}}</span>
             </span>
             <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
-              <span>{{conversationInfo.groupId.desc}}</span>
+              <span v-if="type === 'fenzu'">
+                {{conversationInfo.groupId.desc}}
+              </span>
+              <span v-if="type === 'recent'" style="text-overflow: ellipsis; overflow: hidden;">
+                {{lastNews}}
+              </span>
+              <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
             </span>
           </div>
         </div>

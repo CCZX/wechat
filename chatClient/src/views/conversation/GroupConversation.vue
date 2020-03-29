@@ -11,6 +11,7 @@
           v-for="item in groupCategoryMap[item.category]"
           :key="item.id"
           :conversationInfo="item"
+          type="fenzu"
           @click.native="changeCurrentConversation(item)"
         />
       </el-collapse-item>
