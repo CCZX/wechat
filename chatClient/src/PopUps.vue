@@ -12,14 +12,15 @@
     />
     <transition name="fade">
       <bearing-modal
-      v-if="showModal && isShowCreateGroup"
-      @close="$eventBus.$emit('toggleCreateGroup', { show: false })"
-      title="创建群聊"
-    >
-      <template slot="body">
-        <create-group />
-      </template>
-    </bearing-modal>
+        v-if="showModal && isShowCreateGroup"
+        @close="$eventBus.$emit('toggleCreateGroup', { show: false })"
+        title="创建群聊"
+        :width="400"
+      >
+        <template slot="body">
+          <create-group />
+        </template>
+      </bearing-modal>
     </transition>
     <message-text-menu
       v-if="isShowMsgTextMenu"
