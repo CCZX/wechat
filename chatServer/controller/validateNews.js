@@ -9,9 +9,10 @@ const findMyValidateNews = async (req, res) => {
   const { id } = req.query
   try {
     const data = await VALIDATE_NEWS.find({
-      $or: [
-        {senderId: id}, {reveiverId: id}
-      ]
+      // $or: [
+      //   {senderId: id}, {reveiverId: id}
+      // ]
+      reveiverId: id
     }).populate({path: 'groupId', select: 'title'})
     return res.json({
       status: 2000,
