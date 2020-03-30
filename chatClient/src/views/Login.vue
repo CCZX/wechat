@@ -11,64 +11,56 @@
       />
     </transition>
     <div class="wrapper hor-ver-center">
-      <el-card>
-        <main class="body">
-          <!-- <transition name="fade"> -->
-            <el-form class="login-form" v-if="isLoginState">
-              <div class="avatar">
-                <el-avatar :size="100" :src="IMG_URL + loginInfo.avatar" @error="()=>true">
-                  <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
-                </el-avatar>
-              </div>
-              <el-form-item>
-                <el-input autocomplete="new-password" v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-input autocomplete="new-password" type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
-              </el-form-item>
-              <el-form-item class="cv-code">
-                <el-input autocomplete="on" class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
-                <canvas v-show="!cvCodeing" width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
-                <span style="width: 200px" v-show="cvCodeing">获取中...</span>
-              </el-form-item>
-              <el-form-item>
-                <el-button class="login-btn" type="primary" @click="login">登录</el-button>
-                <span>没有账号？<span class="operation-text" style="display: inline" @click="changeState(false)">注册</span></span>
-              </el-form-item>
-            </el-form>
-          <!-- </transition> -->
-          <!-- <transition name="fade"> -->
-            <el-form class="register-form" v-if="!isLoginState">
-              <div class="avatar" @click="setShowChooseAvatar(true)">
-                <el-avatar :size="100" :src="IMG_URL + registerInfo.avatar" />
-                <span class="secondary-font" style="display: inline-block; margin-bottom: 5px">
-                  点击头像切换头像
-                </span>
-              </div>
-              <el-form-item>
-                <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号" autocomplete="new-password"></el-input>
-                <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
-              </el-form-item>
-              <el-form-item>
-                <el-input type="password" v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码" autocomplete="new-password"></el-input>
-                <!-- <span class="password-errinfo">{{ registerErrInfo.password }}</span> -->
-              </el-form-item>
-              <el-form-item>
-                <el-input type="password" v-model="registerInfo.rePassword" prefix-icon="el-icon-lock" placeholder="请确认密码"></el-input>
-                <!-- <span class="password-errinfo">{{ errInfo.password }}</span> -->
-              </el-form-item>
-              <el-form-item class="cv-code">
-                <el-input class="cv-code-inp" v-model="registerInfo.cvCode" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
-                <canvas width="120" height="40" ref="registerCanvas" @click="getCVCode"></canvas>
-              </el-form-item>
-              <el-form-item class="oper">
-                <el-button class="login-btn" type="primary" @click="register">注册</el-button>
-                <span>已有账号？<span class="operation-text" style="display: inline" @click="changeState(true)">登录</span></span>
-              </el-form-item>
-            </el-form>
-          <!-- </transition> -->
-        </main>
-      </el-card>
+      <el-form class="login-form" v-if="isLoginState">
+        <div class="avatar">
+          <el-avatar :size="100" :src="IMG_URL + loginInfo.avatar" @error="()=>true">
+            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+          </el-avatar>
+        </div>
+        <el-form-item>
+          <el-input autocomplete="new-password" v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input autocomplete="new-password" type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item class="cv-code">
+          <el-input autocomplete="on" class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
+          <canvas v-show="!cvCodeing" width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
+          <span style="width: 200px" v-show="cvCodeing">获取中...</span>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="login-btn" type="primary" @click="login">登录</el-button>
+          <span>没有账号？<span class="operation-text" style="display: inline" @click="changeState(false)">注册</span></span>
+        </el-form-item>
+      </el-form>
+      <el-form class="register-form" v-if="!isLoginState">
+        <div class="avatar" @click="setShowChooseAvatar(true)">
+          <el-avatar :size="100" :src="IMG_URL + registerInfo.avatar" />
+          <span class="secondary-font" style="display: inline-block; margin-bottom: 5px">
+            点击头像切换头像
+          </span>
+        </div>
+        <el-form-item>
+          <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号" autocomplete="new-password"></el-input>
+          <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
+        </el-form-item>
+        <el-form-item>
+          <el-input type="password" v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码" autocomplete="new-password"></el-input>
+          <!-- <span class="password-errinfo">{{ registerErrInfo.password }}</span> -->
+        </el-form-item>
+        <el-form-item>
+          <el-input type="password" v-model="registerInfo.rePassword" prefix-icon="el-icon-lock" placeholder="请确认密码"></el-input>
+          <!-- <span class="password-errinfo">{{ errInfo.password }}</span> -->
+        </el-form-item>
+        <el-form-item class="cv-code">
+          <el-input class="cv-code-inp" v-model="registerInfo.cvCode" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
+          <canvas width="120" height="40" ref="registerCanvas" @click="getCVCode"></canvas>
+        </el-form-item>
+        <el-form-item class="oper">
+          <el-button class="login-btn" type="primary" @click="register">注册</el-button>
+          <span>已有账号？<span class="operation-text" style="display: inline" @click="changeState(true)">登录</span></span>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
@@ -194,7 +186,6 @@ export default {
       this.getCVCode()
     },
     setShowChooseAvatar(flag) {
-      console.log(123)
       this.showChooseAvatar = flag
     },
     chooseAvatar(item) {
@@ -215,7 +206,6 @@ export default {
 .login-page {
   @import "./../../static/css/animation.scss";
   @import "./../../static/css/var.scss";
-  position: relative;
   height: 100vh;
   background-repeat: no-repeat;
   background-size: cover;
@@ -229,36 +219,35 @@ export default {
     width: 60%;
   }
   .wrapper {
+    background-color: #fff;
     width: 400px;
     opacity: .9;
-    .body {
-      height: 100%;
-      padding: 35px 10px 0;
-      display: flex;
-      .login-form, .register-form {
-        width: 100%;
-        .avatar {
-          position: absolute;
-          top: -50px;
-          text-align: center;
-          margin-bottom: 10px;
-          .el-avatar {
-            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
-          }
+    padding: 35px 20px 0;
+    border-radius: 5px;
+    .login-form, .register-form {
+      position: relative;
+      .avatar {
+        position: absolute;
+        z-index: 1001;
+        top: -110px;
+        text-align: center;
+        margin-bottom: 10px;
+        .el-avatar {
+          box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
         }
       }
-      .cv-code {
-        .el-form-item__content {
-          display: flex;
-          justify-content: space-between;
-          .cv-code-inp {
-            margin-right: 20px;
-          }
+    }
+    .cv-code {
+      .el-form-item__content {
+        display: flex;
+        justify-content: space-between;
+        .cv-code-inp {
+          margin-right: 20px;
         }
       }
-      .login-btn {
-        width: 100%;
-      }
+    }
+    .login-btn {
+      width: 100%;
     }
   }
 }
