@@ -16,12 +16,14 @@ class Login extends Component {
       <div className="login-page">
         <div className="wrapper">
           <div className="header">
-            <span className="pointer" onClick={this.toggleState}>登录</span>
-            <span className="pointer" onClick={this.toggleState}>注册</span>
+            <span className="pointer title" onClick={this.toggleState}>登录</span>
+            {/* <span className="pointer title" onClick={this.toggleState}>注册</span> */}
+            {/* <span>暂不开启管理员注册需要的需要的联系</span> */}
           </div>
           {
             isLogin ? <Loginform /> : <Registerform />
           }
+          <div className="footer"></div>
         </div>
       </div>
     )

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Carousel } from 'antd'
 import { systemApi } from './../../api'
-import DashBoard from './components/DashBoard'
+import DashBoard from './../../components/BizChart/DashBoard'
 import './index.scss'
 
 function Home() {
@@ -26,9 +26,6 @@ function Home() {
         <div className="item">
           <DashBoard source={systemInfo.MemUsage} font="内存使用率" />
         </div>
-        {/* <div className="item">
-          <DashBoard />
-        </div> */}
       </div>
       <Carousel autoplay>
         <div>

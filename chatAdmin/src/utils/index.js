@@ -91,3 +91,22 @@ export function exitFullScreen() {
     return doc.webkitCancelFullScreen()
   }
 }
+
+/**token处理相关，登录token的键为authAdmin */
+// 1.保存token
+export function saveToken(token) {
+  if (!token) return
+  document.cookie = `authAdmin=${token}`
+}
+//2.获取token
+export function getToken() {
+  const cookies = document.cookie.split('; ')
+  const target = (cookies.find(item => {
+    return item.split('=')[0] === 'authAdmin'
+  }) || '').split('=')[1]
+  return target
+}
+//3.清除token
+export function clean() {
+  document.cookie = "authAdmin=''"
+}

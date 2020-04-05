@@ -1,6 +1,8 @@
 import axios from 'axios'
+import { message } from 'antd'
 import store from './../store'
 import { actionCreators } from './../store/modules/app'
+import { getToken } from './index'
 
 const instance = axios.create({
   timeout: 7000,
@@ -9,6 +11,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   config => {
+    const token = getToken()
+    if (token) {
+      config.headers.Authorization = token      
+    }
     store.dispatch(actionCreators.toggleLoading(true))
     return config
   },
@@ -20,6 +26,11 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     store.dispatch(actionCreators.toggleLoading(false))
+    console.log('response', response)
+    if (response.data.status === '2002') {
+      message.error('请先登录！')
+      window.location.href = `${window.location.origin}/login`
+    }
     return response
   },
   err => {

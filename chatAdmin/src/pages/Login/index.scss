@@ -13,9 +13,15 @@
     top: 50%;
     left: 50%;
     width: 400px;
-    padding: 30px;
+    padding: 10px 30px;
     background: linear-gradient(230deg,rgba(53,57,74,0),#000);
     transform: translate(-50%, -50%);
+    .header {
+      text-align: center;
+      .title {
+        font-size: 20px;
+      }
+    }
     .form-item {
       margin: 10px 0;
     }
