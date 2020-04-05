@@ -23,6 +23,7 @@ const groupNews = require('./routes/groupNews')
 const system = require('./routes/sys')
 const validate = require('./routes/validateNews')
 const pyq = require('./routes/pyq')
+const superUser = require('./routes/superUser')
 
 // const socketHandler = require('./utils/socket')
 
@@ -49,24 +50,28 @@ app.use(session({
   saveUninitialized: true
 }))
 
-// app.use(checkToken) // 验证token
+app.use(checkToken) // 验证token
 
-// app.use(`${API_VERSION}/*`, (req, res, next)　=> {
-//   console.log(req.session)
-//   if (req.session.login) {
-//     next()
-//   } else {
-//     if (whiteList.includes(req.originalUrl)) {
-//       next()
-//     } else {
-//       res.json({
-//         status: 2002,
-//         data: '',
-//         msg: '用户未登录或登录过期'
-//       })
-//     }
-//   }
-// })
+/* session验证方式
+app.use(`${API_VERSION}/*`, (req, res, next)　=> {
+  console.log(req.session)
+  if (req.session.login) {
+    next()
+  } else {
+    if (whiteList.includes(req.originalUrl)) {
+      next()
+    } else {
+      res.json({
+        status: 2002,
+        data: '',
+        msg: '用户未登录或登录过期'
+      })
+    }
+  }
+})
+*/
+
+/**后期改这里 */
 app.get(`${API_VERSION}/user/onlineusers`, (req, res) => {
   return res.json({
     status: 2000,
@@ -82,6 +87,8 @@ app.use(`${API_VERSION}/groupnews`, groupNews)
 app.use(`${API_VERSION}/sys`, system)
 app.use(`${API_VERSION}/validate`, validate)
 app.use(`${API_VERSION}/pyq`, pyq)
+app.use(`${API_VERSION}/superUser`, superUser)
+/**处理服务端开发页面 */
 app.get('/', (req, res) => {
   res.sendfile(__dirname + '/index.html')
 })
