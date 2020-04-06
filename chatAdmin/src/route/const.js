@@ -35,15 +35,11 @@ export const menus = [
     ]
   },
   {
-    title: '显示组件',
-    icon: 'desktop',
-    key: '/home/display',
+    title: '静态资源',
+    icon: 'wallet',
+    key: '/home/statics',
     subs: [
-      {key: '/home/display/carousel', title: '轮播图', icon: ''},
-      {key: '/home/display/collapse', title: '折叠面板', icon: ''},
-      {key: '/home/display/list', title: '列表', icon: ''},
-      {key: '/home/display/table', title: '表格', icon: ''},
-      {key: '/home/display/tabs', title: '标签页', icon: '',},
+      {key: '/home/statics/avatars', title: '头像', icon: ''},
     ]
   },
   {

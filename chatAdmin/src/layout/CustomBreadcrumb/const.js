@@ -8,4 +8,6 @@ export const BreadcrumbList = {
   '/home/group/edit': '管理群组',
   '/home/admin': '管理员',
   '/home/admin/manage': '管理员管理',
+  '/home/statics': '静态资源',
+  '/home/statics/avatars': '头像',
 }

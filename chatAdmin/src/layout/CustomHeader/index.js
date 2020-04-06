@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { Layout, Avatar, Icon } from 'antd'
-import { entryFullScreen, exitFullScreen } from './../../utils'
+import { entryFullScreen, exitFullScreen, getGreetings } from './../../utils'
 import './index.scss'
 const { Header } = Layout
-
-
 
 class CustomHeader extends Component {
   state = {
@@ -42,9 +40,11 @@ class CustomHeader extends Component {
           className="header-icon"
           onClick={() => toggle()}
         />
-        <span>管理员界面</span>
-        {this.renderFullOption()}
         <Avatar className="avatar" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+        <span>{getGreetings()}</span>
+        <span className="full-screen">
+          {this.renderFullOption()}
+        </span>
       </Header>
     )
   }
