@@ -11,35 +11,35 @@ export default {
     return {
       type: "",
       content: "",
-      duration: 3000
+      // duration: 3000
     }
   },
   mounted() {
-    setTimeout(() => {
-     this.$destroy(true);
-      this.$el.parentNode.removeChild(this.$el);
-    }, this.duration);
+    // setTimeout(() => {
+    //  this.$destroy(true);
+    //   this.$el.parentNode.removeChild(this.$el);
+    // }, this.duration);
   }
 };
 </script>
 
 <style scoped>
 .toast {
-  width: 200px;
-  height: 100px;
+  width: 100px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
+  background-color: #fff;
+  position: absolute;
   top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  color: #fff;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 10px auto 0;
+  /* color: #fff; */
   z-index: 9999;
-  background: transparent;
 }
-.toast>p {
+/* .toast>p {
   padding: 12px 22px;
   font-size: 18px;
   border-radius: 4px;
@@ -50,6 +50,6 @@ export default {
 }
 .toast.toast--success {
   background: rgba(0, 255, 0, 0.5);
-}
+} */
 </style>
 

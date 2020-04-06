@@ -1,22 +1,37 @@
 <template>
   <div class="fenzhu-modal-cmp all0">
     <div class="switch-fenzu hor-ver-center" v-loading="confirmLoading">
-      <span class="p-l-t el-icon-info ">
-        <span class="secondary-font">点击切换分组</span>
-      </span>
-      <span class="p-r-t el-icon-close" @click="close"></span>
+      <div class="header">
+        <span class="p-l-t el-icon-circle-plus-outline" @click="showAddFenzu">
+          <span class="secondary-font">点击添加分组</span>
+        </span>
+        <span class="p-r-t el-icon-close" @click="close"></span>
+      </div>
       <div class="fenzu-list">
         <el-radio-group v-model="selectFenzu" @change="modifyFenzu">
           <el-radio
             v-for="(item, index) in fenzuKeys"
             :key="index" class="item"
             :label="item"
+            v-model="selectFenzu"
           >
             {{item}}（{{userInfo.friendFenzu[item].length}}）
+            <!-- <span class="oper" @click.stop="test">123</span> -->
           </el-radio>
         </el-radio-group>
       </div>
     </div>
+    <el-dialog
+      title="添加分组"
+      :visible="isShowAddFenzu"
+      width="30%"
+      @close="closeAddFenzu"
+    >
+      <el-input />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="addFenzu">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -26,7 +41,8 @@ export default {
   data() {
     return {
       selectFenzu: "",
-      confirmLoading: false
+      confirmLoading: false,
+      isShowAddFenzu: false
     }
   },
   computed: {
@@ -66,6 +82,18 @@ export default {
     close() {
       this.$emit('hidden-fenzu')
     },
+    showAddFenzu() {
+      this.isShowAddFenzu = true
+    },
+    closeAddFenzu() {
+      this.isShowAddFenzu = false
+    },
+    addFenzu() {
+      
+    },
+    test() {
+      console.log(123)
+    }
   },
   mounted() {
     this.selectFenzu = this.currentFenzu
@@ -74,9 +102,12 @@ export default {
 </script>
 
 <style lang="scss">
+.v-modal {
+  display: none;
+}
 .fenzhu-modal-cmp {
   position: fixed;
-  z-index: 1006;
+  z-index: 2003;
   background-color: rgba(0, 0, 0, .2);
   .switch-fenzu {
     width: 300px;
@@ -87,8 +118,13 @@ export default {
       .item {
         display: block;
         margin-top: 20px;
+        position: relative;
         &:first-child {
           margin-top: 0;
+        }
+        .oper {
+          position: absolute;
+          left: 100%;
         }
       }
     }
