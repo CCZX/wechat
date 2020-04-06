@@ -3,6 +3,7 @@ const { createToken } = require('./../utils/auth')
 
 /**登录 */
 const login = async (req, res) => {
+  console.log('superuserloginsuperuserloginsuperuserloginsuperuserloginsuperuserlogin', req.body)
   const { name, password } = req.body
   // console.log('req.originalUrl', req.originalUrl)
   const userInfo = await superUser.findOne({
@@ -34,6 +35,22 @@ const login = async (req, res) => {
   }
 }
 
+/**添加 */
+const add = async (req, res) => {
+  const { name, password, role } = req.body
+  const newSuperUser = await superUser.create({
+    name,
+    password,
+    role
+  })
+  return res.json({
+    status: 2000,
+    data: newSuperUser,
+    msg: '添加管理员成功'
+  })
+}
+
 module.exports = {
-  login
+  login,
+  add
 }

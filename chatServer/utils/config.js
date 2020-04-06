@@ -28,13 +28,18 @@ const USE_ADMIN = [
   `${API_VERSION}/user/onlineusers`,
 
   /**获取系统信息，Read */
-  `${API_VERSION}/sys/syssituation`
+  `${API_VERSION}/sys/syssituation`,
+
+  /**添加新的管理员，Create */
+  `${API_VERSION}/superuser/add`,
 ]
 
 /**需要超级管理员, role === 0 */
 const USE_SUPER_ADMIN = [
   /**修改用户的状态，需要超级管理员 Update */
   `${API_VERSION}/user/changestatus`,
+  /**添加新的管理员，Create */
+  `${API_VERSION}/superuser/add`
 ]
 
 

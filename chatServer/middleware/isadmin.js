@@ -8,14 +8,17 @@ const isAdmin = async (req, res, next) => {
   const token = req.headers.authorization
   const origin = req.originalUrl
   /**不要管理员权限的接口 */
-  if (!USE_ADMIN.includes(origin)) next()
+  if (!USE_ADMIN.includes(origin)) {
+    return next()
+  }
   const _id = jwt.verify(token, TOKEN_SECRET).str
   const adminUser = await superUser.findOne({
     _id
   })
+  console.log('adminUseradminUseradminUser', adminUser)
   /**系统管理员数据库中没有该账号，提示权限不足 */
   if (!adminUser) {
-    return res.josn({
+    return res.json({
       status: 4001,
       data: null,
       msg: '没有操作权限'
@@ -31,7 +34,7 @@ const isAdmin = async (req, res, next) => {
       next()
     } else {
       /**需要super_admin，提示权限不足 */
-      return res.josn({
+      return res.json({
         status: 4001,
         data: null,
         msg: '没有操作权限'

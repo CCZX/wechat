@@ -270,12 +270,6 @@ const getUserBySignUpTime = (req, res) => {
       data: doc,
       msg: '成功'
     })
-  }).catch(err => {
-    return res.json({
-      status: 2003,
-      data: err,
-      msg: '服务器错误，请稍后重试！'
-    })
   })
 }
 

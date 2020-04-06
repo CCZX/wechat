@@ -1,5 +1,5 @@
 
-const { WHITE_LIST } = require('./../utils/config')
+const { WHITE_LIST, TOKEN_SECRET } = require('./../utils/config')
 const jwt = require('jsonwebtoken')
 
 const checkToken = (req, res, next) => {
