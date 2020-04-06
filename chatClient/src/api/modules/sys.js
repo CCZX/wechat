@@ -14,5 +14,9 @@ export default {
   },
   getFaceImgs() {
     return request.get(`${API}/sys/faceimg`)
+  },
+  /**上传文件 */
+  uploadFile(data) {
+    return request.post(`${API}/sys/upfile`, data)
   }
 }

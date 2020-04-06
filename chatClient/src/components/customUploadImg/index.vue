@@ -3,6 +3,7 @@
     <div class="upload-img-com-wrapper">
       <el-alert title="只能上传小于 1M 的图片" type="warning" effect="dark" :closable="false" />
       <div class="option">
+        <input type="file" @change="uploadServer" name="" id="">
         <label for="upimg">
           <i class="option-item ok el-icon-picture">选择
             <input
@@ -11,7 +12,7 @@
               type="file"
               title="选择图片"
               accept="image/png, image/jpeg, image/gif, image/jpg"
-              @change="imgInpChange"
+              @change="uploadQiniu"
             >
           </i>
         </label>
@@ -27,7 +28,8 @@ import { qiniu_URL, uploadImgStatusMap } from '@/const'
 export default {
   props: ["token", "getstatus"],
   methods: {
-    imgInpChange(e) {
+    /**上传至七牛云 */
+    uploadQiniu(e) {
       const [file] = e.target.files
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
@@ -60,21 +62,17 @@ export default {
       const imgName = imgRandomName() + '.' + fileType
       const observable = window.qiniu.upload(file, imgName, this.token, putExtra, config)
       const subScription = observable.subscribe(subObject)
-      // const fileFormData = new FormData()
-      // fileFormData.append('img', file)
-      // this.$http.uploadFile({
-      //   data: fileFormData
-      // }).then(res => {
-      //   console.log(res)
-      // })
-      // axios.post('http://localhost:8080/api/v1/file/uploadfile', fileFormData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   }
-      // }).then(res => {
-      //   console.log(res)
-      // })
-      // console.log(URL.createObjectURL(file))
+    },
+    /**上传至本地服务器 */
+    uploadServer(e) {
+      const file = e.target.files[0]
+      const fileType = file.type && file.type.split("/")[1]
+      const fileSize = file.size / 1024 / 1024
+      const formdata = new FormData()
+      formdata.append('file', file)
+      this.$http.uploadFile(formdata).then(res => {
+        console.log('上传文件结果', res)
+      })
     }
   },
 }
@@ -112,4 +110,3 @@ export default {
   }
 }
 </style>
-
