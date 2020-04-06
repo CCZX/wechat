@@ -1,41 +1,70 @@
-import React, { useState, useRef } from 'react'
-import { Table, Button, Modal, message } from 'antd'
+import React, { useState, useRef, useEffect } from 'react'
+import { Table, Button, Modal, message, Popconfirm, Popover } from 'antd'
 import AddForm from './addForm'
 import { adminApi } from './../../api'
 
 import './index.scss'
 
-const dataSource = [
-  {
-    key: '1',
-    name: '胡彦斌',
-    age: 32,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '2',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-];
-
 const columns = [
   {
-    title: '姓名',
+    title: 'ID',
+    dataIndex: '_id',
+    key: '_id',
+  },
+  {
+    title: '账号',
     dataIndex: 'name',
     key: 'name',
   },
   {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
+    title: '昵称',
+    dataIndex: 'nickname',
+    key: 'nickname',
   },
   {
-    title: '住址',
-    dataIndex: 'address',
-    key: 'address',
+    title: '权限',
+    dataIndex: 'role',
+    key: 'role',
   },
+  {
+    title: '编辑',
+    key: 'operation',
+    fixed: 'right',
+    width: 100,
+    render: (text, record) => {
+      const content = (
+        <div>
+          <div>
+            <Popconfirm
+              title="逻辑删除后可恢复该用户。"
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="link">逻辑删除</Button>
+            </Popconfirm>
+          </div>
+          <div>
+            <Popconfirm
+              title="物理删除后不可恢复。"
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="link">逻辑删除</Button>
+            </Popconfirm>
+          </div>
+        </div>
+      )
+      return (
+        <Popover
+          content={content}
+          title="操作"
+          trigger="click"
+        >
+          <Button type="primary">编辑用户</Button>
+        </Popover>
+      )
+    }
+  }
 ];
 
 export default function AdminManage(props) {
@@ -45,6 +74,17 @@ export default function AdminManage(props) {
     password: '',
     role: '1'
   })
+  const [adminUserList, setAdminUserList] = useState([])
+
+  useEffect(() => {
+    ;(async () => {
+      const { data = {} } = await adminApi.getAllSuperUser()
+      console.log(data)
+      if (data.status === 2000) {
+        setAdminUserList(data.data)
+      }
+    })()
+  }, [])
 
   const handleOk = async () => {
     for (const key in newSuperUser) {
@@ -86,7 +126,7 @@ export default function AdminManage(props) {
         <p>当前管理员</p>
         <Button type="primary" onClick={() => {setShowAddModal(true)}}>添加新的管理员</Button>
       </header>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={adminUserList} columns={columns} />
     </div>
   )
 }

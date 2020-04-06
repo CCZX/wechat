@@ -3,11 +3,11 @@ import { Form, Icon, Input, Select } from 'antd';
 
 const { Option } = Select
 
-class NormalLoginForm extends React.Component {
+class AddForm extends React.Component {
   render() {
     const { onChange } = this.props
     return (
-      <Form className="login-form">
+      <Form>
         <Form.Item>
           <Input
             autoComplete="on"
@@ -30,8 +30,8 @@ class NormalLoginForm extends React.Component {
           placeholder="选择身份"
           onChange={(e) => {onChange({type: 'role', data: e})}}
         >
-          <Option value="0">超级管理员</Option>
-          <Option value="1">普通管理员</Option>
+          <Option value="0">超级管理员（增删改查权限）</Option>
+          <Option value="1">普通管理员（查权限）</Option>
         </Select>
         </Form.Item>
       </Form>
@@ -39,4 +39,4 @@ class NormalLoginForm extends React.Component {
   }
 }
 
-export default NormalLoginForm
+export default AddForm
