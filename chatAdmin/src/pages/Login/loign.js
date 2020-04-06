@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Input, Button, Icon, message } from 'antd'
 import { adminApi } from './../../api'
-import { saveToken, getToken } from './../../utils'
+import { saveToken } from './../../utils'
 
 class LoginForm extends Component {
   constructor(props) {

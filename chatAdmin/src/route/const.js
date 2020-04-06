@@ -23,20 +23,15 @@ export const menus = [
     ]
   },
   {
-    title: '输入组件',
-    icon: 'edit',
-    key: '/home/entry',
+    title: '管理员用户',
+    icon: 'android',
+    key: '/home/admin',
     subs: [
       {
-        key: '/home/entry/form',
-        title: '表单',
-        icon: '',
-        subs: [
-          {key: '/home/entry/form/basic-form', title: '基础表单', icon: ''},
-          {key: '/home/entry/form/step-form', title: '分步表单', icon: ''}
-        ]
+        key: '/home/admin/manage',
+        title: '管理员管理',
+        icon: 'edit',
       },
-      {key: '/home/entry/upload', title: '上传', icon: ''},
     ]
   },
   {

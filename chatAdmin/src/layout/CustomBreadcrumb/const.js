@@ -6,4 +6,6 @@ export const BreadcrumbList = {
   '/home/group': '群组管理',
   '/home/group/statistics': '查看群组',
   '/home/group/edit': '管理群组',
+  '/home/admin': '管理员',
+  '/home/admin/manage': '管理员管理',
 }
