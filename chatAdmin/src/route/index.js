@@ -6,7 +6,8 @@ import Login from './../pages/Login'
 import Home from './../pages/Home'
 /**用户管理相关 */
 import { StatisticsUser, EditUser } from './../pages/User'
-import { StatisticsGroup } from './../pages/Group'
+
+import { StatisticsGroup, EditGroup } from './../pages/Group'
 /**管理员管理 */
 import AdminManage from './../pages/Admin'
 /**系统静态资源 */
@@ -29,6 +30,7 @@ class RouterDom extends Component {
 
               <Route exact path="/home/group" render={()=> <Redirect replace to='/home/group/statistics' />}></Route>
               <Route exact path="/home/group/statistics" component={StatisticsGroup}></Route>
+              <Route exact path="/home/group/edit" component={EditGroup}></Route>
 
               <Route exact path="/home/admin/manage" component={AdminManage}></Route>
 

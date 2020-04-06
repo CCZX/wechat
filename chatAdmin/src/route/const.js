@@ -14,12 +14,12 @@ export const menus = [
     ]
   },
   {
-    title: '群组管理',
+    title: '群组',
     icon: 'team',
     key: '/home/group',
     subs: [
       {key: '/home/group/statistics', title: '查看群组', icon: ''},
-      {key: '/home/group/edit', title: '修改群组', icon: ''},
+      {key: '/home/group/edit', title: '群组管理', icon: ''},
     ]
   },
   {
