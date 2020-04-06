@@ -26,10 +26,12 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     store.dispatch(actionCreators.toggleLoading(false))
-    console.log('response', response)
-    if (response.data.status === '2002') {
+    if (Number(response.data.status) === 2002) {
       message.error('请先登录！')
       window.location.href = `${window.location.origin}/login`
+    }
+    if (Number(response.data.status) === 4001) {
+      message.error('没有操作的权限！')
     }
     return response
   },
