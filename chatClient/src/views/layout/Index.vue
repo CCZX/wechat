@@ -153,7 +153,7 @@ export default {
 .layout-page {
   @import './../../../static/css/var.scss';
   height: 100%;
-  background-image: url('./../../../static/image/1.jpg');
+  background-image: url('./../../../static/image/3.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -173,6 +173,7 @@ export default {
       border-radius: 5px;
       padding: 0;
       opacity: .8;
+      backdrop-filter: blur(40px);
       .co-messager-aside {
         width: 7%;
         height: calc(100vh - 60px);
