@@ -44,10 +44,10 @@ class EditUser extends Component {
       const { status } = res.data
       if (res.status < 400 && status === 2000) {
         message.success('修改成功！')
+        this.setState({
+          userList: newUserList
+        })
       }
-    })
-    this.setState({
-      userList: newUserList
     })
   }
   render() {

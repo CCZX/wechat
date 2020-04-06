@@ -25,7 +25,7 @@ class RouterDom extends Component {
               <Route exact path="/home/user/edit" component={EditUser}></Route>
               <Route exact path="/home/group" render={()=> <Redirect replace to='/home/group/statistics' />}></Route>
               <Route exact path="/home/group/statistics" component={StatisticsGroup}></Route>
-              <Route exact path="/home/amdin/manage" component={AdminManage}></Route>
+              <Route exact path="/home/admin/manage" component={AdminManage}></Route>
             </Switch>
           </ContentMain>
         </Switch>
