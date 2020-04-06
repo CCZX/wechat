@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import { Layout, Avatar, Icon } from 'antd'
+import { Layout, Avatar, Icon, Menu, Dropdown, Button } from 'antd'
+import { connect } from 'react-redux'
 import { entryFullScreen, exitFullScreen, getGreetings } from './../../utils'
+import { actionCreators } from './../../store/modules/app'
+import { cleanToken } from './../../utils'
 import './index.scss'
 const { Header } = Layout
 
@@ -31,7 +34,8 @@ class CustomHeader extends Component {
     />
   }
   render() {
-    const { collapsed, toggle } = this.props
+    const { collapsed, toggle, data } = this.props
+    const currAdminInfo = data.currAdminInfo || ''
     return (
       <Header className="custom-header" style={{ background: '#fff' }}>
         <Icon
@@ -40,8 +44,17 @@ class CustomHeader extends Component {
           className="header-icon"
           onClick={() => toggle()}
         />
-        <Avatar className="avatar" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-        <span>{getGreetings()}</span>
+        <Dropdown overlay={
+          <Menu>
+            <Menu.Item>
+              <Button type="link" onClick={() => {this.props.logout()}}>退出登录</Button>
+            </Menu.Item>
+          </Menu>
+        }>
+          <Avatar className="avatar" size="large"
+           src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+        </Dropdown>
+        <span>{currAdminInfo.nickname}，{getGreetings()}</span>
         <span className="full-screen">
           {this.renderFullOption()}
         </span>
@@ -50,4 +63,21 @@ class CustomHeader extends Component {
   }
 }
 
-export default CustomHeader
+function mapState(state) {
+  return {
+    data: state.toJS().app
+  }
+}
+
+function mapDispatch(dispatch) {
+  return {
+    logout() {
+      cleanToken()
+      window.location.href = `${window.location.origin}/login`
+      const action = actionCreators.setCurrAdmin({})
+      dispatch(action)
+    }
+  }
+}
+
+export default connect(mapState, mapDispatch)(CustomHeader)

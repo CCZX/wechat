@@ -107,8 +107,8 @@ export function getToken() {
   return target
 }
 //3.清除token
-export function clean() {
-  document.cookie = "authAdmin=''"
+export function cleanToken() {
+  document.cookie = "authAdmin='error'"
 }
 
 /**当前环境判断 */
