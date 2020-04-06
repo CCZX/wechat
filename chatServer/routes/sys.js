@@ -3,6 +3,8 @@ const router = express.Router()
 const OSUtils = require('os-utils')
 const OS = require('os')
 const sysController = require('../controller/system')
+const { uploadFile } = require('./../utils/upFile')
+const formatTime = require('./../utils').fromatTime
 
 router.get('/sysusers', sysController.getSysUser) // 获取系统用户
 router.get('/qiniutoken', sysController.getQiniuToken) // 七牛云token
@@ -24,6 +26,15 @@ router.get('/syssituation', (req, res) => {
       data,
       msg: 'Success'
     })
+  })
+})
+/**上传文件接口，前端使用FormData来存储文件 */
+router.post('/upfile', uploadFile.single('file'), (req, res) => {
+  const date = formatTime(new Date(), false)
+  return res.json({
+    status: 2000,
+    data: '/uploads/' + date + '/' + req.file.filename,
+    msg: 'success'
   })
 })
 
