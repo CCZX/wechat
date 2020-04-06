@@ -50,7 +50,18 @@ const add = async (req, res) => {
   })
 }
 
+/**获取所有管理员用户 */
+const getAllSuperUser = async (req, res) => {
+  const superUserList = await superUser.find()
+  return res.json({
+    status: 2000,
+    data: superUserList,
+    msg: '获取成功！'
+  })
+}
+
 module.exports = {
   login,
-  add
+  add,
+  getAllSuperUser
 }

@@ -4,5 +4,6 @@ const superUserController = require('./../controller/superUser')
 
 router.post('/login', superUserController.login)
 router.post('/add', superUserController.add)
+router.get('/all', superUserController.getAllSuperUser)
 
 module.exports = router

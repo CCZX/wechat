@@ -32,6 +32,8 @@ const USE_ADMIN = [
 
   /**添加新的管理员，Create */
   `${API_VERSION}/superuser/add`,
+  /**获取所有的管理员，Read */
+  `${API_VERSION}/superuser/all`,
 ]
 
 /**需要超级管理员, role === 0 */
