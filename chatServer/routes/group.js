@@ -7,5 +7,6 @@ router.get('/groupinfo', groupController.getGroupInfo)
 router.get('/prefetchgroup', groupController.searchGroup)
 router.post('/create', groupController.createGroup)
 router.post('/recent', groupController.getRecentGroup)
+router.get('/all', groupController.getAllGroup)
 
 module.exports = router

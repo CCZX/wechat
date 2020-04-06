@@ -157,11 +157,22 @@ const createGroup = async (req, res) => {
   }
 }
 
+// 获取所有群聊
+const getAllGroup = async (req, res) => {
+  const groupList = await GROUP.find().populate({path: 'holderUserId', select: 'nickname photo signature'})
+  return res.json({
+    status: 2000,
+    data: groupList,
+    msg: '获取成功！'
+  })
+}
+
 module.exports = {
   getMyGroup,
   getGroupInfo,
   searchGroup,
   addNewGroupUser,
   createGroup,
-  getRecentGroup
+  getRecentGroup,
+  getAllGroup
 }
