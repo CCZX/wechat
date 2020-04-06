@@ -18,12 +18,23 @@ const WHITE_LIST = [
 
 /**需要管理员权限，role === 0 ||１ */
 const USE_ADMIN = [
-  
+  /**获取所有用户，根据所有用户的信息做统计分析  Read */
+  `${API_VERSION}/user/getalluser`,
+  /**根据注册时间来获取用户，做折线图 Read */
+  `${API_VERSION}/user/getuserbysigntime`,
+  /**修改用户的状态，需要超级管理员 Update */
+  `${API_VERSION}/user/changestatus`,
+  /**获取当前在线用户，Read */
+  `${API_VERSION}/user/onlineusers`,
+
+  /**获取系统信息，Read */
+  `${API_VERSION}/sys/syssituation`
 ]
 
 /**需要超级管理员, role === 0 */
 const USE_SUPER_ADMIN = [
-
+  /**修改用户的状态，需要超级管理员 Update */
+  `${API_VERSION}/user/changestatus`,
 ]
 
 
@@ -32,5 +43,7 @@ module.exports = {
   SECRET_KEY,
   BUCKET,
   TOKEN_SECRET,
-  WHITE_LIST
+  WHITE_LIST,
+  USE_ADMIN,
+  USE_SUPER_ADMIN
 }
