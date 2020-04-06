@@ -62,6 +62,7 @@
         </el-form-item>
       </el-form>
     </div>
+    <copy-right />
   </div>
 </template>
 
@@ -70,10 +71,12 @@
 import bgUrl1 from './../../static/image/zw1.jpg'
 import bgUrl2 from './../../static/image/zw2.jpg'
 import ocean1 from './../../static/image/ocean1.jpg'
+// import ocean1 from './../../static/image/4.jpg'
 import {createCanvas} from '@/utils/cvcode'
 import canvasImg from './../../static/image/canvas2.jpg'
 import { accountReg, passwordReg } from '@/utils/index'
 import avatarChoose from '@/components/avatarChoose'
+import copyRight from '@/components/copyright'
 const faceRandom = Math.ceil(Math.random()*10)
 export default {
   name: 'Login',
@@ -193,7 +196,8 @@ export default {
     }
   },
   components: {
-    avatarChoose
+    avatarChoose,
+    copyRight
   },
   async mounted() {
     this.getCVCode()
@@ -211,6 +215,7 @@ export default {
   background-size: cover;
   transition: all .8s ease;
   .ceshi {
+    display: none;
     position: absolute;
     top: 50px;
     left: 50%;
