@@ -1,11 +1,11 @@
 // 上传文件的配置
-const { formatTime, randomName } = require('./index')
+const { formatDate, randomName } = require('./index')
 const fs = require('fs')
 const multer = require('multer')
 const storage = multer.diskStorage({
   /**设置上传路径，跨可以使用函数或者字符串来设置 */
   destination(req, file, cb) {
-    const date = formatTime(new Date(), false)
+    const date = formatDate(new Date(), false)
     const path = './public/uploads'
     const isExitPath = fs.existsSync(path)
     const pathDate = './public/uploads/' + date

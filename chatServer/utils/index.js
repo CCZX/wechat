@@ -9,7 +9,7 @@ function isType(type) {
 }
 
 // 格式化时间·
-function fromatTime(time, full = true) { //
+function formatDate(time, full = true) { //
   const y = formatNumber(time.getFullYear())
   const m = formatNumber(time.getMonth() + 1)
   const d = formatNumber(time.getDate())
@@ -86,7 +86,7 @@ const todayAndTomorrow = (date) => {
 }
 
 module.exports = {
-  fromatTime,
+  formatDate,
   formatNumber,
   randomName,
   md5,

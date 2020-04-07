@@ -8,7 +8,7 @@ let session = require('express-session')
 let server = require('http').createServer(app)
 let io = require('socket.io')(server)
 
-const { fromatTime } = require('./utils')
+const { formatDate } = require('./utils')
 const onLineUser = {}
 exports.onLineUser = onLineUser
 const API_VERSION = require('./const').API_VERSION
@@ -149,7 +149,7 @@ io.on('connection', (socket) => {
     const friendly = {
       userM: data.senderId,
       userY: data.reveiverId,
-      createDate: fromatTime(new Date(), false)
+      createDate: formatDate(new Date(), false)
     }
     addFriend(friendly)
     const { roomid, reveiverId, senderId } = data

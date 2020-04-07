@@ -5,7 +5,7 @@ const OSUtils = require('os-utils')
 const OS = require('os')
 const SYS_USER = require('../models/systemUser')
 const { ACCESS_KEY, SECRET_KEY, BUCKET } = require('./../utils/config')
-const { formatTime } = require('./../utils')
+const { formatDate } = require('./../utils')
 
 /**系统用户 */
 const getSysUser = async (req, res) => {
@@ -57,7 +57,7 @@ const readFaceImg = (req, res) => {
 }
 
 const uploadFile = (req, res) => {
-  const date = formatTime(new Date(), false)
+  const date = formatDate(new Date(), false)
   return res.json({
     status: 2000,
     data: '/uploads/' + date + '/' + req.file.filename,
