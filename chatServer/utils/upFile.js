@@ -1,6 +1,5 @@
 // 上传文件的配置
-const formatTime = require('./index').fromatTime
-const randomName = require('./index').randomName
+const { formatTime, randomName } = require('./index')
 const fs = require('fs')
 const multer = require('multer')
 const storage = multer.diskStorage({
@@ -11,9 +10,7 @@ const storage = multer.diskStorage({
     const isExitPath = fs.existsSync(path)
     const pathDate = './public/uploads/' + date
     const isExitPathDate = fs.existsSync(pathDate)
-    console.log(isExitPath, isExitPathDate)
     if (!isExitPath) {
-      console.log('do ./public/uploads')
       fs.mkdirSync(path)
     }
     if (!isExitPathDate) {
@@ -26,6 +23,12 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + randomName() + '-' + file.originalname)
   }
 })
+
+/**
+ * multer使用可以参考以下：
+ * 1. https://www.npmjs.com/package/multer
+ * 2. https://www.jianshu.com/p/42714ca7b6ce
+ */
 
 const uploadFile = multer({
   storage
