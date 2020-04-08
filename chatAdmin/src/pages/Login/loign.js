@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Input, Button, Icon, message } from 'antd'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { adminApi } from './../../api'
 import { saveToken } from './../../utils'
 import { actionCreators } from './../../store/modules/app'
@@ -33,7 +34,7 @@ class LoginForm extends Component {
         message.success('登录成功！')
         this.props.setCurrAdmin(data.data.userInfo)
         saveToken(data.data.token)
-        window.location.href = `${window.location.origin}/home`
+        this.props.history.push('/home')
       }
     })
   }
@@ -68,4 +69,4 @@ function mapDispatch(dispatch) {
   }
 }
 
-export default connect(null, mapDispatch)(LoginForm)
+export default connect(null, mapDispatch)(withRouter(LoginForm))
