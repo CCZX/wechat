@@ -13,7 +13,9 @@ const WHITE_LIST = [
   /**管理登录 */
   `${API_VERSION}/superuser/login`,
   /**根路径 */
-  `/`
+  `/`,
+  /**admin */
+  '/admin'
 ]
 
 /**需要管理员权限，role === 0 ||１ */

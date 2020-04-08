@@ -87,9 +87,14 @@ app.use(`${API_VERSION}/sys`, system)
 app.use(`${API_VERSION}/validate`, validate)
 app.use(`${API_VERSION}/pyq`, pyq)
 app.use(`${API_VERSION}/superUser`, superUser)
-/**处理服务端开发页面 */
+/**前台初始资源路径 */
 app.get('/', (req, res) => {
   res.sendfile(__dirname + '/index.html')
+})
+/**后台资源初始路劲 */
+app.get('/admin', (req, res) => {
+  // res.sendfile(__dirname + '/admin.html')
+  res.sendfile(__dirname + '/public/build/index.html')
 })
 
 const { insertNewNews } = require('./controller/news')
