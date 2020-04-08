@@ -12,6 +12,7 @@ const WHITE_LIST = [
   `${API_VERSION}/user/getcode`,
   /**管理登录 */
   `${API_VERSION}/superuser/login`,
+  `${API_VERSION}/sys/faceimg`,
   /**根路径 */
   `/`,
   /**admin */
