@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { message } from 'antd'
+import { HashRouter } from 'react-router-dom'
 import store from './../store'
 import { actionCreators } from './../store/modules/app'
 import { getToken } from './index'
+
+const Router = new HashRouter()
 
 const instance = axios.create({
   timeout: 7000,
@@ -29,14 +32,17 @@ instance.interceptors.response.use(
     const statusCode = Number(response.data.status)
     if (statusCode === 2002) {
       message.error('请先登录！')
-      window.location.href = `${window.location.origin}/login`
+      Router.history.push('/login')
     }
     if (statusCode === 1006) {
       message.error('请重新登录！')
-      window.location.href = `${window.location.origin}/login`
+      Router.history.push('/login')
     }
     if (statusCode === 4001) {
       message.error('没有操作的权限！')
+    }
+    if (statusCode === 2003) {
+      message.error('服务端错误！')
     }
     return response
   },

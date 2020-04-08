@@ -2,8 +2,9 @@
   $color: #fff;
   position: relative;
   height: 100%;
-  background-image: url('/images/bg1.jpg');
-  background-size: 100% 100%;
+  background-image: url('/images/2.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
   * {
     background-color: transparent !important;
     color: $color !important;

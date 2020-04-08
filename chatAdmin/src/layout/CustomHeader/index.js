@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Layout, Avatar, Icon, Menu, Dropdown, Button } from 'antd'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { entryFullScreen, exitFullScreen, getGreetings } from './../../utils'
 import { actionCreators } from './../../store/modules/app'
 import { cleanToken } from './../../utils'
@@ -10,6 +11,11 @@ const { Header } = Layout
 class CustomHeader extends Component {
   state = {
     isFullscreen: document.fullscreen
+  }
+  logout = () => {
+    this.props.history.push('/login')
+    // this.props.history.replace({pathname: 'login'})
+    this.props.logout()
   }
   toggleFullscreen = () => {
     const { isFullscreen } = this.state
@@ -47,7 +53,7 @@ class CustomHeader extends Component {
         <Dropdown overlay={
           <Menu>
             <Menu.Item>
-              <Button type="link" onClick={() => {this.props.logout()}}>退出登录</Button>
+              <Button type="link" onClick={() => {this.logout()}}>退出登录</Button>
             </Menu.Item>
           </Menu>
         }>
@@ -73,11 +79,10 @@ function mapDispatch(dispatch) {
   return {
     logout() {
       cleanToken()
-      window.location.href = `${window.location.origin}/login`
       const action = actionCreators.setCurrAdmin({})
       dispatch(action)
     }
   }
 }
 
-export default connect(mapState, mapDispatch)(CustomHeader)
+export default connect(mapState, mapDispatch)(withRouter(CustomHeader))
