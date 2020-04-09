@@ -18,5 +18,9 @@ yarn-error.log*
 chatAdmin/Test
 chatClient/Test
 chatServer/public/uploads
+# client资源
 chatServer/public/static
+# admin资源
+chatServer/public/build
 chatServer/index.html
+chatServer/admin.html
