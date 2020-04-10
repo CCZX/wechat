@@ -2,6 +2,10 @@
 
 > 地址：http://co-messager.chenr.cn/#/index
 
+## 相关文章地址
+
+- [掘金](https://juejin.im/post/5e8dd45cf265da47e34bf94d)
+
 ## 功能
 - [x] 登陆注册
 - [x] 单聊
@@ -32,6 +36,8 @@
 
 本系统分为`Client`，`Server`，`Admin`三个端：其中`Client`为客户端，`Server`为服务器端，`Admin`为管理员端。
 
+## 项目截图
+
 ## 系统功能图
 
 ### 普通用户
@@ -52,9 +58,17 @@
 
 ## 启动项目
 
-- 启动服务器（3333端口）
-本地启动要删除以下代码
+- 克隆项目
+
+`git clone git@github.com:CCZX/wechat.git`
+
+- 删除相关代码
+
+> 这部分代码是在我的数据库里，所以你需要删除或者替换相关代码以防报错
+
 ![普通用户功能设计0404](./document/clean.png)
+
+- 启动服务器（3333端口）
 
 ```javascript
 cd chatServer
@@ -84,10 +98,20 @@ npm start
 1. 客户端的代码打包后资源默认放在`chatServer`文件夹的`public`目录下；
 2. 管理员端在`chatAdmin`的`build`目录下，需要自己自己手动将整个build目录复制到`chatServer`文件夹的`public`目录下，然后修改`build`目录文件的`index.html`中引入资源路径前都加上`/build`。
 
+## 交流
+
+- qq群
+
+![qq](./document/resources/qqgroup.jpg)
+
+大家今天学习到了什么知识、有什么好的学习方法、学习技巧或者什么摸鱼的方法都可以一起交流哟。
+
+目前本人在使用react+Typescript搭建一个UI框架，基本架子已经搭建好，到时候会上传至GitHub，到时候欢迎大家一起讨论。
+
 ## 联系
 
-- E-mail：`ccdebuging@gmail.com`、`cAuth1218@163.com`
-- QQ：1831058205
+- `E-mail`：`ccdebuging@gmail.com`、`cAuth1218@163.com`
+- `QQ`：`1831058205`
 
 ## 参考项目
 
