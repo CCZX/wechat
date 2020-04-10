@@ -53,9 +53,13 @@
 ## 启动项目
 
 - 启动服务器（3333端口）
+本地启动要删除以下代码
+![普通用户功能设计0404](./document/clean.png)
+
 ```javascript
 cd chatServer
 npm install
+node init.js // 初始化数据库
 node app.js
 ```
 
