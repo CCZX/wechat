@@ -106,9 +106,18 @@ const { updateUserOnlineTime } = require('./controller/user')
 const { conversationTypes } = require('./const')
 
 const conversationList = {}
+/**
+ * socket实现P2P的消息传输有两种
+ * 1. 使用socket.id来将消息发送给对方
+ * toSocketID.send(...arg)
+ * 2. 使用socket.join(roomid)方法，
+ * socket.join(roomid)
+ * io.in(roomid).emit()
+ */
 io.on('connection', (socket) => {
-  console.log('连接成功')
+  console.log('>>>客户端新上线用户连接成功')
   socket.on('goOnline', val => {
+    if (!val) return
     if (Object.keys(onLineUser).length < 200) {
       onLineUser[socket.id] = {
         _id: val._id,
@@ -117,12 +126,10 @@ io.on('connection', (socket) => {
         loginTime: Date.now()
       }
     }
-    // socket.broadcast.emit('onlineUser', onLineUser)
     io.emit('onlineUser', onLineUser)
   })
   socket.on('join', val => {
     const { roomid } = val
-    // console.log('join', val)
     socket.join(roomid, () => {
       conversationList[roomid] = socket.id
       io.in(roomid).emit('conversationList', conversationList)
