@@ -1,8 +1,8 @@
 import userApi from '@/api/modules/user'
 
 const state = {
-  isLogin: false || window.sessionStorage.getItem('isLogin'),
-  userInfo: '' || JSON.parse(window.localStorage.getItem('userInfo') || '{}')
+  isLogin: JSON.parse(window.sessionStorage.getItem('isLogin') || "false"),
+  userInfo: JSON.parse(window.localStorage.getItem('userInfo') || '{}')
 }
 
 const mutations = {

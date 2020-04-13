@@ -62,6 +62,7 @@ export default {
     logout() {
       this.$router.replace('/login')
       this.$socket.emit('leave')
+      this.$store.dispatch('user/LOGOUT')
       removeCookie()
     }
   },
