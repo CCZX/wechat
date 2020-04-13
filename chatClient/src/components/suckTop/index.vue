@@ -1,5 +1,6 @@
 <template>
-  <div class="cpt-sticky" :class="fixedClass" :style="{ top: top + 'px', zIndex, width: width + 'px' }">
+  <!-- <div class="cpt-sticky" :class="fixedClass" :style="{ top: top + 'px', zIndex, width: width + 'px' }"> -->
+  <div class="cpt-sticky" :class="fixedClass" :style="{ top: top + 'px', zIndex }">
     <slot></slot>
   </div>
 </template>
@@ -10,7 +11,7 @@ export default {
     top: Number,
     parent: String,
     zIndex: Number,
-    width: Number
+    // width: Number
   },
   data() {
     return {

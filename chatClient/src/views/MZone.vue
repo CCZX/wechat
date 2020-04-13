@@ -19,35 +19,40 @@
           <span class="nickname">{{userInfo.nickname}}</span>
         </div>
       </div>
-      <!-- <suck-top :top="60" parent="document" :z-index="1004" width="1020"> -->
-        <div class="mzone-nav">
+      <suck-top :top="0" parent=".mzone-page" :z-index="1004">
+        <div ref="navtop" class="mzone-nav" :style="{width: navTopWidth + 'px'}">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1">好友动态</el-menu-item>
             <el-menu-item index="3">我的空间</el-menu-item>
             <el-menu-item index="4">我的档案</el-menu-item>
           </el-menu>
         </div>
-      <!-- </suck-top> -->
+      </suck-top>
       <div class="mzone-body">
         <div class="menulist">
-          <el-menu
-            default-active="2"
-            class="el-menu-vertical-demo"
-          >
-            <el-menu-item index="2">
-              <i class="el-icon-menu"></i>
-              <span slot="title">导航二</span>
-            </el-menu-item>
-            <el-menu-item index="3" disabled>
-              <i class="el-icon-document"></i>
-              <span slot="title">导航三</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">导航四</span>
-            </el-menu-item>
-          </el-menu>
+          <suck-top :top="70" parent=".mzone-page" :z-index="1004">
+            <div class="menulist" :style="{width: menulistWidth + 'px'}">
+              <el-menu
+                default-active="2"
+                class="el-menu-vertical-demo"
+              >
+                <el-menu-item index="2">
+                  <i class="el-icon-menu"></i>
+                  <span slot="title">导航二</span>
+                </el-menu-item>
+                <el-menu-item index="3" disabled>
+                  <i class="el-icon-document"></i>
+                  <span slot="title">导航三</span>
+                </el-menu-item>
+                <el-menu-item index="4">
+                  <i class="el-icon-setting"></i>
+                  <span slot="title">导航四</span>
+                </el-menu-item>
+              </el-menu>
+            </div>
+          </suck-top>
         </div>
+        
         <div class="content">
           <send-mzone @watchsend="watchSendPyq" />
           <m-pyq
@@ -74,6 +79,8 @@ export default {
     return {
       IMG_URL: process.env.IMG_URL,
       activeIndex: '1',
+      navTopWidth: 0,
+      menulistWidth: 0,
 
       newPyqItem: {}, // 用户新发表的朋友圈
       myFriendPyqList: [], // 我的好友的朋友圈李彪
@@ -122,7 +129,15 @@ export default {
     sendMzone,
     backTop,
     suckTop
-  }
+  },
+  mounted() {
+    const mzoneWrapper = document.querySelector('.mzone-wrapper')
+    const menulist = document.querySelector('.menulist')
+    const mzoneWrapperWidth = window.getComputedStyle(mzoneWrapper).width
+    const menulistWidth = window.getComputedStyle(menulist).width
+    this.navTopWidth = parseInt(mzoneWrapperWidth)
+    this.menulistWidth = parseInt(menulistWidth)
+  },
 }
 </script>
 
@@ -131,9 +146,9 @@ export default {
   width: 100%;
   background-color: #e9ebee;
   height: 100%;
+  padding: 0 10px;
   overflow-y: scroll;
   .mzone-wrapper {
-    height: 100%;
     margin: 0 auto;
     .mzone-top {
       height: 190px;
@@ -201,6 +216,7 @@ export default {
       }
       .content {
         width: 70%;
+        margin-left: 25px;
       }
     }
   }
