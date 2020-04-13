@@ -3,8 +3,8 @@
     <header class="header">
       <span class="title">群成员（{{groupOnlineUser.length}}/{{userlist.length}}）</span>
     </header>
-    <div class="user-item" v-for="item in outcomeUserList" :key="item._id">
-      <div class="wrapper">
+    <div class="user-list">
+      <div class="user-item" v-for="item in outcomeUserList" :key="item._id">
         <el-avatar
           :class="onlineUser.includes(item.userId._id) ? '' : 'offline'"
           :size="20"
@@ -19,6 +19,7 @@
           <span class="normal-font detail-item ellipsis">
             {{item.userId.beizhu ? item.userId.beizhu : item.userId.nickname}}
           </span>
+          <span v-if="item.holder">群主</span>
         </div>
       </div>
     </div>
@@ -55,6 +56,8 @@ export default {
           item.userId.beizhu = this.beizhu[item.userId._id] ? this.beizhu[item.userId._id] : ''
         }
         return item
+      }).sort((a, b) => {
+        return b.holder - a.holder
       })
     }
   },
@@ -63,16 +66,19 @@ export default {
 
 <style lang="scss">
 .custom-group-user-list-com {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 5px;
-  overflow-y: scroll;
   .header {
     width: 100%;
     padding: 5px 0;
   }
-  .user-item {
-    padding: 5px 0;
-    .wrapper {
+  .user-list {
+    flex: 1;
+    overflow: scroll;
+    .user-item {
+      padding: 5px 0;
       display: flex;
       align-items: center;
       .user-detail {
