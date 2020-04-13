@@ -97,10 +97,10 @@ const router = new Router({
   ]
 })
 
-const userIsLogin = store.state.user.isLogin
 
 router.beforeEach((to, from, next) => {
-  //判断要去的路由有没有requiresAuth
+  /**tips:需要在钩子函数内读取登录状态 */
+  const userIsLogin = store.state.user.isLogin
   if(to.meta.requiresAuth){
     if(userIsLogin){
       next()
@@ -108,9 +108,10 @@ router.beforeEach((to, from, next) => {
       // alert('请先登录再进行此操作!')
       next({
         path: '/login',
-        query: { redirect: to.fullPath }  // 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由
-      });
-      } 
+        /** 将刚刚要去的路由path（却无权限）作为参数，方便登录成功后直接跳转到该路由 */
+        query: { redirect: to.fullPath }
+      })
+    } 
   }else{
     next()
   }

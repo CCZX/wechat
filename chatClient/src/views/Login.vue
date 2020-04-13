@@ -135,8 +135,9 @@ export default {
         if (res.status === 200 && status === 1000) {
           this.$message.success('登录成功！')
           this.$store.dispatch('user/LOGIN', data)
-          this.$router.replace('/')
-          // window.location.replace('/')
+          const redirect = this.$router.currentRoute.query.redirect
+          const next = redirect ? redirect : '/index'
+          this.$router.replace(next)
         } else {
           this.$message.error(msg)
           if (status === 1006 || status === 1007) {
