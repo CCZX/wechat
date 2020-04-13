@@ -2,7 +2,7 @@ import userApi from '@/api/modules/user'
 
 const state = {
   isLogin: false || window.sessionStorage.getItem('isLogin'),
-  userInfo: '' || JSON.parse(window.localStorage.getItem('userInfo'))
+  userInfo: '' || JSON.parse(window.localStorage.getItem('userInfo') || '{}')
 }
 
 const mutations = {
