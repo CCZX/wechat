@@ -217,7 +217,7 @@ export const arrUnique = (arr) => {
 
 export const findParentNode = (target, parentClassName) => {
   let cur = target
-  while (cur !== null) {
+  while (cur !== null && cur !== document) {
     if (cur.classList.contains(parentClassName)) {
       return cur
     }
