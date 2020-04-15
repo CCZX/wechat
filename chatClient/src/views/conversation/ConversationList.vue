@@ -1,11 +1,12 @@
 <template>
   <div class="conversationlist-com">
     <div class="search">
-      <el-input
+      <!-- <el-input
         placeholder="please input keyword"
         suffix-icon="el-icon-search"
         v-model="searchKeyWord">
-      </el-input>
+      </el-input> -->
+      <top-search />
     </div>
     <div class="todo">
       <todo />
@@ -49,6 +50,7 @@ import recentConversationList from './RecentConversation'
 import fenzuConversationList from './FenzuConversation'
 import groupConversationList from './GroupConversation'
 import todo from '@/components/todo'
+import topSearch from './TopSearch'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
 import { conversationTypes } from '@/const'
 import { saveMyFriendsToLocalStorage, saveMyGroupToLocalStorage } from '@/utils'
@@ -142,7 +144,8 @@ export default {
     recentConversationList,
     fenzuConversationList,
     groupConversationList,
-    todo
+    todo,
+    topSearch
   },
 }
 </script>
