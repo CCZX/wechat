@@ -47,6 +47,7 @@ const getMyFriends = (req, res) => {
   })
 }
 
+/**查询最近好友列表 */
 const getRecentConversation = async (req, res) => {
   const { recentFriendIds = [], userId } = req.body
   const data = await FRIEND.find({
@@ -76,8 +77,32 @@ const addFriend = (data) => {
   })
 }
 
+const deleteFriend = async (req, res) => {
+  try {
+    const { userM, userY } = req.body
+    const data = await FRIEND.findOneAndRemove({
+      $or: [
+        {userM: userM, userY: userY},
+        {userM: userY, userY: userM}
+      ]
+    })
+    return res.json({
+      status: 2000,
+      data: data,
+      msg: '删除成功！'
+    })
+  } catch (error) {
+    return res.json({
+      status: 2003,
+      data: error,
+      msg: '服务器错误，请稍后重试！'
+    })
+  }
+}
+
 module.exports = {
   getMyFriends,
   addFriend,
-  getRecentConversation
+  getRecentConversation,
+  deleteFriend
 }
