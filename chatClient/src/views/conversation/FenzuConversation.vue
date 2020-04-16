@@ -67,8 +67,11 @@ export default {
     beizhu() { // 备注map
       return this.userInfo.friendBeizhu || {}
     },
+    firendsList() {
+      return this.$store.state.app.allFriends
+    },
     hasBeizhuList() { // 给会话列表加上分组
-      const conversationList = JSON.parse(JSON.stringify(this.conversationList))
+      const conversationList = JSON.parse(JSON.stringify(this.firendsList))
       const offlineUsers = []
       const onlineUsers = []
       conversationList.forEach(item => {
@@ -117,7 +120,8 @@ export default {
     }
   },
   methods: {
-    async getMyFriends() { // 获取所有的好友
+    /** 获取所有的好友 */
+    async getMyFriends() {
       const id = this.userInfo._id
       const { data, status } = await this.$http.getMyFriends(id)
       if (data.status === 2000 && (100 <= status <= 400)) {
@@ -130,6 +134,10 @@ export default {
         })
         this.conversationList = friendList
         this.$store.dispatch('app/SET_ALL_CONVERSATION', friendList)
+        this.$store.dispatch('app/SET_ALL_FRIENDS', {
+          resource: friendList,
+          type: 'init'
+        })
         // this.changeCurrentConversation(this.conversationList[0] || {})
         // 把好友的id保存到本地，可能会用到
         const saveLocalData = friendList.map(item => {

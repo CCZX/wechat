@@ -7,5 +7,8 @@ export default {
   },
   getRecentConversationList(data) {
     return request.post(`${API}/friendly/recentconversation`, data)
+  },
+  deleteFriend(data) {
+    return request.post(`${API}/friendly/deltefriend`, data)
   }
 }

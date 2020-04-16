@@ -11,7 +11,7 @@
     <div class="todo">
       <todo />
     </div>
-    <el-tabs type="border-card">
+    <el-tabs type="border-card" :stretch="true">
       <el-tab-pane>
         <span slot="label"><i class="el-icon-chat-line-round"></i></span>
         <recent-conversation-list
@@ -165,7 +165,9 @@ export default {
     overflow-x: hidden;
     .el-tabs__content {
       padding: 0;
-      min-height: calc(100% - 40px);
+      height: calc(100% - 40px);
+      overflow: scroll;
+      overflow-x: hidden;
       position: relative;
       .friend-tab-header {
         padding: 10px;
