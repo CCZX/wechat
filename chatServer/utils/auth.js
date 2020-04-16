@@ -38,5 +38,10 @@ module.exports = {
         msg: '登录过期！'
       })
     }
+  },
+  /**将token解析未userid */
+  parseToken(token) {
+    const userId = jwt.verify(token, TOKEN_SECRET).str
+    return userId
   }
 }
