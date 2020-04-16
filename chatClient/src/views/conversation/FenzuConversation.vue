@@ -235,3 +235,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.fenzu-conversation-list {
+  height: 461px;
+  overflow-x: hidden;
+}
+</style>

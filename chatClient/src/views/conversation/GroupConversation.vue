@@ -113,6 +113,8 @@ export default {
 
 <style lang="scss">
 .group-conversation-list {
+  height: 510px;
+  overflow-x: hidden;
   .create {
     position: absolute;
     bottom: 10px;

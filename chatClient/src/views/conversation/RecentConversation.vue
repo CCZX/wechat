@@ -203,7 +203,8 @@ export default {
 .recent-conversation-list {
   @import './../../../static/css/animation.scss';
   position: relative;
-  min-height: 400px;
+  height: 510px;
+  overflow-x: hidden;
   .empty {
     text-align: center;
   }

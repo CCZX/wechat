@@ -166,8 +166,8 @@ export default {
     .el-tabs__content {
       padding: 0;
       height: calc(100% - 40px);
-      overflow: scroll;
-      overflow-x: hidden;
+      // overflow: scroll;
+      // overflow-x: hidden;
       position: relative;
       .friend-tab-header {
         padding: 10px;
