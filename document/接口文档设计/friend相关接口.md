@@ -49,3 +49,17 @@ GET：`/api/v1/friendly/recentconversation`
 }
 ```
 
+### 3、删除好友
+
+GET：`/api/v1/friendly/deletefriend`
+
+> 描述：删除好友，在删除时会从token判断是不是自己主动删除的，不是就不会成功！
+
+> 传递参数
+
+```javascript
+{
+    userM: String, // 主动删除者ID
+    userY: String // 被动删除者ID
+}
+```
