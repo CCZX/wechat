@@ -1,5 +1,6 @@
 const FRIEND = require('./../models/friendly')
 const NEWS = require('./../models/news')
+const { parseToken } = require('./../utils/auth')
 
 const { computedLevel } = require('./../utils')
 
@@ -79,7 +80,19 @@ const addFriend = (data) => {
 
 const deleteFriend = async (req, res) => {
   try {
+    /**默认userM是主动删除者的ID，userY是被动删除者的ID */
     const { userM, userY } = req.body
+    const token = req.headers.authorization
+    /**判断用户携带的token是不是和userM相等，相等就是自己删除，否则可能是恶意操作 */
+    const userId = parseToken(token)
+    /**不是自己删除的，非法操作 */
+    if (userId !== userM) {
+      return res.json({
+        status: 4001,
+        data: '',
+        msg: '删除失败！'
+      })
+    }
     const data = await FRIEND.findOneAndRemove({
       $or: [
         {userM: userM, userY: userY},
