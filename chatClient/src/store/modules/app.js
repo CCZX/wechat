@@ -8,7 +8,8 @@ const state = {
   agreeFriendValidate: false, // 同意好友申请
   recentConversation: [], // 最近的会话列表
   onlineUser: [], // 在线用户
-  allConversation: [] // 所有会话
+  allConversation: [], // 所有会话
+  allFriends: [], // 所有的好友 
 }
 
 const mutations = {
@@ -52,6 +53,17 @@ const mutations = {
   },
   setAllConversation(state, data) {
     state.allConversation = [...state.allConversation, ...data]
+  },
+  setAllFriends(state, data) {
+    const { resource, type } = data
+    console.log('setFriend', data)
+    if (type === 'init') {
+      // resourece === [{...}, {...}, ...]
+      state.allFriends = resource
+    } else if (type === 'delete') {
+      // resource === 删除被好友ID
+      state.allFriends = (state.allFriends || []).filter(item => item._id !== resource)
+    }
   }
 }
 
@@ -82,6 +94,9 @@ const actions = {
   },
   SET_ALL_CONVERSATION({commit}, data) {
     commit('setAllConversation', data)
+  },
+  SET_ALL_FRIENDS({commit}, data) {
+    commit('setAllFriends', data)
   }
 }
 
