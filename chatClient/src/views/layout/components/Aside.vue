@@ -23,7 +23,7 @@
       </a>
     </div>
     <div class="operation">
-      <oper-menu />
+      <oper-menu @setShowTheme="setShowTheme" />
     </div>
   </div>
 </template>
@@ -31,6 +31,11 @@
 <script>
 import operMenu from './operMenu'
 export default {
+  props: {
+    setShowTheme: {
+      type: Function
+    }
+  },
   data() {
     return {
       IMG_URL: process.env.IMG_URL

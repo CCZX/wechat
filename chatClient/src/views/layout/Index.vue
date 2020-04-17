@@ -3,17 +3,20 @@
     <main class="co-messager-layout">
       <my-header></my-header>
       <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
-      <div class="filter-bgc"></div>
-      <el-main class="co-messager-main">
+      <div class="filter-bgc" v-css="{'filter': 'blur(' + blur + 'px)'}"></div>
+      <el-main class="co-messager-main" v-css="{'opacity': opacity}">
         <audio :src="NotifyAudio" ref="audio" muted></audio>
         <div class="co-messager-aside">
-          <my-aside />
+          <my-aside :set-show-theme="setShowTheme" />
         </div>
         <div class="co-messager-content">
           <router-view></router-view>
         </div>
       </el-main>
     </main>
+    <transition name="fade">
+      <theme v-if="showTheme" @setShowTheme="setShowTheme" />
+    </transition>
   </div>
 </template>
 
@@ -25,18 +28,24 @@ import bgImgUrl from './../../../static/image/bg.jpg'
 import { APP_VERSION } from '@/const'
 import { saveRecentConversationToLocal } from '@/utils'
 import { SET_UNREAD_NEWS_TYPE_MAP } from '@/store/constants'
+import theme from '@/components/theme'
 import NotifyAudio from './../../../static/audio/notify.mp3'
 export default {
   name: 'Layout',
   data() {
     return {
       bgImgUrl,
-      NotifyAudio
+      NotifyAudio,
+      showTheme: false
     }
   },
   computed: {
     ...mapState('user', {
       userInfo: 'userInfo'
+    }),
+    ...mapState('theme', {
+      opacity: 'opacity',
+      blur: 'blur'
     }),
     allConversation() {
       return this.$store.state.app.allConversation
@@ -53,7 +62,8 @@ export default {
   },
   components: {
     myHeader,
-    myAside
+    myAside,
+    theme
     // chatView
   },
   sockets: {
@@ -136,6 +146,9 @@ export default {
           this.$socket.emit('join', val)
         })
       }
+    },
+    setShowTheme(flag) {
+      this.showTheme = flag
     }
   },
   mounted() {
@@ -154,6 +167,7 @@ export default {
 <style lang="scss">
 .layout-page {
   @import './../../../static/css/var.scss';
+  @import './../../../static/css/animation.scss';
   height: 100%;
   background-image: url('./../../../static/image/3.jpg');
   background-repeat: no-repeat;

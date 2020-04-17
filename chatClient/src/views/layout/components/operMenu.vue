@@ -9,7 +9,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>
           <router-link to="/setting" class="aside-menu-link">
-            个人设置
+            <el-button type="text">个人设置</el-button>
           </router-link>
         </el-dropdown-item>
         <el-dropdown-item>
@@ -18,24 +18,20 @@
             :hidden="validateUnReadCount === 0"
           >
             <router-link to="/system" class="aside-menu-link">
-              系统消息
+              <el-button type="text">系统消息</el-button>
             </router-link>
           </el-badge>
         </el-dropdown-item>
         <el-dropdown-item>
-          <router-link to="/setting" class="aside-menu-link">
-            主题设置
-          </router-link>
+          <el-button type="text" @click="setShowTheme(true)">主题设置</el-button>
         </el-dropdown-item>
         <el-dropdown-item>
           <router-link to="/setting" class="aside-menu-link">
-            反馈
+            <el-button type="text">反馈</el-button>
           </router-link>
         </el-dropdown-item>
         <el-dropdown-item>
-          <a class="aside-menu-link" @click="logout">
-            退出
-          </a>
+          <el-button type="text" @click="logout">退出登录</el-button>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -64,6 +60,9 @@ export default {
       this.$socket.emit('leave')
       this.$store.dispatch('user/LOGOUT')
       removeCookie()
+    },
+    setShowTheme(flag) {
+      this.$emit('setShowTheme', flag)
     }
   },
 }
