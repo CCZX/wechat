@@ -2,6 +2,8 @@
   <div class="layout-page">
     <main class="co-messager-layout">
       <my-header></my-header>
+      <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
+      <div class="filter-bgc"></div>
       <el-main class="co-messager-main">
         <audio :src="NotifyAudio" ref="audio" muted></audio>
         <div class="co-messager-aside">
@@ -158,16 +160,28 @@ export default {
   background-size: cover;
   background-attachment: fixed;
   background-color: #e9ebee;
-  padding: 30px 0;
   position: relative;
   .co-messager-layout {
     box-sizing: border-box;
     height: 100%;
+    .filter-bgc {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -336px 0 0 -510px;
+      width: 1020px;
+      height: 672px;
+      background-image: url('./../../../static/image/3.jpg');
+      filter: blur(10px);
+    }
     .co-messager-main {
       display: flex;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -336px 0 0 -510px;
       width: 1020px;
-      height: 100%;
-      margin:0 auto;
+      height: 672px;
       background-color: #e9ebee;
       color: #333;
       border-radius: 5px;
@@ -175,9 +189,7 @@ export default {
       opacity: .8;
       .co-messager-aside {
         width: 7%;
-        height: calc(100vh - 60px);
-        // position: sticky;
-        // top: 60px;
+        height: 100%;
         border-right: 1px solid #cccccc;
       }
       .co-messager-content {
