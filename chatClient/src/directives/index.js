@@ -1,6 +1,18 @@
 import { Message } from 'element-ui'
 const IMG_URL = process.env.IMG_URL
 export default {
+  /**
+   * 为元素设置行内CSS样式
+   * @param {HTMLDataElement} el 
+   * @param {Object} binding binding的value也是是一个对象如：{width: 100px, height: 20px}
+   */
+  css(el, binding) {
+    const { value } = binding
+    const valueEntries = Object.entries(value)
+    for (const [key, value] of valueEntries) {
+      el.style[key] = value
+    }
+  },
   bgImage(el, binding) {
     el.style.backgroundImage = `url(${IMG_URL}${binding.value})`
     el.style.backgroundRepeat = 'no-repeat'
