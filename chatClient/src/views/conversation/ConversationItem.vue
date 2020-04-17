@@ -168,8 +168,8 @@ export default {
     },
     showMenu(e) {
       this.isShowMenu = true
-      this.menuLeft = e.pageX - 20
-      this.menuTop = e.pageY - 30
+      this.menuLeft = e.pageX
+      this.menuTop = e.pageY
     },
     hiddenMenu() {
       this.isShowMenu = false

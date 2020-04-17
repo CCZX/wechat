@@ -173,7 +173,6 @@ export default {
       border-radius: 5px;
       padding: 0;
       opacity: .8;
-      backdrop-filter: blur(40px);
       .co-messager-aside {
         width: 7%;
         height: calc(100vh - 60px);
