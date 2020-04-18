@@ -40,12 +40,21 @@ const systemPictureMap = {
   city: require('./../../../static/image/theme/city.jpg'),
   ocean: require('./../../../static/image/theme/ocean.jpg')
 }
+const notifySoundMap = {
+  default: require('./../../../static/audio/default.mp3'),
+  apple: require('./../../../static/audio/apple.mp3'),
+  pcqq: require('./../../../static/audio/pcqq.mp3'),
+  momo: require('./../../../static/audio/momo.mp3'),
+  huaji: require('./../../../static/audio/huaji.mp3'),
+  mobileqq: require('./../../../static/audio/mobileqq.mp3'),
+}
 export default {
   name: 'Layout',
   data() {
     return {
       bgImgUrl: '',
-      NotifyAudio,
+      NotifyAudio: '',
+      // notifySound: '',
       showTheme: false
     }
   },
@@ -56,7 +65,8 @@ export default {
     ...mapState('theme', {
       opacity: 'opacity',
       blur: 'blur',
-      bgImg: 'bgImg'
+      bgImg: 'bgImg',
+      notifySound: 'notifySound'
     }),
     allConversation() {
       return this.$store.state.app.allConversation
@@ -72,11 +82,17 @@ export default {
     },
     bgImg: {
       handler(bgImg) {
+        /**如果是base64就直接使用否则从系统自带图片获取 */
         if (bgImg.includes('base64')) {
           this.bgImgUrl = bgImg
         } else {
           this.bgImgUrl = systemPictureMap[bgImg]
         }
+      }, deep: true, immediate: true
+    },
+    notifySound: {
+      handler(notifySound) {
+        this.NotifyAudio = notifySoundMap[notifySound]
       }, deep: true, immediate: true
     }
   },

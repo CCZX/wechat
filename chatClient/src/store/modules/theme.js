@@ -12,7 +12,8 @@ const state = {
    * 区分系统自带和用户自定义判断是否包含base64
    * */
   bgImg: window.localStorage.getItem('theme-bgimg') === "null" || window.localStorage.getItem('theme-bgimg') === null ? 'abstract' : window.localStorage.getItem('theme-bgimg'),
-  notifySound: window.localStorage.getItem('theme-notifysound') === null ||window.localStorage.getItem('theme-notifysound') === "null" ? 'pcqq' : window.localStorage.getItem('theme-notifysound'),
+  notifySound: window.localStorage.getItem('theme-notifysound') === null ||window.localStorage.getItem('theme-notifysound') === "null" ? 'default' : window.localStorage.getItem('theme-notifysound'),
+  // isNotifySound: localStorageManager.get('theme-blur') || 10
 }
 
 const mutations = {
@@ -27,6 +28,10 @@ const mutations = {
   setBgImg(state, value) {
     localStorageManager.set('theme-bgimg', value)
     state.bgImg = value
+  },
+  setNotifySound(state, value) {
+    localStorageManager.set('theme-notifysound', value)
+    state.notifySound = value
   }
 }
 
@@ -39,6 +44,9 @@ const actions = {
   },
   SET_BG_IMG({commit}, value) {
     commit('setBgImg', value)
+  },
+  SET_NOTIFY_SOUND({commit}, value) {
+    commit('setNotifySound', value)
   }
 }
 

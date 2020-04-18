@@ -7,7 +7,7 @@
       <div class="theme-list">
         <div class="theme-item">
           <p class="title">透明度（{{opacity}}）</p>
-          <el-slider :step="0.1" v-model="opacity" :max="1" @change="opacityChange"></el-slider>
+          <el-slider :step="0.1" v-model="opacity" :min="0.1" :max="1" @change="opacityChange"></el-slider>
         </div>
         <div class="theme-item">
           <p class="title">毛玻璃效果模糊度（{{blur}}）</p>
@@ -27,6 +27,29 @@
             <input type="file" name="customImg" id="customImg" @change="customBgImg">
           </div>
         </div>
+        <div class="theme-item notify-sound">
+          <p class="title">
+            提示音设置
+            <el-switch
+              v-model="isNotifySound"
+              style="margin: 0 10px"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="开启"
+              inactive-text="关闭"
+              @change="notifySoundToggle"
+            >
+            </el-switch>
+          </p>
+          <el-radio-group v-model="notifySound" size="small" @change="notifySoundChange">
+            <el-radio label="default" border :disabled="!isNotifySound">默认</el-radio>
+            <el-radio label="pcqq" border :disabled="!isNotifySound">PC QQ</el-radio>
+            <el-radio label="mobileqq" border :disabled="!isNotifySound">手机QQ</el-radio>
+            <el-radio label="huaji" border :disabled="!isNotifySound">滑稽</el-radio>
+            <el-radio label="apple" border :disabled="!isNotifySound">苹果</el-radio>
+            <el-radio label="momo" border :disabled="!isNotifySound">陌陌</el-radio>
+          </el-radio-group>
+        </div>
       </div>
     </div>
   </div>
@@ -40,7 +63,9 @@ export default {
     return {
       opacity: 0,
       blur: 0,
-      bgImg: ''
+      bgImg: '',
+      isNotifySound: false, // 是否开启提示音
+      notifySound: ''
     }
   },
   methods: {
@@ -64,13 +89,28 @@ export default {
       }).catch(err => {
         this.$message.error(err)
       })
+    },
+    notifySoundChange(e) {
+      this.$store.dispatch('theme/SET_NOTIFY_SOUND', e)
+    },
+    /**开启提示音切换 */
+    notifySoundToggle(e) {
+      if (e) {
+        this.notifySound = 'default'
+        this.$store.dispatch('theme/SET_NOTIFY_SOUND', 'default')
+      } else {
+        this.notifySound = ''
+        this.$store.dispatch('theme/SET_NOTIFY_SOUND', 'none')
+      }
+
     }
   },
   mounted() {
-    const { opacity, blur, bgImg } = this.$store.state.theme
+    const { opacity, blur, bgImg, notifySound } = this.$store.state.theme
     this.opacity = parseFloat(opacity)
     this.blur = parseInt(blur)
     this.bgImg = (bgImg || '').includes('base64') ? "custom" : bgImg
+    this.notifySound = notifySound
   },
 }
 </script>
@@ -78,6 +118,7 @@ export default {
 <style lang="scss">
 .theme-choose-cmp {
   position: fixed;
+  z-index: 1020;
   background-color: rgba(0, 0, 0, .3);
   .theme-choose-cmp-container {
     width: 450px;
@@ -85,6 +126,7 @@ export default {
     padding: 20px;
     background-color: #fff;
     border-radius: 5px;
+    overflow-x: hidden;
     .theme-list {
       margin-top: 5px;
       .theme-item {
@@ -100,6 +142,16 @@ export default {
         }
         &:first-child {
           margin-top: 0;
+        }
+      }
+      .notify-sound {
+        .el-radio-group {
+          .el-radio {
+            margin-bottom: 10px;
+          }
+          .el-radio:nth-child(4n + 1) {
+            margin-left: 0;
+          }
         }
       }
     }
