@@ -14,17 +14,22 @@
           <el-slider v-model="blur" :max="100" @change="blurChange"></el-slider>
         </div>
         <div class="theme-item">
-          <p class="title">背景图片（尽量选择小于0.5M长方形的图片）</p>
+          <p class="title">背景图片</p>
           <el-radio-group v-model="bgImg" size="small" @change="bgImgChange">
             <el-radio label="abstract" border>抽象</el-radio>
             <el-radio label="city" border>城市</el-radio>
             <el-radio label="ocean" border>海岸</el-radio>
-            <el-radio label="custom" border>
-              <span>自定义</span>
-            </el-radio>
+            <el-radio label="custom" border>自定义</el-radio>
           </el-radio-group>
-          <div v-if="bgImg === 'custom'">
-            <input type="file" name="customImg" id="customImg" @change="customBgImg">
+          <div class="bgimg-preview">
+            <div v-if="bgImg === 'custom'" class="curp">
+              <label for="customImg">
+                <span class="tips el-icon-info">点击切换自定义图片，选择合适尺寸的图片。</span>
+                <img :src="customBgImgBase64" alt="" srcset="" width="200" height="110" />
+                <input style="display: none" type="file" name="customImg" id="customImg" @change="customBgImg">
+              </label>
+            </div>
+            <img v-show="bgImg !== 'custom'" :src="systemPictureMap[bgImg]" alt="" srcset="" width="200" height="110" />
           </div>
         </div>
         <div class="theme-item notify-sound">
@@ -67,6 +72,12 @@ const notifySoundMap = {
   mobileqq: require('./../../../static/audio/mobileqq.mp3'),
   none: ''
 }
+const systemPictureMap = {
+  abstract: require('./../../../static/image/theme/abstract.jpg'),
+  city: require('./../../../static/image/theme/city.jpg'),
+  ocean: require('./../../../static/image/theme/ocean.jpg')
+}
+const localBase64 = window.localStorage.getItem('theme-bgimg').includes('base64') ? window.localStorage.getItem('theme-bgimg') : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXMAAADPAQMAAAA9C6NrAAAAAXNSR0IArs4c6QAAAANQTFRFyb2Z4bxrAAAAACBJREFUaN7twTEBAAAAwqD1T20MH6AAAAAAAAAAAADgbybQAAFm0AbzAAAAAElFTkSuQmCC'
 let isPlaying = false
 export default {
   data() {
@@ -75,7 +86,9 @@ export default {
       blur: 0,
       bgImg: '',
       isNotifySound: false, // 是否开启提示音
-      notifySound: ''
+      notifySound: '',
+      systemPictureMap: {...systemPictureMap},
+      customBgImgBase64: localBase64
     }
   },
   methods: {
@@ -94,7 +107,7 @@ export default {
     },
     customBgImg(e) {
       localImgToBase64(e.target).then(res => {
-        console.log(res)
+        this.customBgImgBase64 = res
         this.$store.dispatch('theme/SET_BG_IMG', res)
       }).catch(err => {
         this.$message.error(err)

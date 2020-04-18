@@ -80,7 +80,7 @@ export default {
       })
       const list = data.data
       const myId = this.userInfo._id
-      const conversationList = list.map(item => {
+      const conversationList = (list || []).map(item => {
         let res = {}
         res.createDate = item.createDate
         res.roomid = item.userM._id + '-' + item.userY._id
