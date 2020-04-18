@@ -11,7 +11,8 @@ const state = {
    * 系统默认的有abstract.jpg\city.jpg\ocean.jpg
    * 区分系统自带和用户自定义判断是否包含base64
    * */
-  bgImg: window.localStorage.getItem('theme-bgimg') === "null" ? 'abstract' : window.localStorage.getItem('theme-bgimg')
+  bgImg: window.localStorage.getItem('theme-bgimg') === "null" || window.localStorage.getItem('theme-bgimg') === null ? 'abstract' : window.localStorage.getItem('theme-bgimg'),
+  notifySound: window.localStorage.getItem('theme-notifysound') === null ||window.localStorage.getItem('theme-notifysound') === "null" ? 'pcqq' : window.localStorage.getItem('theme-notifysound'),
 }
 
 const mutations = {
