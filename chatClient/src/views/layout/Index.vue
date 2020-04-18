@@ -1,25 +1,30 @@
 <template>
   <div class="layout-page" v-css="{'background-image': 'url(' + bgImgUrl + ')'}">
-    <main class="co-messager-layout">
-      <my-header></my-header>
-      <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
-      <div
-        class="filter-bgc"
-        v-css="{
-          'filter': 'blur(' + blur + 'px)',
-          'background-image': 'url(' + bgImgUrl + ')'
-        }"
-      />
-      <el-main class="co-messager-main" v-css="{'opacity': opacity}">
-        <audio :src="NotifyAudio" ref="audio" muted></audio>
-        <div class="co-messager-aside">
-          <my-aside :set-show-theme="setShowTheme" />
-        </div>
-        <div class="co-messager-content">
-          <router-view></router-view>
-        </div>
-      </el-main>
-    </main>
+    <div class="toggle" @click="setShowMain" title="切换聊天区域是否显示">
+      <i class="icon el-icon-thumb"></i>
+    </div>
+    <transition name="fade">
+      <main v-show="showMain" class="co-messager-layout">
+        <my-header></my-header>
+        <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
+        <div
+          class="filter-bgc"
+          v-css="{
+            'filter': 'blur(' + blur + 'px)',
+            'background-image': 'url(' + bgImgUrl + ')'
+          }"
+        />
+        <el-main class="co-messager-main" v-css="{'opacity': opacity}">
+          <audio :src="NotifyAudio" ref="audio" muted></audio>
+          <div class="co-messager-aside">
+            <my-aside :set-show-theme="setShowTheme" />
+          </div>
+          <div class="co-messager-content">
+            <router-view></router-view>
+          </div>
+        </el-main>
+      </main>
+    </transition>
     <transition name="fade">
       <theme v-if="showTheme" @setShowTheme="setShowTheme" />
     </transition>
@@ -56,7 +61,8 @@ export default {
       bgImgUrl: '',
       NotifyAudio: '',
       // notifySound: '',
-      showTheme: false
+      showTheme: false,
+      showMain: true // 聊天区域是否展示
     }
   },
   computed: {
@@ -187,6 +193,9 @@ export default {
     setShowTheme(flag) {
       this.showTheme = flag
     },
+    setShowMain() {
+      this.showMain = !this.showMain
+    }
   },
   mounted() {
     this.$socket.emit('connect')
@@ -212,6 +221,16 @@ export default {
   background-color: #e9ebee;
   position: relative;
   transition: all .4s ease-out;
+  .toggle {
+    position: fixed;
+    .icon {
+      padding: 5px;
+      font-size: 20px;
+      color: #ffffff;
+      border: 1px solid #ffffff;
+      border-radius: 50%;
+    }
+  }
   .co-messager-layout {
     box-sizing: border-box;
     height: 100%;
