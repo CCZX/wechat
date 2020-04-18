@@ -224,3 +224,51 @@ export const findParentNode = (target, parentClassName) => {
     cur = cur.parentNode
   }
 }
+
+/**
+ * localStorage管理
+ * 这里只针对JSON.pase()出来是对象、数组、number、null的情况，如果涉及String不支持，会报错
+ */
+export class LocalStorageManager {
+  get(key) {
+    const value = window.localStorage.getItem(key) || "null"
+    return JSON.parse(value)
+  }
+  set(key, value) {
+    // const isObj = Object.prototype.toString.call(value) === "[object Object]"
+    /**数组、对象都转字符串 */
+    const isObj = typeof value === 'object'
+    const strVal = isObj ? JSON.stringify(value) : value
+    window.localStorage.setItem(key, strVal)
+  }
+}
+
+/**
+ * 将获取到的本地图片转为base64
+ * @param {HTMLInputElement} fileDom
+ */
+export const localImgToBase64 = (fileDom) => {
+  /**jpeg和jpg是一种 */
+  const imgTypeArr = ['jpeg', 'png', 'gif', 'jpg']
+  return new Promise((resolve, reject) => {
+    const [file] = fileDom.files
+    const fileType = file.type && file.type.split("/")[1]
+    const fileSize = file.size / 1024 / 1024
+    if (!imgTypeArr.includes(fileType)) {
+      reject('只能上传图片！')
+    }
+    if (fileSize > 0.5) {
+      reject('只能上传小于0.5M的图片！')
+    }
+    console.log(file)
+    const imgFileReader = new  FileReader()
+    imgFileReader.readAsDataURL(file)
+    imgFileReader.onload = (e) => {
+      const data = e.target.result
+      resolve(data)
+    }
+    imgFileReader.onerror = () => {
+      reject('上传失败！')
+    }
+  })
+}
