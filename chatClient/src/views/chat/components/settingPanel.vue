@@ -2,22 +2,22 @@
   <div class="setting-panel-cmp">
     <div class="operation-list">
       <span
-        class="item operation-text"
+        class="oper-item operation-text"
         @click.stop="showFenzu"
         v-if="currentConversation.conversationType === conversationTypes.friend"
       >切换分组</span>
       <span
-        class="item operation-text"
+        class="oper-item operation-text"
         slot="reference"
         @click.stop="showBeizhu"
         v-if="currentConversation.conversationType === conversationTypes.friend"
       >修改备注</span>
       <span
-        class="item operation-text__danger"
+        class="oper-item operation-text__danger"
         v-if="currentConversation.conversationType === conversationTypes.friend"
       >删除好友</span>
       <span
-        class="item operation-text__danger"
+        class="oper-item operation-text__danger"
         v-if="currentConversation.conversationType === conversationTypes.group"
       >退出群聊</span>
     </div>
@@ -62,13 +62,16 @@ export default {
 
 <style lang="scss">
 .setting-panel-cmp {
-  padding-left: 20px;
+  height: 100%;
   background-color: #fff;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   .operation-list {
-    .item {
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    .oper-item {
       line-height: 20px;
+      margin-top: 10px;
     }
   }
 }

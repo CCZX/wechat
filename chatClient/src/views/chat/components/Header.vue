@@ -4,23 +4,25 @@
       <div class="header-wrapper" v-if="currentConversation.roomid">
         <div class="header-title">
           <span>{{haderTitle}}</span>
-          <i :class="!showSettingPanel ? 'el-icon-arrow-down curp' : 'el-icon-arrow-up curp'" @click.stop="toggleShowSettingPanel"></i>
+          <!-- <i :class="!showSettingPanel ? 'el-icon-arrow-down curp' : 'el-icon-arrow-up curp'"></i> -->
           <!-- <i class="icon-qun iconfont iconic iconic-group" v-if="currentConversation.conversationType === 'GROUP'"></i> -->
           <!-- <i class="el-icon-user-solid iconic " v-else></i> -->
         </div>
-        <div class="header-operation" v-if="!currentConversation.isGroup">
-          <el-tooltip class="item" effect="dark" content="白板协作需要良好的网络环境" placement="top">
-            <i
-              class="operation-item iconfont icon-huaban"
-              @click="enterArtBoard"></i>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
-            <i class="operation-item iconfont icon-shipin" @click="videoCall"></i>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
-            <i class="operation-item el-icon-phone-outline" @click="audioCall"></i>
-          </el-tooltip>
-          <i class="operation-item el-icon-s-tools" title="设置" @click="setShowSider"></i>
+        <div class="header-operation">
+          <span v-if="!currentConversation.isGroup">
+            <el-tooltip class="item" effect="dark" content="白板协作需要良好的网络环境" placement="top">
+              <i
+                class="operation-item iconfont icon-huaban"
+                @click="enterArtBoard"></i>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
+              <i class="operation-item iconfont icon-shipin" @click="videoCall"></i>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
+              <i class="operation-item el-icon-phone-outline" @click="audioCall"></i>
+            </el-tooltip>
+          </span>
+          <i class="operation-item el-icon-menu" title="设置" @click.stop="toggleShowSettingPanel"></i>
         </div>
       </div>
     </transition>
@@ -60,7 +62,7 @@ export default {
       if (currentConversation.isGroup) {
         res = currentConversation.groupId.title
       } else {
-        res = this.beizhu[currentConversation._id] ? this.beizhu[currentConversation._id] : currentConversation.nickname
+        res = this.beizhu[currentConversation._id] ? this.beizhu[currentConversation._id] + `（${currentConversation.nickname}）` : currentConversation.nickname
       }
       return res
     },
@@ -86,10 +88,12 @@ export default {
       this.$store.dispatch('app/SET_IS_AUDIOING', true)
       this.$eventBus.$emit('web_rtc_msg', { type: WEB_RTC_MSG_TYPE.audio})
     },
-    setShowSider() {
-    },
     toggleShowSettingPanel() {
       this.showSettingPanel = !this.showSettingPanel
+    },
+    watchDocumentClick() {
+      if (!this.showSettingPanel) return
+      this.toggleShowSettingPanel()
     }
   },
   watch: {
@@ -102,11 +106,12 @@ export default {
   components: {
     settingPanel
   },
-  // mounted() {
-  //   document.addEventListener('click', () => {
-  //     this.showSettingPanel = false
-  //   })
-  // },
+  mounted() {
+    document.addEventListener('click', this.watchDocumentClick)
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.watchDocumentClick)
+  },
 }
 </script>
 
@@ -132,8 +137,9 @@ export default {
   .setting-panel {
     position: absolute;
     top: 100%;
-    left: 0px;
-    width: 100%;
+    right: 0px;
+    width: 20%;
+    height: 461px;
     z-index: 1005;
   }
   .iconic-group::before {
