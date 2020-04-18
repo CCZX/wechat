@@ -44,6 +44,15 @@ html, body {
   box-sizing: border-box;
 }
 
+.tips {
+  font-size: 12px;
+  color: $primarycolor-1;
+  margin-bottom: 5px;
+  &::before {
+    margin-right: 5px;
+  }
+}
+
 .aside-menu-link {
   text-decoration: none;
   color: $color-grey8;
