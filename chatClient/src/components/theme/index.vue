@@ -58,6 +58,16 @@
 <script>
 import { mapState } from 'vuex'
 import { localImgToBase64 } from '@/utils'
+const notifySoundMap = {
+  default: require('./../../../static/audio/default.mp3'),
+  apple: require('./../../../static/audio/apple.mp3'),
+  pcqq: require('./../../../static/audio/pcqq.mp3'),
+  momo: require('./../../../static/audio/momo.mp3'),
+  huaji: require('./../../../static/audio/huaji.mp3'),
+  mobileqq: require('./../../../static/audio/mobileqq.mp3'),
+  none: ''
+}
+let isPlaying = false
 export default {
   data() {
     return {
@@ -92,17 +102,34 @@ export default {
     },
     notifySoundChange(e) {
       this.$store.dispatch('theme/SET_NOTIFY_SOUND', e)
+      this.playNotifySound()
     },
     /**开启提示音切换 */
     notifySoundToggle(e) {
       if (e) {
         this.notifySound = 'default'
         this.$store.dispatch('theme/SET_NOTIFY_SOUND', 'default')
+        this.playNotifySound()
       } else {
         this.notifySound = ''
         this.$store.dispatch('theme/SET_NOTIFY_SOUND', 'none')
+        this.playNotifySound()
       }
 
+    },
+    playNotifySound() {
+      if (isPlaying) return
+      isPlaying = true
+      const audio = document.createElement('audio')
+      const source = document.createElement('source')
+      audio.volume = 0.6;
+      source.setAttribute('type', 'audio/mp3');
+      source.setAttribute('src', notifySoundMap[this.notifySound]);
+      audio.appendChild(source);
+      document.body.appendChild(audio);
+      audio.play().then(res => {
+        isPlaying = false
+      })
     }
   },
   mounted() {
@@ -111,6 +138,7 @@ export default {
     this.blur = parseInt(blur)
     this.bgImg = (bgImg || '').includes('base64') ? "custom" : bgImg
     this.notifySound = notifySound
+    this.isNotifySound = notifySound !== 'none'
   },
 }
 </script>
@@ -137,7 +165,7 @@ export default {
         .el-radio-group {
           margin-top: 15px;
           .el-radio {
-            margin-right: 5px;
+            margin: 0 5px 10px 0;
           }
         }
         &:first-child {
@@ -146,9 +174,6 @@ export default {
       }
       .notify-sound {
         .el-radio-group {
-          .el-radio {
-            margin-bottom: 10px;
-          }
           .el-radio:nth-child(4n + 1) {
             margin-left: 0;
           }

@@ -47,6 +47,7 @@ const notifySoundMap = {
   momo: require('./../../../static/audio/momo.mp3'),
   huaji: require('./../../../static/audio/huaji.mp3'),
   mobileqq: require('./../../../static/audio/mobileqq.mp3'),
+  none: ''
 }
 export default {
   name: 'Layout',
@@ -210,6 +211,7 @@ export default {
   background-attachment: fixed;
   background-color: #e9ebee;
   position: relative;
+  transition: all .4s ease-out;
   .co-messager-layout {
     box-sizing: border-box;
     height: 100%;
