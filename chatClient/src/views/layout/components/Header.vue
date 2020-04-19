@@ -131,7 +131,7 @@ export default {
     }),
     validateUnReadCount() {
       const validateSysUser = (this.$store.state.app.sysUsers || []).find(item => item.code === '111111')
-      const key = validateSysUser._id + '-' + this.userInfo._id
+      const key = (validateSysUser || {})._id + '-' + (this.userInfo || {})._id
       return this.unreadNews[key]
     },
     ...mapState('app', {
