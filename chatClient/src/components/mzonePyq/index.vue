@@ -61,7 +61,7 @@
             <i
               class="item iconfont icon-dianzan like" title="点赞"
               @click="doLike(item._id, pyqIndex)"
-              :style="hasILike[item._id].includes(userInfo._id) ? 'color: #c35673' : ''"
+              :style="(hasILike[item._id] || []).includes(userInfo._id) ? 'color: #c35673' : ''"
             />
             <i class="item iconfont icon-zhuanfa farward" title="转发"></i>
           </div>

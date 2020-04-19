@@ -37,7 +37,7 @@ export default {
     outCome() {
       let res = {...this.weather}
       weatherMapKeys.forEach(item => {
-        if (item.includes(res.type)) {
+        if ((item || []).includes(res.type)) {
           res.iconclass = weatherMap[item]
         }
       })

@@ -7,6 +7,7 @@
         type="text"
         class="normal-inp"
         @keydown.enter="search"
+        v-model="keyword"
         @focus="setShowContent(true)"
       >
     </div>
@@ -44,12 +45,13 @@ export default {
   },
   data() {
     return {
+      keyword: '',
       showContent: false
     }
   },
   methods: {
     search() {
-      this.$emit('search')
+      this.$emit('search', this.keyword)
     },
     setShowContent(flag) {
       this.showContent = flag

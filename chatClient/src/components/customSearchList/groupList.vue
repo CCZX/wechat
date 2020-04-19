@@ -22,7 +22,7 @@
           type="primary"
           size="small"
           icon="el-icon-plus"
-          :disabled="groups.includes(item._id)"
+          :disabled="(groups || []).includes(item._id)"
           @click="showAdditionDialog(item)"
         >添加
         </el-button>

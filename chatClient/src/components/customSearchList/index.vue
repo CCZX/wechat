@@ -25,7 +25,7 @@
           type="primary"
           size="small"
           icon="el-icon-plus"
-          :disabled="friends.includes(item._id)"
+          :disabled="(friends || []).includes(item._id)"
           @click="showAdditionDialog(item)"
         >添加
         </el-button>

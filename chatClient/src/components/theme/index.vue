@@ -77,7 +77,7 @@ const systemPictureMap = {
   city: require('./../../../static/image/theme/city.jpg'),
   ocean: require('./../../../static/image/theme/ocean.jpg')
 }
-const localBase64 = window.localStorage.getItem('theme-bgimg').includes('base64') ? window.localStorage.getItem('theme-bgimg') : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXMAAADPAQMAAAA9C6NrAAAAAXNSR0IArs4c6QAAAANQTFRFyb2Z4bxrAAAAACBJREFUaN7twTEBAAAAwqD1T20MH6AAAAAAAAAAAADgbybQAAFm0AbzAAAAAElFTkSuQmCC'
+const localBase64 = (window.localStorage.getItem('theme-bgimg') || '').includes('base64') ? window.localStorage.getItem('theme-bgimg') : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXMAAADPAQMAAAA9C6NrAAAAAXNSR0IArs4c6QAAAANQTFRFyb2Z4bxrAAAAACBJREFUaN7twTEBAAAAwqD1T20MH6AAAAAAAAAAAADgbybQAAFm0AbzAAAAAElFTkSuQmCC'
 let isPlaying = false
 export default {
   data() {

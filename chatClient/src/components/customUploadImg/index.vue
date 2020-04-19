@@ -3,11 +3,23 @@
     <div class="upload-img-com-wrapper">
       <el-alert title="只能上传小于 1M 的图片" type="warning" effect="dark" :closable="false" />
       <div class="option">
-        <input type="file" @change="uploadServer" name="" id="">
-        <label for="upimg">
-          <i class="option-item ok el-icon-picture">选择
+        <!-- <input type="file" @change="uploadServer" name="" id=""> -->
+        <label for="up-to-server">
+          <i class="option-item ok el-icon-picture">上传服务器
             <input
-              id="upimg"
+              id="up-to-server"
+              class="img-inp upload"
+              type="file"
+              title="选择图片"
+              accept="image/png, image/jpeg, image/gif, image/jpg"
+              @change="uploadServer"
+            >
+          </i>
+        </label>
+        <label for="up-to-qiniu">
+          <i class="option-item ok el-icon-picture">上传七牛云
+            <input
+              id="up-to-qiniu"
               class="img-inp upload"
               type="file"
               title="选择图片"
@@ -16,7 +28,6 @@
             >
           </i>
         </label>
-        <i class="option-item close el-icon-close">取消</i>
       </div>
     </div>
   </div>
@@ -34,7 +45,7 @@ export default {
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
       if (fileSize > 1) {
-        this.$message.error('只能上传小于1M的图片！换一个小图片试试吧~~');
+        this.$message.error('只能上传小于1M的图片！换一个小图片试试吧~~')
         return
       }
       const putExtra = {
@@ -65,6 +76,8 @@ export default {
     },
     /**上传至本地服务器 */
     uploadServer(e) {
+      this.$message.error('为减少服务器压力线上请上传至七牛云哟~');
+      return
       const file = e.target.files[0]
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
@@ -72,6 +85,10 @@ export default {
       formdata.append('file', file)
       this.$http.uploadFile(formdata).then(res => {
         console.log('上传文件结果', res)
+        const { data } = res
+        if (res.status === 2000) {
+          this.getstatus({status: uploadImgStatusMap.complete, data: res})
+        }
       })
     }
   },
@@ -89,18 +106,16 @@ export default {
       text-align: right;
       .option-item {
         display: inline-block;
+        padding: 5px;
         background-color: #c35673;
         color: #fff;
-        width: 70px;
-        height: 30px;
+        height: 40px;
         line-height: 30px;
         text-align: center;
         cursor: pointer;
+        border-radius: 5px;
         &::before {
           margin-right: 5px;
-        }
-        &.close {
-          background-color: #F56C6C;
         }
       }
       .img-inp {

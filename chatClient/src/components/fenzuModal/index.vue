@@ -56,7 +56,7 @@ export default {
       const fenzuIdsMap = this.userInfo.friendFenzu
       let res = ''
       this.fenzuKeys.forEach(item => {
-        if (fenzuIdsMap[item].includes(this.currentConversation._id)) {
+        if ((fenzuIdsMap[item] || []).includes(this.currentConversation._id)) {
           res = item
         }
       })
