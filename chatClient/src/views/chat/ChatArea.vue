@@ -55,7 +55,10 @@
         <el-button @click="send" type="success" size="small" round>发送</el-button>
         <el-button @click="send" type="danger" size="small" round>清空</el-button>
       </div>
-      <textarea class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true" @keydown.enter="send($event)"></textarea>
+      <div style="display: none" contenteditable="true" class="textarea" @input="test">
+
+      </div>
+      <textarea ref="chatInp" class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true" @keydown.enter="send($event)"></textarea>
       <transition name="fade">
         <up-img class="emoji-component" v-if="showUpImgCom" :token="token" @getstatus="getImgUploadResult" :getstatus="getImgUploadResult" />
       </transition>
@@ -131,6 +134,9 @@ export default {
     }
   },
   methods: {
+    test(e) {
+      console.log(e, 123132)
+    },
     setShowHistoryMsg() {
       this.showHistoryMsg = !this.showHistoryMsg
     },
@@ -278,6 +284,12 @@ export default {
           }
         })
       })
+    },
+    /**聊天内容输入框自动聚焦 */
+    chatInpAutoFocus() {
+      this.$nextTick(() => {
+        this.$refs.chatInp.focus();
+      })
     }
   },
   components: {
@@ -291,6 +303,7 @@ export default {
   watch: {
     currentConversation(newVal, oldVal) {
       if (newVal && newVal._id) {
+        this.chatInpAutoFocus()
         this.page = 0
         this.scrollBottom = true
         this.showHistoryMsg = false
@@ -391,6 +404,7 @@ export default {
       right: 2px;
     }
     .textarea {
+      overflow-x: hidden;
       box-sizing: border-box;
       height: calc(100% - 30px);
       width: 100%;
@@ -402,6 +416,9 @@ export default {
       background-color: #e9ebee;
       padding: 10px;
       resize: none;
+      img {
+        width: 50px;
+      }
     }
     .emoji-component {
       position: absolute;
