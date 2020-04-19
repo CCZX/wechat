@@ -230,9 +230,15 @@ export const findParentNode = (target, parentClassName) => {
  * 这里只针对JSON.pase()出来是对象、数组、number、null的情况，如果涉及String不支持，会报错
  */
 export class LocalStorageManager {
-  get(key) {
+  /**获取JSON */
+  getJson(key) {
     const value = window.localStorage.getItem(key) || "null"
     return JSON.parse(value)
+  }
+  /**获取字符串 */
+  getStr(key) {
+    const value = window.localStorage.getItem(key)
+    return value
   }
   set(key, value) {
     // const isObj = Object.prototype.toString.call(value) === "[object Object]"
