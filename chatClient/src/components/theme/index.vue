@@ -162,14 +162,13 @@ export default {
   z-index: 1020;
   background-color: rgba(0, 0, 0, .3);
   .theme-choose-cmp-container {
-    width: 450px;
-    height: 427px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    overflow-x: hidden;
     .theme-list {
-      margin-top: 5px;
+      width: 450px;
+      height: 427px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      overflow-x: hidden;
       .theme-item {
         margin-top: 15px;
         .title {
