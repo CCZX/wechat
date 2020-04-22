@@ -1,5 +1,9 @@
-// 判断是否是一个滚动元素
 const scrollList = ["auto", "scroll"]
+/**
+ * 判断是否是一个滚动元素
+ * @param {HTMLElement} el 
+ * @param {String} direction 
+ */
 export function hasScrollElement(el, direction = "vertical") {
   if(!el) return
   let style = window.getComputedStyle(el)
@@ -10,7 +14,11 @@ export function hasScrollElement(el, direction = "vertical") {
   }
 }
 
-// 获取第一个滚动元素
+/**
+ * 获取第一个滚动元素
+ * @param {HTMLElement} el 
+ * @param {String} direction 
+ */
 export function getFirstScrollElement(el, direction = "vertical") {
   if(!el) return
   if (hasScrollElement(el)) {
@@ -20,7 +28,11 @@ export function getFirstScrollElement(el, direction = "vertical") {
   }
 }
 
-// 格式化时间
+/**
+ * 格式化时间
+ * @param {Date} time 
+ * @param {Boolean} full 
+ */
 export function fromatTime(time, full = true) { //
   const y = formatNumber(time.getFullYear())
   const m = formatNumber(time.getMonth() + 1)
@@ -35,7 +47,10 @@ export function fromatTime(time, full = true) { //
   }
 }
 
-// 格式化数字 '1' => '01'
+/**
+ * 格式化数字 1 => 01
+ * @param {Number} num 
+ */
 function formatNumber(num) {
   let isNumber = isType('Number')
   if (!isNumber(num)) return
@@ -57,7 +72,11 @@ export function isProduction() {
 export const accountReg = /^[\w\d_]{3,6}/
 export const passwordReg = /^[\w\d]{6,14}/
 
-// 格式化日期
+/**
+ * 格式化日期
+ * @param {Date} time 
+ * @param {String} type 
+ */
 export function formatDate(time, type = 'YYYY-MM-DD') { //
   const y = formatNumber(time.getFullYear())
   const m = formatNumber(time.getMonth() + 1)
@@ -78,7 +97,10 @@ export function formatDate(time, type = 'YYYY-MM-DD') { //
   }
 }
 
-// 将时间转化为中文的形式：昨天 12：12，12月12日 12：12
+/**
+ * 将时间转化为中文的形式：昨天 12：12，12月12日 12：12
+ * @param {String | Number} date 
+ */
 export const formatDateToZH = (date) => {
   const targetDate = new Date(date)
   const nowTime = new Date(formatDate(new Date())).getTime()
@@ -149,7 +171,11 @@ export const validateSignature = (rule, value, callback) => {
   }
 }
 
-// 防抖函数
+/**
+ * 防抖函数
+ * @param {Function} fn 
+ * @param {Number} wait 
+ */
 export function debounce(fn, wait) {
   let timer
   return function (...arg) {
@@ -162,21 +188,23 @@ export function debounce(fn, wait) {
   }
 }
 
+/**将我的好友ID、群聊ID保存至localStorage */
 export const saveMyFriendsToLocalStorage = (data) => {
   data = JSON.stringify(data)
   window.localStorage.setItem('friends', data)
 }
-
 export const saveMyGroupToLocalStorage = (data) => {
   data = JSON.stringify(data)
   window.localStorage.setItem('groups', data)
 }
 
-// 随机名称函数
+/**
+ * 随机名称函数
+ */
 export function imgRandomName() {
   const timestamp = Date.now().toString(16)
   const random = Math.floor(Math.random()*100)
-  const res = `cc-messger-${timestamp}-${random}`
+  const res = `co-messger-${timestamp}-${random}`
   return res
 }
 
@@ -198,6 +226,10 @@ const saveGroup = (id) => {
   storage.setItem('coMessager-recentConversation-group', recentStr)
 }
 
+/**
+ * 将最近会话保存到localStorage
+ * @param {Object} data 
+ */
 export const saveRecentConversationToLocal = (data) => {
   if (data.conversationType === 'FRIEND') {
     saveFriend(data._id)
@@ -207,6 +239,10 @@ export const saveRecentConversationToLocal = (data) => {
   
 }
 
+/**
+ * 数组去重
+ * @param {Array} arr 
+ */
 export const arrUnique = (arr) => {
   const list = [...arr]
   return list.reduce((mult, item) => {
@@ -215,6 +251,11 @@ export const arrUnique = (arr) => {
   }, [])
 }
 
+/**
+ * 
+ * @param {HTMLElement} target 
+ * @param {String} parentClassName 
+ */
 export const findParentNode = (target, parentClassName) => {
   let cur = target
   while (cur !== null && cur !== document) {
@@ -227,7 +268,6 @@ export const findParentNode = (target, parentClassName) => {
 
 /**
  * localStorage管理
- * 这里只针对JSON.pase()出来是对象、数组、number、null的情况，如果涉及String不支持，会报错
  */
 export class LocalStorageManager {
   /**获取JSON */
@@ -277,4 +317,45 @@ export const localImgToBase64 = (fileDom) => {
       reject('上传失败！')
     }
   })
+}
+
+/**
+ * 设置CSS
+ * @param {*} theme 
+ */
+export const setCSS = (theme) => {
+  
+}
+
+/**
+ * 滚动到顶部
+ */
+export const scrollToTop = () => {
+  const top = document.documentElement.scrollTop || document.body.scrollTop;
+  if (top > 0) {
+    window.requestAnimationFrame(scrollToTop)
+    window.scrollTo(0, top - top / 8)
+  }
+}
+
+/**
+ * 检查指定的元素在视口中是否可见
+ * @param {HTMLElement} el 
+ * @param {Boolean} partiallyVisible 
+ */
+export const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
+  const { top, left, bottom, right } = el.getBoundingClientRect();
+  const { innerHeight, innerWidth } = window;
+  return partiallyVisible
+    ? ((top > 0 && top < innerHeight) || (bottom > 0 && bottom < innerHeight)) &&
+        ((left > 0 && left < innerWidth) || (right > 0 && right < innerWidth))
+    : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
+}
+
+/**
+ * 获取设备类型
+ */
+export const getDeviceType = () => {
+  const reg =  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+  return reg.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
 }
