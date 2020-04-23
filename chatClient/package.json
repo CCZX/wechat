@@ -22,7 +22,8 @@
     "vue-fullcalendar": "^1.0.9",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.7",
-    "vuex": "^3.1.1"
+    "vuex": "^3.1.1",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

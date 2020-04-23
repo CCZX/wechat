@@ -80,6 +80,7 @@ import customEmoji from '@/components/customEmoji'
 import upImg from '@/components/customUploadImg'
 import groupDesc from './components/GroupDesc'
 import historyMsg from './components/HistoryMsg'
+import xss from '@/utils/xss'
 export default {
   props: {
     currentConversation: Object,
@@ -195,7 +196,7 @@ export default {
       const common = this.generatorMessageCommon()
       const newMessage = {
         ...common,
-        message: this.messageText,
+        message: xss(this.messageText),
         messageType: "text",
       }
       this.messages = [...this.messages, newMessage]
