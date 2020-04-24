@@ -2,35 +2,48 @@ import request from '@/utils/request'
 import { API } from './../index'
 
 export default {
+  /**登录 */
   login(data) {
     return request.post(`${API}/user/login`, data)
   },
-  getCVCode() { // 获取验证码
+  /**获取验证码 */
+  getCVCode() {
     return request.get(`${API}/user/getcode`)
   },
-  register(data) { // 注册
+  /**注册 */
+  register(data) {
     return request.post(`${API}/user/register`, data)
   },
+  /**获取用户详情 */
   getUserInfo(id) {
     return request.get(`${API}/user/userinfo?id=${id}`)
   },
+  /**获取用户（搜索） */
   preFetchUser(data) {
     let { type, q, page, pageSize } = data
     return request.get(`${API}/user/prefetchuser?type=${type}&q=${q}&page=${page}&pageSize=${pageSize}`)
   },
+  /**添加分组 */
   addNewFenzu(data) {
     return request.post(`${API}/user/addfenzu`, data)
   },
+  /**修改分组 */
   modifyuserfenzu(data) {
     return request.post(`${API}/user/modifyuserfenzu`, data)
   },
   modifyFriendBeizhu(data) {
     return request.post(`${API}/user/modifyfriendbeizhu`, data)
   },
+  /**删除分组 */
   deleteFenzu(data) {
     return request.post(`${API}/user/delfenzu`, data)
   },
-  editFeznu(data) { // 编辑某项分组名称
+  /**编辑分组 */
+  editFeznu(data) {
     return request.post(`${API}/user/editfenzu`, data)
+  },
+  /**更新我的相关信息 */
+  updateMyInfo(data) {
+    return request.post(`${API}/user/updatemyinfo`, data)
   }
 }
