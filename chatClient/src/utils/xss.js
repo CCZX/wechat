@@ -4,6 +4,6 @@ const myXSS = new xss.FilterXSS({
   whiteList: {}
 })
 
-export function processXSS(text) {
+export default function processXSS(text) {
   return myXSS.process(text)
 }
