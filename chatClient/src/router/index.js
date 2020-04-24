@@ -15,7 +15,7 @@ const router = new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import("@/views/login"),
+      component: () => import("@/views/Login"),
       meta: {
         deepth: 0.5
       }
@@ -74,7 +74,7 @@ const router = new Router({
         {
           path: 'mzone',
           name: 'MZone',
-          component: () => import('@/views/mzone'),
+          component: () => import('@/views/MZone'),
           meta: {
             requiresAuth: true
           },
