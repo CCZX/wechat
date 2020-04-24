@@ -24,3 +24,5 @@ chatServer/public/static
 chatServer/public/build
 chatServer/index.html
 chatServer/admin.html
+
+ts-server/build
