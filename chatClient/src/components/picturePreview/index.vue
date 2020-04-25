@@ -1,9 +1,37 @@
 <template>
   <div class="picture-preview-com all0">
     <div class="img-wrapper hor-ver-center" v-if="!error">
-      <img :src="img_url" class="img-content" alt="图片" @error="handlerError">
+      <img
+        class="img-content" alt="图片地址" @error="handlerError"
+        :src="img_url"
+        :style="`transform:scale(${scale}) rotateZ(${rotate}deg)`"
+      >
     </div>
-    <div class="operation" v-if="showOper">
+    <div class="operation-list" v-if="showOper">
+      <span
+        class="oper-item close"
+        title="关闭"
+      />
+      <span
+        class="oper-item el-icon-plus plus"
+        title="放大"
+        @click.stop="plus"
+      />
+      <span
+        class="oper-item el-icon-minus minus"
+        title="缩小"
+        @click.stop="minus"
+      />
+      <span
+        class="oper-item el-icon-refresh-left spin"
+        title="逆时针旋转90°"
+        @click.stop="spin('left')"
+      />
+      <span
+        class="oper-item el-icon-refresh-right spin"
+        title="顺时针旋转90°"
+        @click.stop="spin('right')"        
+      />
       <span
         class="oper-item el-icon-arrow-left previous"
         title="上一张"
@@ -14,9 +42,12 @@
         title="下一张"
         @click.stop="next"
       />
+      <span class="oper-item count">
+        <span>{{currImgIndex}}</span> / <span>{{imgList.length ? imgList.length : 1}}</span>
+      </span>
     </div>
     <div class="count" v-if="showOper">
-      <span>{{currImgIndex}}</span> / <span>{{this.imgList.length}}</span>
+      <span>{{currImgIndex}}</span> / <span>{{imgList.length ? imgList.length : 1}}</span>
     </div>
     <div class="img-error img-wrapper hor-ver-center" v-if="error">
       图片加载失败
@@ -46,7 +77,9 @@ export default {
     return {
       error: false,
       img_url: '',
-      currImgIndex: 0
+      currImgIndex: 0,
+      scale: 1, // 图片放大缩小的值 
+      rotate: 0
     }
   },
   methods: {
@@ -54,13 +87,28 @@ export default {
       this.$emit('setshow', false)
     },
     handlerError() {
-      console.log('error')
       this.error = true
+    },
+    /**放大图片 */
+    plus() {
+      this.scale += 0.2
+    },
+    /**缩小图片 */
+    minus() {
+      this.scale -= 0.2
+    },
+    /**旋转图片 */
+    spin(falg) {
+      if (falg === 'left') {
+        this.rotate -= 90
+      } else if (falg === 'right') {
+        this.rotate += 90
+      }
     },
     previous() {
       const currIndex = this.imgList.findIndex(item => item === this.img_url)
       const len = this.imgList.length
-      if (currIndex === 0) {
+      if (currIndex === 0 || currIndex === -1) {
         return this.$message({type: 'warning', message: '已经是第一张了~'})
       } else {
         this.img_url = this.imgList[currIndex - 1]
@@ -82,7 +130,7 @@ export default {
     document.addEventListener('click', this.handlerClick)
     const currImgIndex = (this.imgList || []).findIndex(item => item === this.currentImg)
     this.img_url = this.currentImg
-    this.currImgIndex = currImgIndex + 1
+    this.currImgIndex = currImgIndex === -1 ? 1 : currImgIndex + 1
   },
   beforeDestroy() {
     document.removeEventListener('click', this.handlerClick)
@@ -94,42 +142,41 @@ export default {
 .picture-preview-com {
   position: fixed;
   z-index: 1005;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.4);
   .img-wrapper {
     display: inline-block;
-    height: 88%;
     cursor: zoom-out;
     .img-content {
       max-height: 100%;
     }
   }
-  .operation {
-    .oper-item {
-      position: absolute;
-      transform: translateY(-50%);
-      font-size: 30px;
-      color: hsla(230, 11%, 19%, 1);
-      padding: 7px;
-      background-color: #fff;
-      cursor: pointer;
-    }
-    .previous {
-      left: 10px;
-      top: 50%;
-    }
-    .next {
-      right: 10px;
-      top: 50%;
-    }
-  }
-  .count {
+  .operation-list {
     position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    padding: 5px;
-    opacity: .5;
+    width: 100%;
+    bottom: 3px;
+    user-select: none;
+    text-align: center;
+    .oper-item {
+      color: #fff;
+      padding: 7px;
+      background-color: #000;
+      border-radius: 50%;
+      cursor: pointer;
+      &.close {
+        position: fixed;
+        right: 0;
+        top: 0;
+        border-radius: 0 0 0 40px;
+        &::before {
+          content: "❌";
+          padding: 0 0 5px 5px;
+        }
+      }
+      &.count {
+        position: absolute;
+        right: 0;
+      }
+    }
   }
   .img-error {
     width: 500px;
