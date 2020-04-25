@@ -359,3 +359,13 @@ export const getDeviceType = () => {
   const reg =  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
   return reg.test(navigator.userAgent) ? 'Mobile' : 'Desktop'
 }
+
+/**
+ * GUID生成
+ */
+export function genGuid() {
+	function _guid() {
+		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+	}
+	return (_guid() + _guid() + "-" + _guid() + "-" + _guid() + "-" + _guid() + "-" + _guid() + _guid() + _guid());
+}
