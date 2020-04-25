@@ -181,7 +181,7 @@ export default {
         console.log(`图片大小：${size}，已上传：${loaded}，百分比：${percent}`)
         msgListClone.forEach(item => {
           if (item.guid === guid) {
-            item.uploadPercent = percent
+            item.uploadPercent = Number(percent)
           }
         })
         this.messages = msgListClone
