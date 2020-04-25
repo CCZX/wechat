@@ -60,7 +60,15 @@
       </div>
       <textarea ref="chatInp" class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true" @keydown.enter="send($event)"></textarea>
       <transition name="fade">
-        <up-img class="emoji-component" v-if="showUpImgCom" :token="token" @getstatus="getImgUploadResult" :getstatus="getImgUploadResult" />
+        <up-img
+          v-if="showUpImgCom"
+          class="emoji-component"
+          :token="token"
+          @getStatus="getImgUploadResult"
+          @getLocalUrl="getLocalUrl"
+          :get-status="getImgUploadResult"
+          :get-local-url="getLocalUrl"
+        />
       </transition>
       <transition name="fade">
         <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />        
@@ -71,6 +79,7 @@
 
 <script>
 import { mapState } from "vuex"
+import { cloneDeep } from 'lodash'
 import { fromatTime } from "@/utils"
 import chatHeader from "./components/Header"
 import messageList from "./components/MessageList"
@@ -141,6 +150,7 @@ export default {
     setShowHistoryMsg() {
       this.showHistoryMsg = !this.showHistoryMsg
     },
+    /**最后进入该会话的时间 */
     setLastEnterTime(time) {
       this.lastEnterTime = time
     },
@@ -162,6 +172,7 @@ export default {
         this.$message.error('图片上传失败！')
         return
       }
+      const { guid } = res // 图片的唯一标识
       if (res.status === uploadImgStatusMap.complete) {
         const img_URL = qiniu_URL + res.data.key
         const common = this.generatorMessageCommon()
@@ -170,7 +181,13 @@ export default {
           message: img_URL,
           messageType: "img", // emoji/text/img/file/sys/artboard/audio/video
         }
-        this.messages = [...this.messages, newMessage]
+        const msgListClone = cloneDeep(this.messages)
+        msgListClone.forEach(item => {
+          if (item.guid = guid) {
+            item.uploading = false
+          }
+        })
+        this.messages = msgListClone
         this.$socket.emit("sendNewMessage", newMessage)
         this.$store.dispatch('news/SET_LAST_NEWS', {
           type: 'edit',
@@ -181,6 +198,28 @@ export default {
         })
         this.messageText = ""
       }
+    },
+    /**
+     * 直接获取本地的地址
+     */
+    getLocalUrl(url, guid) {
+      // return
+      const common = this.generatorMessageCommon()
+      const newMessage = {
+        ...common,
+        uploading: true,
+        guid,
+        message: url,
+        messageType: "img",
+      }
+      this.messages = [...this.messages, newMessage]
+      this.$store.dispatch('news/SET_LAST_NEWS', {
+        type: 'edit',
+        res: {
+          roomid: this.currentConversation.roomid,
+          news: newMessage
+        }
+      })
     },
     fileInpChange(e) {
 

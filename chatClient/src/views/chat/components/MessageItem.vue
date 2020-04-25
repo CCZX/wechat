@@ -188,12 +188,15 @@ export default {
       word-break: break-word;
     }
     .img-content {
+      min-height: 200px;
       position: relative;
       margin-top: 5px;
       display: inline-block;
       width: 100%;
       .message-wrapper {
         position: relative;
+        height: 200px;
+        // width: 100%;
         .is-read {
           @extend .is-read-style
         }

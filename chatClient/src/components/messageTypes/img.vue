@@ -1,6 +1,7 @@
 <template>
   <div class="message-type__img">
-    <img width="200" style="cursor: zoom-in" :src="message.message" alt="" @click="setshowPicturePreview(true)">
+    <img height="200" style="cursor: zoom-in" :src="message.message" alt="图片加载失败" @click="setshowPicturePreview(true)">
+    <div v-if="message.uploading" class="all0 img-cover">图片上传中...</div>
     <transition name="fade">
       <picture-preview
         v-if="showPicturePreview"
@@ -38,3 +39,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.message-type__img {
+  position: relative;
+  img {
+    background-color: #f2f2f2;
+  }
+  .img-cover {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, .2);
+    color: #fff;
+  }
+}
+</style>

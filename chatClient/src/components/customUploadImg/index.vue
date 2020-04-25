@@ -34,14 +34,28 @@
 </template>
 
 <script>
-import { imgRandomName } from '@/utils'
+/**
+ * 上传图片组件，支持上传方式：1.七牛云，2.本地服务器
+ * props: 1.token：七牛云token，
+ * emit: 1.getLocalUrl：获取图片的本地URL
+ */
+import { imgRandomName, isProduction, genGuid } from '@/utils'
 import { qiniu_URL, uploadImgStatusMap } from '@/const'
+import { connect } from 'tls';
 export default {
-  props: ["token", "getstatus"],
+  props: ["token", "getStatus", "getLocalUrl"],
   methods: {
+    createObjetURL(file, guid) {
+      const url = window.URL.createObjectURL(file)
+      // this.$emit('getLocalUrl', url)
+      this.getLocalUrl(url, guid)
+    },
     /**上传至七牛云 */
     uploadQiniu(e) {
+      const guid = genGuid()
       const [file] = e.target.files
+      this.createObjetURL(file, guid)
+      // return
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
       if (fileSize > 1) {
@@ -57,13 +71,14 @@ export default {
         useCdnDomain: true
       }
       const error = (err) => {
-        this.getstatus({status: uploadImgStatusMap.error, data: err})
+        this.getStatus({status: uploadImgStatusMap.error, data: err, guid})
       }
       const next = (res) => {
-        this.getstatus({status: uploadImgStatusMap.next, data: res})
+        console.log(res)
+        this.getStatus({status: uploadImgStatusMap.next, data: res, guid})
       }
       const complete = (res) => {
-        this.getstatus({status: uploadImgStatusMap.complete, data: res})
+        this.getStatus({status: uploadImgStatusMap.complete, data: res, guid})
       }
       const subObject = {
         next,
@@ -76,8 +91,9 @@ export default {
     },
     /**上传至本地服务器 */
     uploadServer(e) {
-      this.$message.error('为减少服务器压力线上请上传至七牛云哟~');
-      return
+      if (isProduction()) {
+        return this.$message.error('为减少服务器压力线上请上传至七牛云哟~');
+      }
       const file = e.target.files[0]
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
@@ -87,7 +103,7 @@ export default {
         console.log('上传文件结果', res)
         const { data } = res
         if (res.status === 2000) {
-          this.getstatus({status: uploadImgStatusMap.complete, data: res})
+          this.getStatus({status: uploadImgStatusMap.complete, data: res})
         }
       })
     }
