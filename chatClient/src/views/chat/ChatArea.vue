@@ -168,11 +168,25 @@ export default {
       }
     },
     getImgUploadResult(res) {
+      const { guid } = res // 图片的唯一标识
+      const msgListClone = cloneDeep(this.messages)
       if (res.status === uploadImgStatusMap.error) {
         this.$message.error('图片上传失败！')
         return
       }
-      const { guid } = res // 图片的唯一标识
+      if (res.status === uploadImgStatusMap.next) {
+        const percent = Number((res.data && res.data.total && res.data.total.percent) || 0).toFixed(2)
+        const loaded = (res.data && res.data.total && res.data.total.loaded) || 0
+        const size = (res.data && res.data.total && res.data.total.size) || 0
+        console.log(`图片大小：${size}，已上传：${loaded}，百分比：${percent}`)
+        msgListClone.forEach(item => {
+          if (item.guid === guid) {
+            item.uploadPercent = percent
+          }
+        })
+        this.messages = msgListClone
+        return
+      }
       if (res.status === uploadImgStatusMap.complete) {
         const img_URL = qiniu_URL + res.data.key
         const common = this.generatorMessageCommon()
@@ -181,10 +195,10 @@ export default {
           message: img_URL,
           messageType: "img", // emoji/text/img/file/sys/artboard/audio/video
         }
-        const msgListClone = cloneDeep(this.messages)
         msgListClone.forEach(item => {
-          if (item.guid = guid) {
+          if (item.guid === guid) {
             item.uploading = false
+            delete item.uploadPercent
           }
         })
         this.messages = msgListClone

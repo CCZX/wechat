@@ -1,7 +1,14 @@
 <template>
   <div class="message-type__img">
     <img height="200" style="cursor: zoom-in" :src="message.message" alt="图片加载失败" @click="setshowPicturePreview(true)">
-    <div v-if="message.uploading" class="all0 img-cover">图片上传中...</div>
+    <div v-if="message.uploading && !message.uploadPercent" class="all0 img-cover">图片上传中...</div>
+    <div v-if="message.uploadPercent && message.uploadPercent !== 100" class="all0 img-cover progress">
+    <!-- <div class="all0 img-cover progress"> -->
+      <div class="content">
+        <el-progress :width="50" type="circle" :percentage="message.uploadPercent"></el-progress>
+        <!-- <el-progress :width="50" type="circle" :percentage="23"></el-progress> -->
+      </div>
+    </div>
     <transition name="fade">
       <picture-preview
         v-if="showPicturePreview"
@@ -53,6 +60,22 @@ export default {
     align-items: center;
     background-color: rgba(0, 0, 0, .2);
     color: #fff;
+    &.progress {
+      .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 5px;
+        .el-progress {
+          // flex: 1;
+          .el-progress__text {
+            color: #fff;
+          }
+        }
+      }
+    }
   }
 }
 </style>

@@ -74,7 +74,7 @@ export default {
         this.getStatus({status: uploadImgStatusMap.error, data: err, guid})
       }
       const next = (res) => {
-        console.log(res)
+        // console.log(res)
         this.getStatus({status: uploadImgStatusMap.next, data: res, guid})
       }
       const complete = (res) => {
