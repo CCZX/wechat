@@ -30,6 +30,27 @@
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
 }
 
+.img-loading-tips {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background-color: #ccc;
+  &::after {
+    content: '资源加载中...';
+    position: absolute;
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/*element-ui dialog遮罩层问题*/
+.v-modal {
+  // z-index: 2000 !important;
+  display: none !important;
+}
+
 // 全局布局CSS
 html, body {
   height: 100%;

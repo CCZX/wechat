@@ -1,8 +1,9 @@
 <template>
   <div class="message-type__img">
-    <img height="200" style="cursor: zoom-in" :src="message.message" alt="图片加载失败" @click="setshowPicturePreview(true)">
+    <img v-show="!imgLoading" height="200" style="cursor: zoom-in" :src="message.message" alt="图片加载失败" @load="load" @click="setshowPicturePreview(true)">
+    <div v-if="imgLoading" class="img-loading-tips"></div>
     <div v-if="message.uploading && !message.uploadPercent" class="all0 img-cover">图片上传中...</div>
-    <div v-if="message.uploadPercent && message.uploadPercent !== 100" class="all0 img-cover progress">
+    <div v-if="message.uploadPercent" class="all0 img-cover progress">
     <!-- <div class="all0 img-cover progress"> -->
       <div class="content">
         <el-progress :width="50" type="circle" :percentage="message.uploadPercent"></el-progress>
@@ -28,7 +29,8 @@ export default {
   props: ['message', 'imgTypeMsgList'],
   data() {
     return {
-      showPicturePreview: false
+      showPicturePreview: false,
+      imgLoading: true
     }
   },
   computed: {
@@ -39,6 +41,9 @@ export default {
   methods: {
     setshowPicturePreview(flag) {
       this.showPicturePreview = flag
+    },
+    load() {
+      this.imgLoading = false
     }
   },
   components: {
