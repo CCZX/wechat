@@ -49,3 +49,6 @@ export const validateSignature = (rule, value, callback) => {
     callback();
   }
 }
+
+/**16进制颜色 */
+export const colorHexReg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
