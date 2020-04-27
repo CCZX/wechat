@@ -2,10 +2,13 @@
   <div class="picture-preview-com all0">
     <div class="img-wrapper hor-ver-center" v-if="!error">
       <img
+        v-show="!imgIsLoding"
         class="img-content" alt="图片地址" @error="handlerError"
         :src="img_url"
         :style="`transform:scale(${scale}) rotateZ(${rotate}deg)`"
+        @load="load"
       >
+      <div v-if="imgIsLoding" style="width: 400px" class="img-loading-tips"></div>
     </div>
     <div class="operation-list" v-if="showOper">
       <span
@@ -79,10 +82,14 @@ export default {
       img_url: '',
       currImgIndex: 0,
       scale: 1, // 图片放大缩小的值 
-      rotate: 0
+      rotate: 0,
+      imgIsLoding: true
     }
   },
   methods: {
+    load() {
+      this.imgIsLoding = false
+    },
     handlerClick() {
       this.$emit('setshow', false)
     },
