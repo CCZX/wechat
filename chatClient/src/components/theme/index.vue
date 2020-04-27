@@ -55,6 +55,14 @@
             <el-radio label="momo" border :disabled="!isNotifySound">陌陌</el-radio>
           </el-radio-group>
         </div>
+        <div class="theme-item color-pick">
+          <p class="title">字体颜色（{{color}}）</p>
+          <color-pick :color="color" @change="colorChange" />
+        </div>
+        <div class="theme-item bg-color-pick">
+          <p class="title">背景颜色（{{bgColor}}）</p>
+          <color-pick :color="bgColor" @change="bgColorChange" />
+        </div>
       </div>
     </div>
   </div>
@@ -63,6 +71,8 @@
 <script>
 import { mapState } from 'vuex'
 import { localImgToBase64 } from '@/utils'
+import colorPick from '@/components/colorPick'
+import { connect } from 'tls';
 const notifySoundMap = {
   default: require('./../../../static/audio/default.mp3'),
   apple: require('./../../../static/audio/apple.mp3'),
@@ -88,7 +98,9 @@ export default {
       isNotifySound: false, // 是否开启提示音
       notifySound: '',
       systemPictureMap: {...systemPictureMap},
-      customBgImgBase64: localBase64
+      customBgImgBase64: localBase64,
+      color: '', // 字体颜色
+      bgColor: ''
     }
   },
   methods: {
@@ -143,15 +155,29 @@ export default {
       audio.play().then(res => {
         isPlaying = false
       })
+    },
+    colorChange(color) {
+      this.color = color
+      this.$store.dispatch('theme/SET_COLOR', color)
+    },
+    bgColorChange(color) {
+      this.bgColor = color
+      this.$store.dispatch('theme/SET_BG_COLOR', color)
     }
   },
-  mounted() {
-    const { opacity, blur, bgImg, notifySound } = this.$store.state.theme
+  components: {
+    colorPick
+  },
+  created() {
+    const { opacity, blur, bgImg, notifySound, color, bgColor } = this.$store.state.theme
     this.opacity = parseFloat(opacity)
     this.blur = parseInt(blur)
     this.bgImg = (bgImg || '').includes('base64') ? "custom" : bgImg
     this.notifySound = notifySound
     this.isNotifySound = notifySound !== 'none'
+    console.log('color', color, 'bgColor', bgColor)
+    this.color = color
+    this.bgColor = bgColor
   },
 }
 </script>
