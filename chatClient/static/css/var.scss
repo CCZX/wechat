@@ -1,5 +1,7 @@
 // some color
+// @import './theme.scss';
 $primarycolor: #409EFF;
+// $primarycolor: var(--theme-primary);
 $primarycolor-1: #3578E5;
 $successcolor: #67C23A;
 $warningcolor: #E6A23C;
@@ -9,10 +11,16 @@ $infocolor: #909399;
 $normalwhite: #ffffff;
 
 // some font color
-$primaryfont: #303133;
-$normalfont: #606266;
-$secondaryfont: #909399;
-$seatfont: #C0C4CC;
+$primaryfont: var(--primary-color-10);
+$normalfont: var(--primary-color-8);
+$secondaryfont: var(--primary-color-6);
+$seatfont: var(--primary-color-4);
+
+// bgcolor
+$primarybg: var(--primary-bgcolor-10);
+$normalbg: var(--primary-bgcolor-8);
+$secondarybg: var(--primary-bgcolor-6);
+$seatbg: var(--primary-bgcolor-4);
 
 // border
 $border1: #DCDFE6;

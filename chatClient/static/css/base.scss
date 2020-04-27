@@ -125,6 +125,23 @@ html, body {
   border-bottom: 1px solid #E4E7ED;
 }
 
+// 背景颜色
+.primary-bg {
+  background-color: $primarybg;
+}
+
+.normal-bg {
+  background-color: $normalbg;
+}
+
+.secondary-bg {
+  background-color: $secondarybg;
+}
+
+.seat-bg {
+  background-color: $seatbg;
+}
+
 // 布局、位置CSS
 .hor-ver-center {
   position: absolute;
