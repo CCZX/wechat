@@ -62,6 +62,7 @@ export default {
   width: 100%;
   height: 100%;
   padding: 10px 0;
+  background-color: var(--primary-bgcolor-7);
   .avatar {
     display: flex;
     justify-content: center;
@@ -80,6 +81,7 @@ export default {
     margin-top: 30px;
     .nav-item {
       display: block;
+      color: var(--primary-color-10);
       margin-top: 20px;
       font-size: 20px;
       cursor: pointer;

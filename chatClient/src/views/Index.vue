@@ -114,10 +114,12 @@ export default {
 .index-page {
   display: flex;
   width: 100%;
-  height: calc(100vh - 60px);
+  // height: calc(100vh - 60px);
+  height: 100%;
   .conversation-list {
     width: 30%;
     border-right: 1px solid #cccccc;
+    background-color: var(--primary-bgcolor-4);
   }
   .conversation-chat-area {
     position: relative;

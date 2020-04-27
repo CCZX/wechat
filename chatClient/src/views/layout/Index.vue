@@ -61,7 +61,7 @@ export default {
       bgImgUrl: '',
       NotifyAudio: '',
       // notifySound: '',
-      showTheme: false,
+      showTheme: true,
       showMain: true // 聊天区域是否展示
     }
   },

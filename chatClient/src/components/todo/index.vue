@@ -44,13 +44,16 @@ export default {
 </script>
 
 <style lang="scss">
+@import './../../../static/css/var.scss';
 .todo-cmp {
   display: flex;
   align-items: center;
   height: 40px;
-  background-color: #fff;
+  background-color: $secondarybg;
+  // background-color: #fff;
   padding: 5px;
   border-radius: 5px;
+  color: $primaryfont;
   cursor: pointer;
   .text {
     margin-left: 5px;
