@@ -151,6 +151,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import './../../../static/css/var.scss';
 .conversationlist-com {
   height: 100%;
   padding: 0 5px;
@@ -163,9 +164,18 @@ export default {
   .el-tabs.el-tabs--top.el-tabs--border-card {
     height: calc(100% - 120px);
     overflow-x: hidden;
+    background-color: $normalbg;
+    .el-tabs__header {
+      background-color: $seatbg;
+      // background-color: $secondarybg;
+      .el-tabs__item.is-active {
+        background-color: $normalbg;
+      }
+    }
     .el-tabs__content {
       padding: 0;
       height: calc(100% - 40px);
+      background-color: $normalbg;
       // overflow: scroll;
       // overflow-x: hidden;
       position: relative;
