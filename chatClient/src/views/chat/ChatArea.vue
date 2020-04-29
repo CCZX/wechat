@@ -23,7 +23,7 @@
           :set-last-enter-time="setLastEnterTime"
         />
       </div>
-      <div class="group-desc" v-if="currentConversation.conversationType === 'GROUP'">
+      <div class="group-desc" v-if="device !== 'Mobile' && currentConversation.conversationType === 'GROUP'">
         <group-desc :currentConversation="currentConversation" :key="datetamp" />
       </div>
     </div>
@@ -123,6 +123,9 @@ export default {
       return this.messages.filter(item => {
         return item.roomid === this.currentConversation.roomid
       })
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   sockets: {
@@ -410,6 +413,7 @@ export default {
       position: relative;
       height: 100%;
       width: 75%;
+      flex: 1;
       .top-operation {
         position: absolute;
       }

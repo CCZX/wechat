@@ -1,6 +1,6 @@
 <template>
   <div class="layout-page" v-css="{'background-image': 'url(' + bgImgUrl + ')'}">
-    <div class="toggle" @click="setShowMain" title="切换聊天区域是否显示">
+    <div v-if="!device === 'Mobile'" class="toggle" @click="setShowMain" title="切换聊天区域是否显示">
       <i class="icon el-icon-thumb"></i>
     </div>
     <transition name="fade">
@@ -8,18 +8,22 @@
         <my-header></my-header>
         <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
         <div
+          v-if="!device === 'Mobile'"
           class="filter-bgc"
           v-css="{
             'filter': 'blur(' + blur + 'px)',
             'background-image': 'url(' + bgImgUrl + ')'
           }"
         />
-        <el-main class="co-messager-main" v-css="{'opacity': opacity}">
+        <el-main
+          :class="device === 'Mobile' ? 'co-messager-main mobile' : 'co-messager-main'"
+          v-css="{'opacity': opacity}"
+        >
           <audio :src="NotifyAudio" ref="audio" muted></audio>
-          <div class="co-messager-aside">
+          <div :class="device === 'Mobile' ? 'co-messager-aside mobile' : 'co-messager-aside'">
             <my-aside :set-show-theme="setShowTheme" />
           </div>
-          <div class="co-messager-content">
+          <div :class="device === 'Mobile' ? 'co-messager-content mobile' : 'co-messager-content'">
             <router-view></router-view>
           </div>
         </el-main>
@@ -61,7 +65,7 @@ export default {
       bgImgUrl: '',
       NotifyAudio: '',
       // notifySound: '',
-      showTheme: true,
+      showTheme: false,
       showMain: true // 聊天区域是否展示
     }
   },
@@ -77,6 +81,9 @@ export default {
     }),
     allConversation() {
       return this.$store.state.app.allConversation
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   watch: {
@@ -161,6 +168,9 @@ export default {
     conversationList(list) {
       // console.log("当前会话列表", list)
     },
+    /**
+     * 发送的消息被对方读取了
+     */
     isReadMsg(val) {
       console.log('isReadMsg', val)
       const { roomid, status } = val
@@ -234,6 +244,7 @@ export default {
   .co-messager-layout {
     box-sizing: border-box;
     height: 100%;
+    width: 100%;
     .filter-bgc {
       position: absolute;
       left: 50%;
@@ -259,13 +270,27 @@ export default {
       border-radius: 5px;
       padding: 0;
       opacity: .8;
+      /*针对移动端做特殊处理*/
+      &.mobile {
+        left: 0;
+        top: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
       .co-messager-aside {
         width: 7%;
         height: 100%;
         border-right: 1px solid #cccccc;
+        &.mobile {
+          width: 20%;
+        }
       }
       .co-messager-content {
         width: 93%;
+        &.mobile {
+          width: 80%;
+        }
       }
     }
   }

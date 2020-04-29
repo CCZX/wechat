@@ -1,13 +1,20 @@
 <template>
   <div class="index-page">
-    <div class="conversation-list">
+    <div
+      v-show="device === 'Desktop' || (device === 'Mobile' && currentUI === 'conversation')"
+      :class="device === 'Mobile' ? 'conversation-list mobile' : 'conversation-list'"
+    >
       <conversation-list
         :currentConversation="currentConversation"
         :set-current-conversation="setCurrentConversation"
         @setCurrentConversation="setCurrentConversation"
       />
     </div>
-    <div class="conversation-chat-area" v-loading="loading">
+    <div
+      v-show="device === 'Desktop' || (device === 'Mobile' && currentUI === 'chatArea')"
+      v-loading="loading"
+      :class="device === 'Mobile' ? 'conversation-chat-area mobile' : 'conversation-chat-area'"
+    >
       <chat-area
         v-if="currentConversation && currentConversation._id"
         :currentConversation="currentConversation"
@@ -48,6 +55,12 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    device() {
+      return this.$store.state.device.deviceType
+    },
+    currentUI() {
+      return this.$store.state.device.currentUI
     }
   },
   watch: {
@@ -120,10 +133,16 @@ export default {
     width: 30%;
     border-right: 1px solid #cccccc;
     background-color: var(--primary-bgcolor-4);
+    &.mobile {
+      width: 100%;
+    }
   }
   .conversation-chat-area {
     position: relative;
     width: 70%;
+    &.mobile {
+      width: 100%;
+    }
     .no-conversation {
       text-align: center;
     }

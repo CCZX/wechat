@@ -3,6 +3,7 @@
     <transition name="roll">
       <div class="header-wrapper" v-if="currentConversation.roomid">
         <div class="header-title">
+          <i @click="setCurrentUI" v-if="device === 'Mobile'" style="margin-left: -15px;" class="el-icon-arrow-left"></i>
           <span>{{haderTitle}}</span>
           <!-- <i :class="!showSettingPanel ? 'el-icon-arrow-down curp' : 'el-icon-arrow-up curp'"></i> -->
           <!-- <i class="icon-qun iconfont iconic iconic-group" v-if="currentConversation.conversationType === 'GROUP'"></i> -->
@@ -60,7 +61,7 @@ export default {
       const currentConversation = this.currentConversation
       let res = ''
       if (currentConversation.isGroup) {
-        res = currentConversation.groupId.title
+        res = currentConversation.groupId.title + `（${currentConversation.groupId.userNum}）`
       } else {
         res = this.beizhu[currentConversation._id] ? this.beizhu[currentConversation._id] + `（${currentConversation.nickname}）` : currentConversation.nickname
       }
@@ -70,7 +71,10 @@ export default {
       isToCoArtBoard: 'isToCoArtBoard',
       isVideoing: 'isVideoing',
       isAudioing: 'isAudioing'
-    })
+    }),
+    device() {
+      return this.$store.state.device.deviceType
+    }
   },
   methods: {
     enterArtBoard() {
@@ -94,6 +98,9 @@ export default {
     watchDocumentClick() {
       if (!this.showSettingPanel) return
       this.toggleShowSettingPanel()
+    },
+    setCurrentUI() {
+      this.$store.dispatch('device/SET_CURRENT_UI', 'conversation')
     }
   },
   watch: {
