@@ -1,6 +1,7 @@
 <template>
   <div class="mzone-page">
     <div class="mzone-wrapper">
+      <div v-if="device === 'Mobile'" class="goback el-icon-arrow-left" @click="$router.go(-1)" />
       <div class="mzone-top">
         <div class="carousel" :style="'backgroundImage:url(' + IMG_URL + userInfo.cover [0] + ')'">
           
@@ -28,7 +29,7 @@
           </el-menu>
         </div>
       </suck-top>
-      <div class="mzone-body">
+      <div :class="device === 'Mobile' ? 'mzone-body mobile' : 'mzone-body'">
         <div class="menulist">
           <suck-top :top="70" parent=".mzone-page" :z-index="1004">
             <div class="menulist" :style="{width: menulistWidth + 'px'}">
@@ -93,6 +94,9 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {
@@ -149,6 +153,13 @@ export default {
   padding: 0 10px;
   overflow-y: scroll;
   .mzone-wrapper {
+    .goback {
+      position: absolute;
+      left: 15px;
+      top: 10px;
+      z-index: 1007;
+      font-size: 20px;
+    }
     margin: 0 auto;
     .mzone-top {
       height: 190px;
@@ -217,6 +228,15 @@ export default {
       .content {
         width: 70%;
         margin-left: 25px;
+      }
+      &.mobile {
+        .menulist {
+          display: none;
+        }
+        .content {
+          width: 100%;
+          margin-left: 0;
+        }
       }
     }
   }

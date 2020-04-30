@@ -1,6 +1,6 @@
 <template>
   <div class="theme-choose-cmp all0">
-    <div class="theme-choose-cmp-container hor-ver-center">
+    <div class="theme-choose-cmp-container hor-ver-center" :style=" device === 'Mobile' ? {width: '90%'} : {}">
       <header class="header">
         <i class="p-r-t el-icon-close" @click="setShowTheme(false)" />
       </header>
@@ -103,6 +103,11 @@ export default {
       bgColor: ''
     }
   },
+  computed: {
+    device() {
+      return this.$store.state.device.deviceType
+    }
+  },
   methods: {
     setShowTheme(flag) {
       this.$emit('setShowTheme', flag)
@@ -188,8 +193,9 @@ export default {
   z-index: 1020;
   background-color: rgba(0, 0, 0, .3);
   .theme-choose-cmp-container {
+    width: 450px;
     .theme-list {
-      width: 450px;
+      width: 100%;
       height: 427px;
       padding: 20px;
       background-color: #fff;

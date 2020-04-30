@@ -3,7 +3,9 @@
     <div class="img-wrapper hor-ver-center" v-if="!error">
       <img
         v-show="!imgIsLoding"
-        class="img-content" alt="图片地址" @error="handlerError"
+        alt="图片地址"
+        class="img-content"
+        @error="handlerError"
         :src="img_url"
         :style="`transform:scale(${scale}) rotateZ(${rotate}deg)`"
         @load="load"
@@ -152,9 +154,11 @@ export default {
   background-color: rgba(0, 0, 0, 0.4);
   .img-wrapper {
     display: inline-block;
+    width: 80%;
+    // height: 80%;
     cursor: zoom-out;
     .img-content {
-      max-height: 100%;
+      width: 100%;
     }
   }
   .operation-list {

@@ -13,7 +13,7 @@
       <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" alt srcset>
     </el-avatar>
     <div
-      class="message-info"
+      :class="device === 'Mobile' ? 'message-info mobile' : 'message-info'"
       :style="messageitem.messageType === MSG_TYPES.sys ? 'width: 100%' : ''"
     >
       <span
@@ -120,6 +120,9 @@ export default {
       const flag1 = isReadUserArr.includes(roomidArr[0]) && isReadUserArr.includes(roomidArr[1])
       const flag2 = this.userIsReadMsg[this.messageitem.roomid] || false
       return this.messageitem.time < this.lastEnterTime || flag1 || flag2
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   filters: {
@@ -200,6 +203,11 @@ export default {
         .is-read {
           @extend .is-read-style
         }
+      }
+    }
+    &.mobile {
+      .img-content {
+        overflow: hidden;
       }
     }
     .normal-content {

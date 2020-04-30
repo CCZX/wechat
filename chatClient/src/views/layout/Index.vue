@@ -1,6 +1,6 @@
 <template>
   <div class="layout-page" v-css="{'background-image': 'url(' + bgImgUrl + ')'}">
-    <div v-if="!device === 'Mobile'" class="toggle" @click="setShowMain" title="切换聊天区域是否显示">
+    <div v-if="!device === 'Mobile'" class="toggle" @click.stop="setShowMain" title="切换聊天区域是否显示">
       <i class="icon el-icon-thumb"></i>
     </div>
     <transition name="fade">
@@ -20,7 +20,10 @@
           v-css="{'opacity': opacity}"
         >
           <audio :src="NotifyAudio" ref="audio" muted></audio>
-          <div :class="device === 'Mobile' ? 'co-messager-aside mobile' : 'co-messager-aside'">
+          <div
+            :class="device === 'Mobile' ? 'co-messager-aside mobile' : 'co-messager-aside'"
+            v-css="device === 'Mobile' ? {'transform': 'translateX(' + asideTranslateX + 'px)'} : ''"
+          >
             <my-aside :set-show-theme="setShowTheme" />
           </div>
           <div :class="device === 'Mobile' ? 'co-messager-content mobile' : 'co-messager-content'">
@@ -32,6 +35,15 @@
     <transition name="fade">
       <theme v-if="showTheme" @setShowTheme="setShowTheme" />
     </transition>
+    <!-- 在移动端下点击展示左边菜单 -->
+    <div
+      v-show="device === 'Mobile'"
+      v-css="device === 'Mobile' ? {'transform': 'translateX(' + (asideTranslateX + 70) + 'px)'} : ''"
+      :class="asideTranslateX ? 'mobile-menu el-icon-d-arrow-right' : 'mobile-menu el-icon-d-arrow-left' "
+      @click.stop="toggleAside"
+    >
+
+    </div>
   </div>
 </template>
 
@@ -66,7 +78,8 @@ export default {
       NotifyAudio: '',
       // notifySound: '',
       showTheme: false,
-      showMain: true // 聊天区域是否展示
+      showMain: true, // 聊天区域是否展示
+      asideTranslateX: -70
     }
   },
   computed: {
@@ -205,10 +218,18 @@ export default {
     },
     setShowMain() {
       this.showMain = !this.showMain
+    },
+    toggleAside() {
+      this.asideTranslateX === 0 ? this.asideTranslateX = -70 : this.asideTranslateX = 0
     }
   },
   mounted() {
     this.$socket.emit('connect')
+    if (this.device === 'Mobile') {
+      document.addEventListener('click', () => {
+        this.asideTranslateX = -70
+      })
+    }
     this.sysUserJoinSocket()
     console.log(
       `%c Messger V${APP_VERSION} Started %c Contact: ccdebuging@gmail.com %c`,
@@ -283,16 +304,29 @@ export default {
         height: 100%;
         border-right: 1px solid #cccccc;
         &.mobile {
-          width: 20%;
+          position: absolute;
+          z-index: 1001;
+          width: 70px;
         }
       }
       .co-messager-content {
         width: 93%;
         &.mobile {
-          width: 80%;
+          width: 100%;
         }
       }
     }
+  }
+  .mobile-menu {
+    position: fixed;
+    z-index: 1003;
+    left: -1px;
+    top: 50px;
+    background-color: #fff;
+    padding: 3px;
+    opacity: 0.6;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 }
 </style>
