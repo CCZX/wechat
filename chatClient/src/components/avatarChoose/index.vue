@@ -1,6 +1,6 @@
 <template>
   <div class="avatar-choose-cmp all0">
-    <div class="avatar-list hor-ver-center">
+    <div class="avatar-list hor-ver-center" :style="device === 'Mobile' ? {width: '90%'} : {}">
       <i class="el-icon-close p-r-t" @click="close"></i>
       <span class="p-l-t">选择头像</span>
       <div
@@ -21,6 +21,11 @@ export default {
     return {
       avatarList: [],
       IMG_URL: process.env.IMG_URL
+    }
+  },
+  computed: {
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {

@@ -10,7 +10,7 @@
         @choose="chooseAvatar"
       />
     </transition>
-    <div class="wrapper hor-ver-center">
+    <div class="wrapper hor-ver-center" :style="device === 'Mobile' ? {width: '90%'}:{}">
       <el-form class="login-form" v-if="isLoginState">
         <div class="avatar">
           <el-avatar :size="100" :src="IMG_URL + loginInfo.avatar" @error="()=>true">
@@ -102,6 +102,11 @@ export default {
       bgUrl: ocean1,
       showChooseAvatar: false,
       IMG_URL: process.env.IMG_URL
+    }
+  },
+  computed: {
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {

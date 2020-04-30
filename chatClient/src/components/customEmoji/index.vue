@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-emoji-com" @click.stop="()=>{}">
+  <div class="custom-emoji-com" :style="device === 'Mobile' ? {width: '90%'} : {}" @click.stop="()=>{}">
     <el-tabs :tab-position="tabposition" type="border-card" class="wrapper">
       <el-tab-pane v-for="(value, key, index) in emojisList" :label="key" :key="index" addable>
         <span slot="label"><i :class="emijoIconClassNameMap[key]"></i> </span>
@@ -38,6 +38,11 @@ export default {
         drink: 'iconfont icon-Colddrinkteacoffeeb',
         animal: 'iconfont icon-icon-test'
       }
+    }
+  },
+  computed: {
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {
