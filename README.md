@@ -39,26 +39,36 @@
 ## 项目截图
 
 ### 1、主页
-![主页](./document/screenshots/home.png)
+![主页](./document/screenshots/p-home.png)
 
 ### 2、聊天
-![聊天](./document/screenshots/chat1.png)
-![已读设置](./document/screenshots/chat2.png)
-![通知](./document/screenshots/notify.png)
+![聊天](./document/screenshots/p-chat1.png)
+![已读设置](./document/screenshots/p-chat2.png)
+![通知](./document/screenshots/p-notify.png)
 
 ### 3、朋友圈
-![朋友圈](./document/screenshots/pyq1.png)
-![朋友圈评论](./document/screenshots/pyq2.png)
+![朋友圈](./document/screenshots/p-pyq1.png)
+![朋友圈评论](./document/screenshots/p-pyq2.png)
 
 ### 4、主题设置
-![主题](./document/screenshots/theme.png)
+![主题](./document/screenshots/p-theme.png)
 
 ### 5、日程
-![日程](./document/screenshots/schedule1.png)
-![新建日程](./document/screenshots/schedule2.png)
+![日程](./document/screenshots/p-schedule1.png)
+![新建日程](./document/screenshots/p-schedule2.png)
 
 ### 6、个人中心
-![设置](./document/screenshots/personcenter.png)
+![设置](./document/screenshots/p-personcenter.png)
+
+## 移动端截图
+
+![移动端](./document/screenshots/m-login.png)
+![移动端](./document/screenshots/m-aside.png)
+![移动端](./document/screenshots/m-conversationlist.png)
+![移动端](./document/screenshots/m-chat.png)
+![移动端](./document/screenshots/m-picpreview.png)
+![移动端](./document/screenshots/m-theme.png)
+![移动端](./document/screenshots/m-pyq.png)
 
 
 
