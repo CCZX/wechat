@@ -1,7 +1,9 @@
 <template>
   <div class="history-msg-cmp" v-loading="isLoading">
     <div class="history-msg__header">
-      <div class="item type">
+      <div
+        :class="device === 'Mobile' ? 'item type mobile' : 'item type'"
+      >
         <el-radio-group v-model="searchType" size="mini" @change="searchTypeChange">
           <el-radio-button value="all" label="全部"></el-radio-button>
           <el-radio-button value="img" label="图片"></el-radio-button>
@@ -17,7 +19,9 @@
           @keydown.native="searchWordChange"
         />
       </div>
-      <div class="item date">
+      <div
+        :class="device === 'Mobile' ? 'item date mobile' : 'item date'"
+      >
         <el-date-picker
           v-model="searchDate"
           type="date"
@@ -46,7 +50,7 @@
         :page-sizes="[10, 20, 30, 40]"
         :page-size="pageSize"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
+        :layout="paginationArgs"
       />
     </div>
   </div>
@@ -77,6 +81,18 @@ export default {
       pageSize: 10,
       total: 0,
       isLoading: false
+    }
+  },
+  computed: {
+    device() {
+      return this.$store.state.device.deviceType
+    },
+    paginationArgs() {
+      if (this.device === 'Mobile') {
+        return 'total, sizes, pager'
+      } else {
+        return 'total, sizes, prev, pager, next, jumper'
+      }
     }
   },
   methods: {
@@ -142,9 +158,26 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    // flex-wrap: wrap;
     .search {
       flex: 1;
       margin: 0 5px;
+    }
+    .type.mobile {
+      .el-radio-button--mini .el-radio-button__inner {
+        padding: 7px 7px;
+      }
+    }
+    .date.mobile {
+      width: 64px;
+      overflow: hidden;
+      .el-date-editor.el-input {
+        width: 40px;
+        
+        // .el-input {
+        //   display: none;
+        // }
+      }
     }
   }
   .history-msg__body {

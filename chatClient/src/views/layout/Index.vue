@@ -298,6 +298,7 @@ export default {
         margin: 0;
         width: 100%;
         height: 100%;
+        border-radius: 0px;
       }
       .co-messager-aside {
         width: 7%;

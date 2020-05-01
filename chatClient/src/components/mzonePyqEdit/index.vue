@@ -1,5 +1,8 @@
 <template>
-  <div class="mzone-pyq-edit hor-ver-center" v-loading="isLoading">
+  <div
+    v-loading="isLoading"
+    :class="device === 'Mobile' ? 'mzone-pyq-edit mobile hor-ver-center' : 'mzone-pyq-edit hor-ver-center'"
+  >
     <i class="close-box el-icon-close" @click="close"></i>
     <div class="header">
       <router-link :to="`/user/${pyqInfo.userId._id}`">
@@ -64,6 +67,9 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {
@@ -145,6 +151,9 @@ export default {
   background-color: #fff;
   width: 650px;
   padding: 10px;
+  &.mobile {
+    width: 90%;
+  }
   .close-box {
     float: right;
     font-size: 20px;

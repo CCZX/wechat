@@ -1,31 +1,35 @@
 <template>
   <div class="index-page">
-    <div
-      v-show="device === 'Desktop' || (device === 'Mobile' && currentUI === 'conversation')"
-      :class="device === 'Mobile' ? 'conversation-list mobile' : 'conversation-list'"
-    >
-      <conversation-list
-        :currentConversation="currentConversation"
-        :set-current-conversation="setCurrentConversation"
-        @setCurrentConversation="setCurrentConversation"
-      />
-    </div>
-    <div
-      v-show="device === 'Desktop' || (device === 'Mobile' && currentUI === 'chatArea')"
-      v-loading="loading"
-      :class="device === 'Mobile' ? 'conversation-chat-area mobile' : 'conversation-chat-area'"
-    >
-      <chat-area
-        v-if="currentConversation && currentConversation._id"
-        :currentConversation="currentConversation"
-        :setLoading="setLoading"
-        :set-current-conversation="setCurrentConversation"
-      />
-      <div class="no-conversation hor-ver-center" v-else>
-        <chat-svg width="400" height="300" />
-        <p>聊天~打开心灵的窗户</p>
+    <transition name="fade-left">
+      <div
+        v-show="device === 'Desktop' || (device === 'Mobile' && currentUI === 'conversation')"
+        :class="device === 'Mobile' ? 'conversation-list mobile' : 'conversation-list'"
+      >
+        <conversation-list
+          :currentConversation="currentConversation"
+          :set-current-conversation="setCurrentConversation"
+          @setCurrentConversation="setCurrentConversation"
+        />
       </div>
-    </div>
+    </transition>
+    <transition name="fade-right">
+      <div
+        v-show="device === 'Desktop' || (device === 'Mobile' && currentUI === 'chatArea')"
+        v-loading="loading"
+        :class="device === 'Mobile' ? 'conversation-chat-area mobile' : 'conversation-chat-area'"
+      >
+        <chat-area
+          v-if="currentConversation && currentConversation._id"
+          :currentConversation="currentConversation"
+          :setLoading="setLoading"
+          :set-current-conversation="setCurrentConversation"
+        />
+        <div class="no-conversation hor-ver-center" v-else>
+          <chat-svg width="400" height="300" />
+          <p>聊天~打开心灵的窗户</p>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -124,6 +128,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import './../../static/css/animation.scss';
 .index-page {
   display: flex;
   width: 100%;
@@ -134,6 +139,7 @@ export default {
     border-right: 1px solid #cccccc;
     background-color: var(--primary-bgcolor-4);
     &.mobile {
+      position: absolute;
       width: 100%;
     }
   }
@@ -141,6 +147,7 @@ export default {
     position: relative;
     width: 70%;
     &.mobile {
+      // position: absolute;
       width: 100%;
     }
     .no-conversation {

@@ -109,4 +109,21 @@
 .btn-move { transition: all .5s; }
 .btn-leave-active { position: absolute; }
 
-
+.fade-left-enter-active,.fade-right-enter-active{
+  transition: all .08 ease;
+  position: absolute;
+}
+.fade-left-leave-active, .fade-right-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  position: absolute;
+}
+.fade-left-leave-to, .fade-right-enter{
+  position: absolute;
+  transform: translate3d(-50%, 0, 0);
+  opacity: 0
+}
+.fade-left-enter, .fade-right-leave-to{
+  position: absolute;
+  transform: translate3d(50%, 0, 0);
+  opacity: 0
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="user-details-page">
     <div class="wrapper">
-      <div class="details-top">
+      <div :class="device === 'Mobile' ? 'details-top mobile' : 'details-top'">
         <div class="carousel">
           <el-carousel indicator-position="none" height="315px">
             <el-carousel-item v-for="(item, index) in userDetails.cover" :key="index">
@@ -21,7 +21,6 @@
             >
           </el-avatar>
           <span class="nickname">{{userDetails.nickname}}</span>
-          <el-button type="primary">不是好友加好友！</el-button>
         </div>
       </div>
       <div class="details-body">
@@ -60,12 +59,16 @@ export default {
       pyqPageSize: 7
     }
   },
+  computed: {
+    device() {
+      return this.$store.state.device.deviceType
+    }
+  },
   methods: {
     getUserPyq() {
       const { id } = this.$route.params
       const params = {userId: id, page: this.pyqPage, pageSize: this.pyqPageSize}
       this.$http.getUserPyq(params).then(res => {
-        console.log('用户朋友圈', res)
         const { data, status } = res.data
         if (status === 2000 && res.status < 400) {
           this.pyqList = [...this.pyqList, ...data]
@@ -103,12 +106,15 @@ export default {
   height: 100%;
   overflow: scroll;
   .wrapper {
-    width: 850px;
+    width: 100%;
     margin: 0 auto;
     .details-top {
       height: 315px;
       position: relative;
       margin-bottom: 10px;
+      &.mobile {
+        height: 200px;
+      }
       .carousel {
         .carousel-img {
           width: 100%;
