@@ -13,6 +13,7 @@
           <span v-if="!currentConversation.isGroup">
             <el-tooltip class="item" effect="dark" content="白板协作需要良好的网络环境" placement="top">
               <i
+                v-if="device !== 'Mobile'"
                 class="operation-item iconfont icon-huaban"
                 @click="enterArtBoard"></i>
             </el-tooltip>

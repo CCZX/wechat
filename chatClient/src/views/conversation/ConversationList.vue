@@ -1,11 +1,9 @@
 <template>
   <div class="conversationlist-com">
-    <div class="search">
-      <!-- <el-input
-        placeholder="please input keyword"
-        suffix-icon="el-icon-search"
-        v-model="searchKeyWord">
-      </el-input> -->
+    <div
+      class="search"
+      :style="device === 'Mobile' ? {marginLeft: '50px'} : {}"
+    >
       <top-search />
     </div>
     <div class="todo">
@@ -91,6 +89,9 @@ export default {
     friendFenzu() { // 获取所有分组 [分组1， 分组2]
       return Object.keys(this.userInfo.friendFenzu)
     },
+    device() {
+      return this.$store.state.device.deviceType
+    }
   },
   methods: {
     async addNewFenzu() {

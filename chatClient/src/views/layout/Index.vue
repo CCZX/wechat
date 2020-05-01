@@ -20,12 +20,14 @@
           v-css="{'opacity': opacity}"
         >
           <audio :src="NotifyAudio" ref="audio" muted></audio>
-          <div
-            :class="device === 'Mobile' ? 'co-messager-aside mobile' : 'co-messager-aside'"
-            v-css="device === 'Mobile' ? {'transform': 'translateX(' + asideTranslateX + 'px)'} : ''"
-          >
-            <my-aside :set-show-theme="setShowTheme" />
-          </div>
+          <transition name="slide-left">
+            <div
+              :class="device === 'Mobile' ? 'co-messager-aside mobile' : 'co-messager-aside'"
+              v-css="device === 'Mobile' ? {'transform': 'translateX(' + asideTranslateX + 'px)'} : ''"
+            >
+              <my-aside :set-show-theme="setShowTheme" />
+            </div>
+          </transition>
           <div :class="device === 'Mobile' ? 'co-messager-content mobile' : 'co-messager-content'">
             <router-view></router-view>
           </div>
@@ -37,12 +39,11 @@
     </transition>
     <!-- 在移动端下点击展示左边菜单 -->
     <div
-      v-show="device === 'Mobile'"
-      v-css="device === 'Mobile' ? {'transform': 'translateX(' + (asideTranslateX + 70) + 'px)'} : ''"
-      :class="asideTranslateX ? 'mobile-menu el-icon-d-arrow-right' : 'mobile-menu el-icon-d-arrow-left' "
+      v-show="device === 'Mobile' && asideTranslateX === -70 && $route.path === '/index' && currentUI === 'conversation'"
+      class="mobile-menu"
       @click.stop="toggleAside"
     >
-
+      <img :src="IMG_URL + userInfo.photo" alt="" srcset="">
     </div>
   </div>
 </template>
@@ -79,7 +80,8 @@ export default {
       // notifySound: '',
       showTheme: false,
       showMain: true, // 聊天区域是否展示
-      asideTranslateX: -70
+      asideTranslateX: -70,
+      IMG_URL: process.env.IMG_URL
     }
   },
   computed: {
@@ -97,6 +99,9 @@ export default {
     },
     device() {
       return this.$store.state.device.deviceType
+    },
+    currentUI() {
+      return this.$store.state.device.currentUI
     }
   },
   watch: {
@@ -321,13 +326,17 @@ export default {
   .mobile-menu {
     position: fixed;
     z-index: 1003;
-    left: -1px;
-    top: 50px;
-    background-color: #fff;
-    padding: 3px;
-    opacity: 0.6;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    left: 5px;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>
