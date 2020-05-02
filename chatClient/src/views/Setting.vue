@@ -1,236 +1,316 @@
 <template>
-  <div class="person-setting">
-    <el-form
-      ref="personForm"
-      label-width="80px"
-      class="personForm"
-      :model="personForm"
-      :rules="personRules"
-    >
-      <el-form-item label="头像">
-        <div class="avatar" @click="setShowCrop">
-          <img :src="imageUrl">
-        </div>
-      </el-form-item>
-      <el-form-item label="性别">
-        <el-radio v-model="personForm.sex" label="1">男</el-radio>
-        <el-radio v-model="personForm.sex" label="2">女</el-radio>
-        <el-radio v-model="personForm.sex" label="3">保密</el-radio>
-      </el-form-item>
-      <el-form-item label="昵称" prop="nickname">
-        <el-input v-model="personForm.nickname" placeholder="名称"></el-input>
-      </el-form-item>
-      <el-form-item label="地址" prop="address">
-        <el-select
-          v-model="personForm.province"
-          filterable
-          placeholder="请选择"
-          style="width: 120px;margin-right: 10px;"
+  <div class="setting-page" :style="device === 'Mobile' ? {width: '95%'} : {}">
+    <div class="header">
+      <div class="avatar">
+        <img :src="IMG_URL + userInfo.photo" alt="" srcset="">
+      </div>
+      <div class="info-list">
+        <div class="info-item">MessagerId：{{userInfo.code}}</div>
+        <div class="info-item">账号：{{userInfo.name}}</div>
+        <div class="info-item">注册时间：{{userInfo.signUpTime | formatDate}}</div>
+        <div class="info-item">登录时间：{{userInfo.lastLoginTime | formatDate}}</div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="nav-list">
+        <span
+          :class="currentTab === 'setting' ? 'operation-text isactive' : 'operation-text'"
+          @click="setCurrentTab('setting')">个人资料</span>
+        <span
+          :class="currentTab === 'password' ? 'operation-text isactive' : 'operation-text'"
+          @click="setCurrentTab('password')"
         >
-          <el-option v-for="item in provinces" :key="item.value" :label="item.name" :value="item"></el-option>
-        </el-select>
-        <el-select
-          v-model="personForm.city"
-          filterable
-          placeholder="请选择"
-          style="width: 120px;margin-right: 10px;"
-        >
-          <el-option v-for="item in cities" :key="item.value" :label="item.name" :value="item"></el-option>
-        </el-select>
-        <el-select v-model="personForm.town" filterable placeholder="请选择" style="width: 120px;">
-          <el-option v-for="item in towns" :key="item.value" :label="item.name" :value="item"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="手机" prop="phone">
-        <el-input v-model="personForm.phone" placeholder="手机"></el-input>
-      </el-form-item>
-      <el-form-item label="电子邮箱" prop="email">
-        <el-input v-model="personForm.email" placeholder="电子邮箱"></el-input>
-      </el-form-item>
-      <el-form-item label="个性签名" prop="signature">
-        <el-input
-          v-model="personForm.signature"
-          placeholder="签名（不超过100位字符）"
-          type="textarea"
-          aotusize
-          resize="none"
-        ></el-input>
-      </el-form-item>
-    </el-form>
-    <el-button type="primary" @click="saveInfo">保存</el-button>
-    <el-dialog :visible.sync="showCrop" width="700px" :before-close="handleClose">
-      <cropper :url="cropUrl" @avatar="getAvatar"></cropper>
-    </el-dialog>
+          密码设置
+        </span>
+      </div>
+      <div class="content" v-loading="fetching">
+        <ul v-show="currentTab === 'setting'" class="user-setting-list">
+          <li
+            class="setting-item"
+            v-for="item in settingList"
+            :key="item"
+          >
+            <span class="title">{{listZHMap[item]}}</span>
+            <div class="inp-box">
+              <template v-if="item === 'sex'">
+                <el-radio-group v-model="userSetting[item]" :disabled="!isModifying[item]" size="mini">
+                  <el-radio-button label="0">男</el-radio-button>
+                  <el-radio-button label="1">女</el-radio-button>
+                  <el-radio-button label="3">保密</el-radio-button>
+                </el-radio-group>
+              </template>
+              <template v-else>
+                <input
+                  type="text"
+                  :ref="item"
+                  :disabled="!isModifying[item]"
+                  v-model="userSetting[item]"
+                >
+              </template>
+            </div>
+            <div class="action">
+              <span
+                v-show="!isModifying[item]"
+                class="operation-text"
+                @click="setModily(item, true)"
+              >
+                修改
+              </span>
+              <div class="oper" v-show="isModifying[item]">
+                <span class="operation-text__danger" @click="saveModify(item)">保存</span>
+                <span class="operation-text__danger" @click="setModily(item, false)">取消</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul v-show="currentTab === 'password'" class="user-password">
+          <li
+            class="pwd-item"
+            v-for="(value, key) in pwdMap"
+            :key="key"
+          >
+            <span class="title">{{value}}</span>
+            <div class="inp-box">
+              <input
+                :placeholder="pwdPlaceholder[key]"
+                type="password"
+                v-model="pwdSetting[key]"
+              />
+            </div>
+          </li>
+          <div class="action">
+            <el-button type="primary" @click="updateUserPwd">确认</el-button>
+          </div>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
-import api from "@/api";
-import cropper from "@/components/cropper";
-import { validateNickname, validatePhone, validateEmail, validateSignature } from '@/utils'
-import { pca, pcaa } from "area-data"; // 省市区数据
+import { formatDate } from '@/utils'
+const list = ['nickname', 'age', 'email', 'sex', 'signature']
+const listZHMap = {
+  nickname: '昵称',
+  age: '年龄',
+  email: 'Email',
+  sex: '性别',
+  signature: '个性签名'
+}
+const tabMap = {
+  setting: 'setting',
+  password: 'password'
+}
+const pwdMap = {
+  oldPwd: '旧密码',
+  newPwd: '新密码',
+  reNewPwd: '确认新密码'
+}
+const pwdPlaceholder = {
+  oldPwd: '请输入原始密码',
+  newPwd: '请输入新密码',
+  reNewPwd: '请确认新密码'
+}
 export default {
-  name: "Setting",
+  name: 'Setting',
   data() {
     return {
-      imageUrl: process.env.IMG_URL + this.$store.state.user.userInfo.photo, // 显示图片路径
-      personForm: {
-        nickname: "",
-        signature: "",
-        sex: "",
-        email: "",
-        phone: "",
-        province: "",
-        city: "",
-        town: ""
+      IMG_URL: process.env.IMG_URL,
+      currentTab: tabMap.setting,
+      settingList: list,
+      listZHMap: listZHMap,
+      userSetting: {}, // 用户修改的信息
+      isModifying: {}, // 标识哪一项正在修改
+      pwdMap,
+      pwdPlaceholder,
+      pwdSetting: {
+        oldPwd: '',
+        newPwd: '',
+        reNewPwd: ''
       },
-      showCrop: false, // 裁剪框开关
-      cropUrl: "", // 裁剪图片地址
-      personRules: {
-        nickname: [{ validator: validateNickname, trigger: "blur" }],
-        phone: [{ validator: validatePhone, trigger: "blur" }],
-        email: [{ validator: validateEmail, trigger: "blur" }],
-        signature: [{ validator: validateSignature, trigger: "blur" }]
-      },
-      cities: [],
-      towns: []
-    };
-  },
-  computed: {
-    provinces() {
-      let arr = this.MapData(pca["86"]);
-      this.personForm.province = arr[0];
-      return arr;
+      fetching: false // 正在网络请求中
     }
   },
-  components: {
-    cropper
-  },
-  watch: {
-    "personForm.province": {
-      handler(v) {
-        this.provinceChange(v);
-      },
-      deep: true
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo
     },
-    "personForm.city": {
-      handler(v) {
-        this.cityChange(v);
-      },
-      deep: true
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {
-    MapData(data) {
-      return Object.keys(data).map(k => {
-        return {
-          name: data[k],
-          value: k
-        };
-      });
+    setCurrentTab(tab) {
+      this.currentTab = tab
     },
-    provinceChange(v) {
-      this.cities = this.MapData(pcaa[v.value]);
-      this.personForm.city = this.cities[0];
+    setUserSetting(userInfo) {
+      for (const item of list) {
+        this.$set(this.userSetting, item, userInfo[item])
+        this.$set(this.isModifying, item, false)
+      }
     },
-    cityChange(v) {
-      this.towns = this.MapData(pcaa[v.value]);
-      this.personForm.town = this.towns[0];
-    },
-    getAvatar(url) {
-      // 裁剪后的图像路径
-      this.imageUrl = process.env.IMG_URL + url;
-      this.showCrop = false;
-      api
-        .upUserInfo({ photo: url, unlink: this.$store.state.user.photo })
-        .then(r => {
-          if (r.code === 0) {
-            this.$message({
-              message: "保存头像成功",
-              type: "success"
-            });
-            this.$store.commit("setUser", { photo: url });
-          } else {
-            this.$message({
-              message: "保存头像失败",
-              type: "warning"
-            });
-          }
-        });
-    },
-    handleClose(done) {
-      // 关闭裁剪框清空地址
-      this.cropUrl = "";
-      done();
-    },
-    setShowCrop() {
-      // 点击上传图像
-      this.showCrop = true;
-      this.cropUrl = this.imageUrl;
-    },
-    saveInfo() {
-      // 保存修改
-      this.$refs["personForm"].validate(valid => {
-        if (valid) {
-          api.upUserInfo(this.personForm).then(r => {
-            if (r.code === 0) {
-              this.$message({
-                message: "保存成功",
-                type: "success"
-              });
-              this.$store.commit("setUser", {
-                nickname: this.personForm.nickname,
-                signature: this.personForm.signature,
-                province: this.personForm.province,
-                city: this.personForm.city,
-                town: this.personForm.town
-              });
-            } else {
-              this.$message({
-                message: "保存失败",
-                type: "warning"
-              });
-            }
-          });
-        } else {
-          return false;
+    setModily(key, flag) {
+      for (const key in this.isModifying) {
+        if (this.isModifying.hasOwnProperty(key)) {
+          this.isModifying[key] = false
         }
-      });
+      }
+      if (!key) return
+      this.isModifying[key] = flag
+      if (key === 'sex') return
+      if (flag) {
+        this.$nextTick(() => {
+          this.$refs[key][0].focus()
+          this.$refs[key][0].select()
+        })
+      } else {
+        const userInfo = this.userInfo
+        this.setUserSetting(userInfo)
+      }
     },
-    getUserDetail() {
-      // 获取个人设置用户信息
-      // api.getUserDetail().then(r => {
-      //   if (r.code === 0) {
-      //     this.personForm = Object.assign(this.personForm, r.data);
-      //   }
-      // });
-      this.$http.getUserInfo(this.$store.state.user.userInfo._id).then(res => {
-        console.log(res)
-        this.personForm = Object.assign(this.personForm, res.data.data);
-      })
+    async saveModify(key) {
+      if (this.userSetting[key] === this.userInfo[key]) {
+        this.setModily(undefined, false)
+        return
+      }
+      const params = {
+        field: key,
+        value: this.userSetting[key],
+        userId: this.userInfo._id
+      }
+      this.fetching = true
+      const {data} = await this.$http.updateUserInfo(params)
+      if (data.status === 2000) {
+        const userInfo = await this.$http.getUserInfo(this.userInfo._id)
+        this.$store.dispatch('user/LOGIN', userInfo.data.data)
+        this.fetching = false
+        this.$message({type: 'success', message: '修改成功！'})
+      } else {
+        this.fetching = false
+        this.$message({type: 'error', message: '修改失败！'})
+      }
+      this.setModily(undefined, false)
+    },
+    async updateUserPwd() {
+      const params = Object.assign({}, this.pwdSetting, {userId: this.userInfo._id})
+      const { data } = await this.$http.updateUserPwd(params)
+      if (data.status === 2000) {
+        this.$message({type: 'success', message: data.msg})
+      } else {
+        this.$message({type: 'warning', message: data.msg})
+      }
     }
   },
-  mounted() {
-    this.getUserDetail();
-  }
-};
+  filters: {
+    formatDate(val) {
+      return formatDate(new Date(val))
+    }
+  },
+  created() {
+    const userInfo = this.$store.state.user.userInfo
+    this.setUserSetting(userInfo)
+  },
+}
 </script>
-<style lang="scss" scoped>
-.person-setting {
-  background-color: #fff;
-  padding: 20px 30px;
-  margin: 10px auto 0;
-  box-sizing: border-box;
-  .el-input {
-    width: 300px;
+
+<style lang="scss">
+@import './../../static/css/var.scss';
+.setting-page {
+  height: 95%;
+  width: 70%;
+  padding: 20px;
+  margin: 10px auto;
+  box-shadow: 0 1px 2px 0 #ffffff;
+  background-color: $primarybg;
+  .header {
+    display: flex;
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .info-list {
+      margin-left: 20px;
+      .info-item {
+        margin-top: 10px;
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
   }
-  .avatar {
-    width: 120px;
-    height: 120px;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    overflow: hidden;
-    img {
-      width: 100%;
+  .body {
+    .nav-list {
+      margin: 10px 0;
+      .isactive {
+        background-color: #cccccc;
+      }
+    }
+    .content {
+      .user-setting-list {
+        .setting-item {
+          display: flex;
+          align-items: center;
+          padding: 1.5rem 0;
+          border-top: 1px solid #cccccc;
+          &:last-child {
+            border-bottom: 1px solid #cccccc;
+          }
+          .title {
+            width: 80px;
+          }
+          .inp-box {
+            // width: 60%;
+            flex: 1;
+            input {
+              width: 100%;
+              border: none;
+              outline: none;
+              background-color: transparent;
+              color: $secondaryfont;
+            }
+          }
+          .action {
+            width: auto;
+            margin-left: 5px;
+            text-align: right;
+          }
+        }
+      }
+      .user-password {
+        .pwd-item {
+          display: flex;
+          align-items: center;
+          padding: 1.5rem 0;
+          border-bottom: 1px solid #cccccc;
+          &:first-child {
+            border-top: 1px solid #cccccc;
+          }
+          .title {
+            width: 100px;
+          }
+          .inp-box {
+            // width: 60%;
+            flex: 1;
+            input {
+              width: 100%;
+              border: none;
+              outline: none;
+              background-color: transparent;
+              color: $secondaryfont;
+            }
+          }
+        }
+        .action {
+          margin-top: 20px;
+          text-align: right;
+        }
+      }
     }
   }
 }

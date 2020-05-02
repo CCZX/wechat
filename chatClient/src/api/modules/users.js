@@ -27,10 +27,11 @@ export default {
   addNewFenzu(data) {
     return request.post(`${API}/user/addfenzu`, data)
   },
-  /**修改分组 */
+  /**修改好友所在的分组 */
   modifyuserfenzu(data) {
     return request.post(`${API}/user/modifyuserfenzu`, data)
   },
+  /**修改好友的备注 */
   modifyFriendBeizhu(data) {
     return request.post(`${API}/user/modifyfriendbeizhu`, data)
   },
@@ -42,8 +43,12 @@ export default {
   editFeznu(data) {
     return request.post(`${API}/user/editfenzu`, data)
   },
-  /**更新我的相关信息 */
-  updateMyInfo(data) {
-    return request.post(`${API}/user/updatemyinfo`, data)
+  /**更新用户相关信息 */
+  updateUserInfo(data) {
+    return request.post(`${API}/user/updateUserInfo`, data)
+  },
+  /**更新用户密码 */
+  updateUserPwd(data) {
+    return request.post(`${API}/user/updateUserPwd`, data)
   }
 }
