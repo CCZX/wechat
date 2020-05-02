@@ -73,7 +73,9 @@
             <div class="inp-box">
               <input
                 :placeholder="pwdPlaceholder[key]"
-                type="password"
+                type="text"
+                autocomplete="new-password"
+                onfocus="this.type === 'password'"
                 v-model="pwdSetting[key]"
               />
             </div>
@@ -157,11 +159,10 @@ export default {
       }
       if (!key) return
       this.isModifying[key] = flag
-      if (key === 'sex') return
       if (flag) {
         this.$nextTick(() => {
-          this.$refs[key][0].focus()
-          this.$refs[key][0].select()
+          this.$refs[key] && this.$refs[key][0].focus()
+          this.$refs[key] && this.$refs[key][0].select()
         })
       } else {
         const userInfo = this.userInfo
