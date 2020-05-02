@@ -54,7 +54,7 @@ export default {
     uploadQiniu(e) {
       const guid = genGuid()
       const [file] = e.target.files
-      this.createObjetURL(file, guid)
+      typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
       // return
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024

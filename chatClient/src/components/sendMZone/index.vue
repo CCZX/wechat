@@ -34,7 +34,11 @@
         </transition>
         <transition name="roll">
           <div class="emoji-com" v-show="showUploadImg">
-            <upload-img @addemoji="addEmoji" :token="token" :getstatus="getPictureStatus" />
+            <upload-img 
+              :token="token"
+              :getStatus="getPictureStatus"
+              :getLocalUrl="getPicLocalUrl"
+            />
           </div>
         </transition>
       </div>
@@ -59,6 +63,7 @@ export default {
     return {
       content: '',
       // pictures: ['http://blog.static.chenr.cn/cc-messger-170240566a4-56.jpeg', 'http://blog.static.chenr.cn/cc-messger-1701041742e-71.jpeg', 'http://blog.static.chenr.cn/cc-messger-170240566a4-56.jpeg'],
+      // pictures: [{url: '', guid: '', uploading: true, uploadPercent: 10}, ...],
       pictures: [],
       showFotter: false,
       showEmoji: false,
@@ -111,14 +116,39 @@ export default {
       }
       this.isPublishing = false
     },
+    getPicLocalUrl(url, guid) {
+      console.log('getPicLocalUrl')
+      this.pictures = [...this.pictures, {url, guid, uploading: true}]
+    },
     getPictureStatus(res) {
+      console.log(res)
       if (res.status === uploadImgStatusMap.error) {
         this.$message.error('图片上传失败！')
         return
       }
+      if (res.status === uploadImgStatusMap.next) {
+        const guid = res.guid
+        const percent = Number(Number((res.data && res.data.total && res.data.total.percent) || 0).toFixed(2))
+        const pictures = JSON.parse(JSON.stringify(this.pictures)) || []
+        pictures.forEach(item => {
+          if (item.guid === guid) {
+            item.uploadPercent = percent
+          }
+        })
+        this.pictures = pictures
+      }
       if (res.status === uploadImgStatusMap.complete) {
         const IMG_URL = qiniu_URL + res.data.key
-        this.pictures = [...this.pictures, IMG_URL]
+        const guid = res.guid
+        const pictures = this.pictures || []
+        pictures.forEach(item => {
+          if (item.guid === guid) {
+            item.url = IMG_URL
+            delete item.uploading
+            delete item.uploadPercent
+          }
+        })
+        this.pictures = pictures
       }
     },
     cancel() {

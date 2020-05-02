@@ -9,9 +9,17 @@
       </span>
     </div>
     <div class="picture-list">
-      <div class="picture-item" v-for="(item, index) in pitures" :key="index">
+      <div class="picture-item" v-for="(item, index) in pitures" :key="item.guid">
         <i class="close el-icon-close" @click="deleteItem(index)"></i>
-        <img class="img" :src="item" alt="" srcset="">
+        <img class="img" :src="item.url" alt="" srcset="">
+        <div v-if="item.uploading && !item.uploadPercent" class="all0 img-cover">图片上传中...</div>
+        <div v-if="item.uploadPercent" class="all0 img-cover progress">
+        <!-- <div class="all0 img-cover progress"> -->
+          <div class="content">
+            <el-progress :width="50" type="circle" :percentage="item.uploadPercent"></el-progress>
+            <!-- <el-progress :width="50" type="circle" :percentage="23"></el-progress> -->
+          </div>
+      </div>
       </div>
     </div>
   </div>
@@ -67,6 +75,14 @@ export default {
       }
       .img {
         width: 270px;
+      }
+      .img-cover {
+        display: flex;
+        position: absolute;
+        background-color: rgba(0, 0, 0, .6);
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
       }
     }
   }
