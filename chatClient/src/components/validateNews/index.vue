@@ -58,7 +58,7 @@
         <div class="go-operation">
           <el-popover
             placement="left"
-            width="400"
+            width="300"
             trigger="click">
             <div class="validate-popover-body" v-loading="isAdding">
               <div class="sender-info">
@@ -124,6 +124,9 @@ export default {
     },
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {
@@ -182,7 +185,9 @@ export default {
 }
 .validatenews-com {
   background-color: #fff;
-  width: 600px;
+  width: 100%;
+  height: 95%;
+  overflow-x: hidden;
   .wrapper {
     padding: 10px;
     box-sizing: border-box;

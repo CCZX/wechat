@@ -1,6 +1,6 @@
 <template>
-  <div class="system-page">
-    <p>我的系统消息</p>
+  <div class="system-page" :style="device === 'Mobile' ? {width: '100%'} : {}">
+    <p class="title">我的系统消息</p>
     <validate-news :validateNewsList="validateNewsList" @changeValidateNewsStatus="changeValidateNewsStatus" />
   </div>
 </template>
@@ -18,6 +18,9 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {
@@ -59,8 +62,12 @@ export default {
 
 <style lang="scss">
 .system-page {
-  width: 815px;
-  min-height: 100%;
-  margin: 10px auto 0;
+  .title {
+    margin-top: 0;
+  }
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 20px 10px;
 }
 </style>
