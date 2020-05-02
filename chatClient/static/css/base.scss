@@ -60,6 +60,17 @@ html, body {
   // min-width: 1120px;
   // width: 1020px;
 }
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  &::placeholder {
+    @extend .secondary-font
+  }
+}
 
 * {
   box-sizing: border-box;

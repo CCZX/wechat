@@ -17,7 +17,7 @@
         />
         <el-main
           :class="device === 'Mobile' ? 'co-messager-main mobile' : 'co-messager-main'"
-          v-css="{'opacity': opacity}"
+          v-css=" opacity !== 1 ? {'opacity': opacity} : {}"
         >
           <audio :src="NotifyAudio" ref="audio" muted></audio>
           <transition name="slide-left">

@@ -168,6 +168,7 @@ export default {
         this.setUserSetting(userInfo)
       }
     },
+    /**更新用户信息 */
     async saveModify(key) {
       if (this.userSetting[key] === this.userInfo[key]) {
         this.setModily(undefined, false)
@@ -187,6 +188,7 @@ export default {
         this.$message({type: 'success', message: '修改成功！'})
       } else {
         this.fetching = false
+        this.setUserSetting(this.userInfo)
         this.$message({type: 'error', message: '修改失败！'})
       }
       this.setModily(undefined, false)
