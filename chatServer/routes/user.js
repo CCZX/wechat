@@ -15,5 +15,7 @@ router.post('/modifyuserfenzu', userController.modifyFrienFenzu) // 更新好友
 router.post('/delfenzu', userController.deleteFenzu) // 删除分组
 router.post('/editfenzu', userController.editFenzu) // 编辑某项分组的名称
 router.post('/modifyfriendbeizhu', userController.modifyBeizhu) // 修改好友备注
+router.post('/updateUserInfo', userController.updateUserInfo) // 更新用户信息
+router.post('/updateUserPwd', userController.updateUserPwd) // 更新用户密码
 
 module.exports = router

@@ -2,7 +2,7 @@ const USER = require('./../models/user')
 const ACCOUNTBASE = require('./../models/accountpool')
 const md5 = require('./../utils').md5
 const cvCode = require('./../utils/cvCode').cvCode
-const { createToken } = require('./../utils/auth')
+const { createToken, parseToken } = require('./../utils/auth')
 const randomNickname = require('./../utils/index').randomNickname
 const { onLineUser } = require('./../app')
 const { addFriend } = require('./friendly')
@@ -430,6 +430,88 @@ const updateUserOnlineTime = async (data) => {
   return doc
 }
 
+// 更新用户信息
+const updateUserInfo = async (req, res) => {
+  /**
+   * field：更新的项，比如昵称、性别等
+   * value：更新的值
+   * userId：用户的ID
+   */
+  try {
+    const { field, value, userId } = req.body
+    if (parseToken(req.headers.authorization) !== userId) {
+      return res.json({
+        status: 2001,
+        data: [],
+        msg: '错误操作！'
+      })
+    }
+    const data = await USER.findByIdAndUpdate({
+      _id: userId
+    }, {
+      [field]: value
+    })
+    return res.json({
+      status: 2000,
+      data: [],
+      msg: '修改成功！'
+    })
+  } catch (error) {
+    return res.json({
+      status: 2003,
+      data: error,
+      msg: '服务端错误！'
+    })
+  }
+}
+
+// 更新用户密码
+const updateUserPwd = async (req, res) => {
+  try {
+    const { oldPwd, newPwd, reNewPwd, userId } = req.body
+    const {pass: userPwd} = await USER.findOne({_id: userId}, {pass: 1})
+    const oldPwdMD5 = md5(oldPwd)
+    const newPwdMD5 = md5(newPwd)
+    if (parseToken(req.headers.authorization) !== userId) {
+      return res.json({
+        status: 2001,
+        data: [],
+        msg: '错误操作！'
+      })
+    }
+    if (userPwd !== oldPwdMD5) {
+      return res.json({
+        status: 2001,
+        data: [],
+        msg: '原始密码输入错误！'
+      })
+    }
+    if (newPwd !== reNewPwd) {
+      return res.json({
+        status: 2001,
+        data: [],
+        msg: '两次密码不一致！'
+      })
+    }
+    const data = await USER.findByIdAndUpdate({
+      _id: userId
+    }, {
+      pass: newPwdMD5
+    })
+    return res.json({
+      status: 2000,
+      data: [],
+      msg: '更新成功，请牢记你的新密码！'
+    })
+  } catch (error) {
+    return res.json({
+      status: 2003,
+      data: [],
+      msg: '服务端错误！'
+    })
+  }
+}
+
 module.exports = {
   login,
   generatorCode,
@@ -444,5 +526,7 @@ module.exports = {
   editFenzu,
   modifyFrienFenzu,
   modifyBeizhu,
-  updateUserOnlineTime
+  updateUserOnlineTime,
+  updateUserInfo,
+  updateUserPwd
 }
