@@ -20,17 +20,17 @@
           <span class="nickname">{{userInfo.nickname}}</span>
         </div>
       </div>
-      <suck-top :top="0" parent=".mzone-page" :z-index="1004">
+      <!-- <suck-top :top="30" parent=".mzone-page" :z-index="1004"> -->
         <div ref="navtop" class="mzone-nav" :style="{width: navTopWidth + 'px'}">
-          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1">好友动态</el-menu-item>
-            <el-menu-item index="3">我的空间</el-menu-item>
-            <el-menu-item index="4">我的档案</el-menu-item>
+          <el-menu :default-active="activeTab" @select="tabSelect" class="el-menu-demo" mode="horizontal">
+            <el-menu-item index="pyq">好友动态</el-menu-item>
+            <el-menu-item index="my-mzone">我的空间</el-menu-item>
+            <el-menu-item index="blog">博客</el-menu-item>
           </el-menu>
         </div>
-      </suck-top>
+      <!-- </suck-top> -->
       <div :class="device === 'Mobile' ? 'mzone-body mobile' : 'mzone-body'">
-        <div class="menulist">
+        <!-- <div class="menulist">
           <suck-top :top="70" parent=".mzone-page" :z-index="1004">
             <div class="menulist" :style="{width: menulistWidth + 'px'}">
               <el-menu
@@ -52,9 +52,9 @@
               </el-menu>
             </div>
           </suck-top>
-        </div>
+        </div> -->
         
-        <div class="content">
+        <div v-show="activeTab === 'pyq'" class="content">
           <send-mzone @watchsend="watchSendPyq" />
           <m-pyq
             :pyq-list-data="myFriendPyqList"
@@ -62,6 +62,9 @@
             @modifyPyq="modifyPyq"
             @getPyq="getMyFriendPyq"
           />
+        </div>
+        <div v-show="activeTab === 'blog'" class="content blog">
+          <blog />
         </div>
       </div>
       <back-top target=".mzone-page" />
@@ -74,12 +77,13 @@ import mPyq from '@/components/mzonePyq'
 import sendMzone from '@/components/sendMZone'
 import backTop from '@/components/backTop'
 import suckTop from '@/components/suckTop'
+import Blog from './blog'
 export default {
   name: 'MZone',
   data() {
     return {
       IMG_URL: process.env.IMG_URL,
-      activeIndex: '1',
+      activeTab: 'blog',
       navTopWidth: 0,
       menulistWidth: 0,
 
@@ -100,6 +104,10 @@ export default {
     }
   },
   methods: {
+    tabSelect(index) {
+      // console.log(a)
+      this.activeTab = index
+    },
     watchSendPyq(newPyqItem) { // 监听用户发表新的朋友圈
       this.myFriendPyqList = [newPyqItem, ...this.myFriendPyqList]
     },
@@ -132,15 +140,16 @@ export default {
     mPyq,
     sendMzone,
     backTop,
-    suckTop
+    suckTop,
+    Blog
   },
   mounted() {
     const mzoneWrapper = document.querySelector('.mzone-wrapper')
-    const menulist = document.querySelector('.menulist')
+    // const menulist = document.querySelector('.menulist')
     const mzoneWrapperWidth = window.getComputedStyle(mzoneWrapper).width
-    const menulistWidth = window.getComputedStyle(menulist).width
+    // const menulistWidth = window.getComputedStyle(menulist).width
     this.navTopWidth = parseInt(mzoneWrapperWidth)
-    this.menulistWidth = parseInt(menulistWidth)
+    // this.menulistWidth = parseInt(menulistWidth)
   },
 }
 </script>
@@ -197,19 +206,19 @@ export default {
           .is-active {
             position: relative;
             border-bottom: none;
-            &::before {
-              position: absolute;
-              bottom: 0;
-              left: 50%;
-              transform: translateX(-50%);
-              transition: all .5s ease;
-              content: '';
-              width: 0;
-              height: 0;
-              border-bottom: 10px solid #e9ebee;
-              border-left: 10px solid transparent;
-              border-right: 10px solid transparent;
-            }
+            // &::before {
+            //   position: absolute;
+            //   bottom: 0;
+            //   left: 50%;
+            //   transform: translateX(-50%);
+            //   transition: all .5s ease;
+            //   content: '';
+            //   width: 0;
+            //   height: 0;
+            //   border-bottom: 10px solid #e9ebee;
+            //   border-left: 10px solid transparent;
+            //   border-right: 10px solid transparent;
+            // }
           }
         }
         .el-tabs__content {
@@ -228,6 +237,9 @@ export default {
       .content {
         width: 70%;
         margin-left: 25px;
+        &.blog {
+          margin-left: 0;
+        }
       }
       &.mobile {
         .menulist {

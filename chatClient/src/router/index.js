@@ -26,7 +26,8 @@ const router = new Router({
       component: () => import('@/views/layout'),
       redirect: '/chat/home',
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        keepAlive: true
       },
       children: [
         {
@@ -94,6 +95,14 @@ const router = new Router({
           meta: {
             requiresAuth: true
           },
+        },
+        {
+          path: 'blog/:id',
+          name: 'BlogInfo',
+          component: () => import('@/views/BlogInfo'),
+          meta: {
+            requiresAuth: true
+          }
         }
       ]
     },

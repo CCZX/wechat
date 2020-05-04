@@ -6,6 +6,7 @@ import validate from './modules/validate'
 import pyq from './modules/pyq'
 // import user from './modules/user'
 import user from './modules/users'
+import blog from './modules/blog'
 
 export const API = 'api/v1'
 
@@ -16,5 +17,6 @@ export default {
   ...news,
   ...sys,
   ...validate,
-  ...pyq
+  ...pyq,
+  ...blog
 }
