@@ -1,4 +1,6 @@
 const Blog = require('./../models/blog')
+const BlogCategory = require('./../models/blogCategory')
+const BlogTag = require('./../models/blogTags')
 
 /**发表博客 */
 const publishBlog = async (req, res) => {
@@ -30,6 +32,7 @@ const getBlogList = async (req, res) => {
   })
 }
 
+/**查看博客内容 */
 const getBlogInfo = async (req, res) => {
   try {
     const { id } = req.query
@@ -44,11 +47,42 @@ const getBlogInfo = async (req, res) => {
   } catch (error) {
     
   }
+}
 
+/**获取分类列表 */
+const getCategoryList = async (req, res) => {
+  try {
+    const data = await BlogCategory.find()
+    return res.json({
+      status: 2000,
+      data: data,
+      msg: 'ok'
+    })
+  } catch (error) {
+    
+  }
+}
+
+const getTagList = async (req, res) => {
+  const { cateId } = req.query
+  try {
+    const data = await BlogTag.find({
+      categoryId: cateId
+    })
+    return res.json({
+      status: 2000,
+      data: data,
+      msg: 'ok'
+    })
+  } catch (error) {
+    
+  }
 }
 
 module.exports = {
   publishBlog,
   getBlogList,
-  getBlogInfo
+  getBlogInfo,
+  getCategoryList,
+  getTagList
 }

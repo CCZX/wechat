@@ -7,10 +7,10 @@ const blogSchema = new Schema({
     type : Schema.Types.ObjectId,
     ref : 'user'
   },
-  /**类别 */
+  /**类别，只能属于一个类别 */
   category: {
-    type: Array,
-    default: []
+    type: String,
+    default: ''
   },
   /**标签 */
   tags: {
@@ -36,7 +36,13 @@ const blogSchema = new Schema({
     type: String,
     default: ''
   },
+  /**创建日期 */
   createDate: {
+    type: Date,
+    default: Date.now
+  },
+  /**更新日期 */
+  updateDate: {
     type: Date,
     default: Date.now
   }
