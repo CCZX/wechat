@@ -1,6 +1,6 @@
 <template>
   <div class="custom-upload-img-com">
-    <div class="upload-img-com-wrapper">
+    <div class="upload-img-com-wrapper" v-show="useType !== 'slot'">
       <el-alert title="只能上传小于 1M 的图片" type="warning" effect="dark" :closable="false" />
       <div class="option">
         <!-- <input type="file" @change="uploadServer" name="" id=""> -->
@@ -30,6 +30,7 @@
         </label>
       </div>
     </div>
+    <slot v-bind:trigger="customTriggerInp" />
   </div>
 </template>
 
@@ -43,8 +44,12 @@ import { imgRandomName, isProduction, genGuid } from '@/utils'
 import { qiniu_URL, uploadImgStatusMap } from '@/const'
 import { connect } from 'tls';
 export default {
-  props: ["token", "getStatus", "getLocalUrl"],
+  props: ["token", "getStatus", "getLocalUrl", "useType"],
   methods: {
+    customTriggerInp() {
+      const fileInp = document.querySelector('#up-to-qiniu')
+      fileInp.click()
+    },
     createObjetURL(file, guid) {
       const url = window.URL.createObjectURL(file)
       // this.$emit('getLocalUrl', url)
