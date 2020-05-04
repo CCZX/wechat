@@ -8,7 +8,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>
-          <router-link to="/setting" class="aside-menu-link">
+          <router-link to="/chat/setting" class="aside-menu-link">
             <el-button type="text">个人设置</el-button>
           </router-link>
         </el-dropdown-item>
@@ -17,7 +17,7 @@
             :value="validateUnReadCount"
             :hidden="!validateUnReadCount"
           >
-            <router-link to="/system" class="aside-menu-link">
+            <router-link to="/chat/system" class="aside-menu-link">
               <el-button type="text">系统消息</el-button>
             </router-link>
           </el-badge>
@@ -26,7 +26,7 @@
           <el-button type="text" @click="setShowTheme(true)">主题设置</el-button>
         </el-dropdown-item>
         <el-dropdown-item>
-          <router-link to="/setting" class="aside-menu-link">
+          <router-link to="/chat/setting" class="aside-menu-link">
             <el-button type="text">反馈</el-button>
           </router-link>
         </el-dropdown-item>

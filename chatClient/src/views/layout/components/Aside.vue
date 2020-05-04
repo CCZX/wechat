@@ -1,7 +1,7 @@
 <template>
   <div class="layout-cmp__aside">
     <div class="avatar">
-      <router-link to="/index">
+      <router-link to="/">
         <el-avatar shape="square" :size="50" :src="IMG_URL + userInfo.photo"></el-avatar>
       </router-link>
       <el-tooltip class="item" effect="dark" :content="userInfo.nickname" placement="top">
@@ -9,10 +9,10 @@
       </el-tooltip>
     </div>
     <div class="nav-list">
-      <router-link to="/add" tag="span" title="加好友">
+      <router-link to="/chat/add" tag="span" title="加好友">
         <span class="nav-item iconfont icon-icon-"></span>
       </router-link>
-      <router-link to="/mzone" tag="span" title="空间">
+      <router-link to="/chat/mzone" tag="span" title="空间">
         <span class="nav-item iconfont icon-icon-test1"></span>
       </router-link>
       <span class="nav-item iconfont icon-zhongchuangkongjian-"></span>

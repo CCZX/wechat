@@ -43,7 +43,7 @@ import partTitle from '@/components/partTitle'
 import chatSvg from '@/SVGComponents/chat'
 // import AMap from '@/components/customMap'
 export default {
-  name: 'Index',
+  name: 'Home',
   data() {
     return {
       currentConversation: {},
