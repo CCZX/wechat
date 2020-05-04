@@ -422,4 +422,10 @@ export function colorRgb (str) {
   } else {
     return
   }
-};
+}
+
+ export function computedLevel(onlineTime) {
+  const toHour = onlineTime / 1000 / 60 /60
+  const res = Math.ceil(toHour)
+  return res > 8 ? 8 : res
+}
