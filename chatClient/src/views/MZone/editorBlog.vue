@@ -2,21 +2,24 @@
   <div class="editor-blog">
     <div class="header">
       <el-input v-model="blogParams.title" />
-      <el-button class="publish-btn" @click="publish" type="primary">发表博客</el-button>
+      <el-button class="publish-btn" @click="setShowDialog(true)" type="primary">发表博客</el-button>
     </div>
     <div class="editor-area">
       <mavon-editor v-model="blogParams.content" class="container"/>
     </div>
+    <meta-dialog @change="metaChange" @setShow="setShowDialog" @publish="publish" v-show="showDialog" />
   </div>
 </template>
 
 <script>
+import metaDialog from './blogMetaDialog'
 export default {
   name: 'Editor',
   data() {
     return {
+      showDialog: false,
       blogParams: {
-        category: [],
+        category: '',
         tags: [],
         cover: '',
         title: '',
@@ -53,8 +56,22 @@ export default {
                
         })
       }
+    },
+    metaChange(type, value) {
+      this.blogParams[type] = value
+    },
+    setShowDialog(flag) {
+      const blogParams = this.blogParams
+      if (!blogParams.title || !blogParams.content) {
+        this.$message({type: 'error', message: '信息未填写完整！'})
+        return
+      }
+      this.showDialog = flag
     }
   },
+  components: {
+    metaDialog
+  }
 }
 </script>
 
