@@ -4,9 +4,9 @@
       <router-link to="/">
         <el-avatar shape="square" :size="50" :src="IMG_URL + userInfo.photo"></el-avatar>
       </router-link>
-      <el-tooltip class="item" effect="dark" :content="userInfo.nickname" placement="top">
-        <el-button>上边</el-button><span class="nickname">{{userInfo.nickname}}</span>
-      </el-tooltip>
+      <!-- <el-tooltip class="item" effect="dark" :content="userInfo.nickname" placement="top"> -->
+        <span class="nickname">{{userInfo.nickname}}</span>
+      <!-- </el-tooltip> -->
     </div>
     <div class="nav-list">
       <router-link to="/chat/add" tag="span" title="加好友">

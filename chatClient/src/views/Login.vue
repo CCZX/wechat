@@ -141,7 +141,7 @@ export default {
           this.$message.success('登录成功！')
           this.$store.dispatch('user/LOGIN', data)
           const redirect = this.$router.currentRoute.query.redirect
-          const next = redirect ? redirect : '/index'
+          const next = redirect ? redirect : '/chat/home'
           this.$router.replace(next)
         } else {
           this.$message.error(msg)

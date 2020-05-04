@@ -29,7 +29,10 @@
             </div>
           </transition>
           <div :class="device === 'Mobile' ? 'co-messager-content mobile' : 'co-messager-content'">
-            <router-view></router-view>
+            <keep-alive :include="include">
+              <router-view v-if="$route.meta.keepAlive"></router-view>
+            </keep-alive>
+            <router-view v-if="!$route.meta.keepAlive"></router-view>
           </div>
         </el-main>
       </main>
@@ -75,6 +78,7 @@ export default {
   name: 'Layout',
   data() {
     return {
+      include: ['Home'], // keepAlive缓存相关
       bgImgUrl: '',
       NotifyAudio: '',
       // notifySound: '',
@@ -126,6 +130,21 @@ export default {
       handler(notifySound) {
         this.NotifyAudio = notifySoundMap[notifySound]
       }, deep: true, immediate: true
+    },
+    $route(to, from) {
+      const include = this.include
+      //如果 要 to(进入) 的页面是需要 keepAlive 缓存的，把 name push 进 include数组
+      if (to.meta.keepAlive) {
+        // !include.includes('Layout') && include.push('Layout')
+        !include.includes(to.name) && include.push(to.name)
+      }
+      //如果 要 form(离开) 的页面是 keepAlive缓存的，
+      //再根据 deepth 来判断是前进还是后退
+      //如果是后退
+      if (from.meta.keepAlive && to.meta.deepth < from.meta.deepth) {
+        const index = include.indexOf(from.name)
+        index !== -1 && include.splice(index, 1)
+      }
     }
   },
   components: {
