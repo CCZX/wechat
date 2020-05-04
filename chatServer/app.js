@@ -23,6 +23,7 @@ const system = require('./routes/sys')
 const validate = require('./routes/validateNews')
 const pyq = require('./routes/pyq')
 const superUser = require('./routes/superUser')
+const blog = require('./routes/blog')
 
 // const socketHandler = require('./utils/socket')
 
@@ -87,6 +88,7 @@ app.use(`${API_VERSION}/sys`, system)
 app.use(`${API_VERSION}/validate`, validate)
 app.use(`${API_VERSION}/pyq`, pyq)
 app.use(`${API_VERSION}/superUser`, superUser)
+app.use(`${API_VERSION}/blog`, blog)
 /**前台初始资源路径 */
 app.get('/', (req, res) => {
   res.sendfile(__dirname + '/index.html')
