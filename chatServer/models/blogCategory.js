@@ -1,4 +1,3 @@
-// 好友数据模型
 const DB = require('../utils/connectDB')
 const Schema = DB.Schema
 

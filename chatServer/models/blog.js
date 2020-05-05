@@ -1,4 +1,3 @@
-// 好友数据模型
 const DB = require('../utils/connectDB')
 const Schema = DB.Schema
 
@@ -9,10 +8,10 @@ const blogSchema = new Schema({
   },
   /**类别，只能属于一个类别 */
   category: {
-    type: String,
-    default: ''
+    type: Object,
+    default: {}
   },
-  /**标签 */
+  /**标签[{},{}...] */
   tags: {
     type: Array,
     default: []
@@ -35,6 +34,11 @@ const blogSchema = new Schema({
   desc: {
     type: String,
     default: ''
+  },
+  /**点赞数 */
+  likeNum: {
+    type: Number,
+    default: 0
   },
   /**创建日期 */
   createDate: {
