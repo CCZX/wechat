@@ -53,7 +53,7 @@
               v-for="item in selectedTags"
               :key="item"
             >
-              <el-tag size="small" closable @close="selectTag({name: item})">{{item}}</el-tag>
+              <el-tag size="small" closable @close="selectTag(item)">{{item.name}}</el-tag>
             </span>
           </div>
         </div>
@@ -89,7 +89,7 @@ export default {
       if (data.status === 2000) {
         this.categoryList = data.data
         this.currentCate = this.categoryList[0]
-        this.$emit('change', 'category', this.currentCate.name)
+        this.$emit('change', 'category', this.currentCate)
         this.getBlogTag()
       }
     },
@@ -101,17 +101,17 @@ export default {
     },
     setCurrentCate(cate) {
       this.currentCate = cate
-      this.$emit('change', 'category', this.currentCate.name)
+      this.$emit('change', 'category', this.currentCate)
       this.getBlogTag()
     },
-    selectTag(item) {
-      const name = item.name
+    selectTag(tagItem) {
+      // const name = item
       const selectedTags = this.selectedTags || []
-      const index = selectedTags.indexOf(name)
+      const index = selectedTags.findIndex(item => item._id === tagItem._id)
       if (index !== -1) {
         selectedTags.splice(index, 1)
       } else {
-        selectedTags.push(name)
+        selectedTags.push(tagItem)
       }
       this.$emit('change', 'tags', this.selectedTags)
     },

@@ -5,10 +5,16 @@
         <div class="header">
           <avatar-header :userInfo="authorInfo" :time="blogInfo.createDate" />
         </div>
-        <div class="cover" v-css="{'background-image': 'url(' + blogInfo.cover + ')'}"></div>
+        <div v-if="blogInfo.cover" class="cover" v-css="{'background-image': 'url(' + blogInfo.cover + ')'}"></div>
         <div class="blog-info">
           <p class="title">{{blogInfo.title}}</p>
           <div v-html="content" class="markdown-body"></div>
+        </div>
+        <div class="tag-list">
+          <part-title text="关注以下标签，发现更多相似文章" />
+          <span class="tag-item" v-for="item in blogInfo.tags" :key="item._id">
+            <el-tag>{{item.name}}</el-tag>
+          </span>
         </div>
       </div>
       <div class="blog-aside" :style="{top: pageScrollTop + 300 + 'px'}">
@@ -20,8 +26,10 @@
 
 <script>
 import marked from '@/plugins/marked'
-import { debounce, formatDateToZH } from '@/utils'
+import { debounce, formatDateToZH, LocalStorageManager } from '@/utils'
 import avatarHeader from '@/components/avatarHeader'
+import partTitle from '@/components/partTitle'
+const localStorageManager = new LocalStorageManager()
 export default {
   name: 'BlogInfo',
   data() {
@@ -31,7 +39,8 @@ export default {
       id: '',
       blogInfo: {},
       authorInfo: {},
-      pageScrollTop: 0
+      pageScrollTop: 0,
+      pageDOM: ''
     }
   },
   computed: {
@@ -57,7 +66,9 @@ export default {
       this.isFetching = false
     },
     handlerScroll: debounce(function (e) {
-      this.pageScrollTop = e.target.scrollTop
+      const scrollTop = e.target.scrollTop
+      this.pageScrollTop = scrollTop
+      localStorageManager.set(`blog-acrticle-${this.id}`, scrollTop)
     }, 500)
   },
   filters: {
@@ -66,7 +77,18 @@ export default {
     }
   },
   components: {
-    avatarHeader
+    avatarHeader,
+    partTitle
+  },
+  watch: {
+    blogInfo: {
+      handler(val) {
+        this.$nextTick(() => {
+          const scrollTop = localStorageManager.getStr(`blog-acrticle-${this.id}`)
+          document.querySelector('.blog-info-page').scrollTop = scrollTop
+        })
+      }
+    }
   },
   created() {
     const id = this.$route.params.id
@@ -74,7 +96,12 @@ export default {
     this.getBlogInfo()
   },
   mounted() {
-    document.querySelector('.blog-info-page').addEventListener('scroll', this.handlerScroll)
+    const pageDOM = document.querySelector('.blog-info-page')
+    pageDOM.addEventListener('scroll', this.handlerScroll)
+    this.pageDOM = pageDOM
+  },
+  beforeDestroy() {
+    this.pageDOM.removeEventListener('scroll', this.handlerScroll)
   },
 }
 </script>
@@ -82,6 +109,7 @@ export default {
 <style lang="scss">
 @import './../../static/css/animation.scss';
 @import './../../static/css/markdown.css';
+@import './../../static/css/var.scss';
 .blog-info-page {
   position: relative;
   height: 100%;
@@ -89,6 +117,8 @@ export default {
   overflow-x: hidden;
   .blog-wrapper {
     margin-right: 30px;
+    padding: 0 10px 10px;
+    background-color: $primarybg;
     .blog-main {
       .cover {
         width: 100%;
@@ -99,6 +129,14 @@ export default {
         .title {
           margin: 0 0 30px;
           font-size: 30px;
+        }
+      }
+      .tag-list {
+        margin-top: 30px;
+        .tag-item {
+          display: inline-block;
+          margin: 0 10px 10px 0;
+          cursor: pointer;
         }
       }
     }

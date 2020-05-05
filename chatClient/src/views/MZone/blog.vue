@@ -16,7 +16,7 @@
                 <div class="meta-rows">
                   <span class="meta-item">{{item.authorId.nickname}}</span>
                   <span class="meta-item">{{item.createDate | formatDateToZH}}</span>
-                  <span class="meta-item" v-if="item.category">{{item.category}}</span>
+                  <span class="meta-item" v-if="item.category">{{item.category.name}}</span>
                 </div>
                 <div class="title">
                   <router-link class="entry-link" :to="`/chat/blog/${item._id}`">
