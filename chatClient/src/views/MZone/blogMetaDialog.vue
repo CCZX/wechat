@@ -60,6 +60,7 @@
       </div>
       <div class="footer">
         <el-button type="text" @click="setShow(false)">取消</el-button>
+        <el-button type="info">存为草稿</el-button>
         <el-button type="primary" @click="publish">发表博客</el-button>
       </div>
     </div>
