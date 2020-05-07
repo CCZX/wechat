@@ -11,6 +11,10 @@ export default {
     const valueEntries = Object.entries(value)
     for (const [key, value] of valueEntries) {
       el.style[key] = value
+      if (key === 'background-image' || key === 'backgroundImage') {
+        el.style.backgroundRepeat = 'no-repeat'
+        el.style.backgroundSize = 'cover'
+      }
     }
   },
   bgImage(el, binding) {
