@@ -191,7 +191,14 @@ export default {
         return
       }
       if (res.status === uploadImgStatusMap.complete) {
-        const img_URL = qiniu_URL + res.data.key
+        const imgKey = res.data.key
+        let img_URL = ''
+        if ((imgKey || '').includes('/uploads/')) {
+          img_URL = process.env.IMG_URL + imgKey
+        } else {
+          img_URL = qiniu_URL + imgKey
+        }
+        // const img_URL = qiniu_URL + res.data.key
         const common = this.generatorMessageCommon()
         const newMessage = {
           ...common,

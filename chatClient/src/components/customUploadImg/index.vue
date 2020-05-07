@@ -99,7 +99,9 @@ export default {
       if (isProduction()) {
         return this.$message.error('为减少服务器压力线上请上传至七牛云哟~');
       }
+      const guid = genGuid()
       const file = e.target.files[0]
+      typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
       const formdata = new FormData()
@@ -107,8 +109,10 @@ export default {
       this.$http.uploadFile(formdata).then(res => {
         console.log('上传文件结果', res)
         const { data } = res
-        if (res.status === 2000) {
-          this.getStatus({status: uploadImgStatusMap.complete, data: res})
+        if (data.status === 2000) {
+          this.getStatus({status: uploadImgStatusMap.complete, data: {key: data.data}, guid})
+        } else {
+
         }
       })
     }
