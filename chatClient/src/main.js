@@ -6,8 +6,10 @@ import VueAMap from 'vue-amap'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueSocketIO from 'vue-socket.io'
 import fullCalendar from 'vue-fullcalendar'
+import mavonEditor from 'mavon-editor'
 // import socketIO from 'socket.io-client'
 import 'normalize.css/normalize.css'
+import 'mavon-editor/dist/css/index.css'
 import App from './App'
 import router from './router'
 import Toast from './components/toast/main.js'
@@ -18,9 +20,11 @@ import { VueAMapKey } from '@/const'
 // import './../static/css/base.css'
 import './../static/css/base.scss'
 import './../static/css/var.scss'
+import './../static/css/theme.scss'
 
 Vue.use(ElementUI)
 Vue.use(VueAMap)
+Vue.use(mavonEditor)
 Vue.component('full-calendar', fullCalendar)
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({

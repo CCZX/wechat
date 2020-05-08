@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     goSchedule() {
-      this.$router.push({path: '/schedule'})
+      this.$router.push({path: '/chat/schedule'})
     },
     findTodayTodo() {
       const allTodos = JSON.parse(window.localStorage.getItem('todo')) || []

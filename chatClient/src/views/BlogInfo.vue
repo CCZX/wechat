@@ -1,13 +1,18 @@
 <template>
-  <div class="blog-info-page" v-loading="isFetching">
-    <div class="blog-wrapper">
+  <div class="blog-info-page" v-loading="isFetching"
+    :style="device === 'Mobile' ? {'padding': '0 0 20px 0'} : {}"
+  >
+    <div
+      class="blog-wrapper"
+      :style="device === 'Mobile' ? {'margin': 0} : {}"
+    >
       <div class="blog-main">
         <div class="header">
           <avatar-header :userInfo="authorInfo" :time="blogInfo.createDate" />
         </div>
         <div v-if="blogInfo.cover" class="cover" v-css="{'background-image': 'url(' + blogInfo.cover + ')'}"></div>
         <div class="blog-info">
-          <p class="title">{{blogInfo.title}}</p>
+          <h1 class="title">{{blogInfo.title}}</h1>
           <div v-html="content" class="markdown-body"></div>
         </div>
         <div class="tag-list">
@@ -17,8 +22,12 @@
           </span>
         </div>
       </div>
-      <div class="blog-aside" :style="{top: pageScrollTop + 300 + 'px'}">
-        <span class="like iconfont icon-dianzan"></span>
+      <div
+        :class="device === 'Mobile' ? 'blog-aside mobile' : 'blog-aside'"
+        :style="device !== 'Mobile' ? {top: pageScrollTop + 300 + 'px'} : {}"
+      >
+        <span class="item like iconfont icon-dianzan"></span>
+        <span class="item comment iconfont icon-pinglun1"></span>
       </div>
     </div>
   </div>
@@ -46,6 +55,9 @@ export default {
   computed: {
     content() {
       return marked(this.blogInfo.content, false, true).html
+    },
+    device() {
+      return this.$store.state.device.deviceType
     }
   },
   methods: {
@@ -113,7 +125,7 @@ export default {
 .blog-info-page {
   position: relative;
   height: 100%;
-  padding: 20px;
+  padding: 10px;
   overflow-x: hidden;
   .blog-wrapper {
     margin-right: 30px;
@@ -149,6 +161,24 @@ export default {
       right: 5px;
       width: 20px;
       transition: all .5s;
+      font-size: 20px;
+      .item {
+        font-size: 20px;
+      }
+      &.mobile {
+        position: fixed;
+        bottom:-1px;
+        width: 100%;
+        flex-direction: row;
+        padding: 5px 20px;
+        // background-color: $primarybg;
+        background-color: #fff;
+        justify-content: start;
+        .item {
+          width: 50%;
+          text-align: center;
+        }
+      }
     }
   }
 }

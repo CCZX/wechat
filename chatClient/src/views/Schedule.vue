@@ -12,7 +12,7 @@
     >
       <template slot="fc-header-left">
         <div>
-          <span>123</span>
+          <p>日程管理</p>
         </div>
       </template>
       <template slot="fc-event-card" slot-scope="p">
