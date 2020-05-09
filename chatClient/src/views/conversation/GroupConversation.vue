@@ -76,6 +76,7 @@ export default {
           item.roomid = item.groupId._id
         })
         this.conversationList = groupList
+        this.$store.dispatch('app/SET_ALL_CONVERSATION', this.conversationList)
         const saveLocalData = groupList.map(item => item.groupId._id)
         saveMyGroupToLocalStorage(saveLocalData)
       }
