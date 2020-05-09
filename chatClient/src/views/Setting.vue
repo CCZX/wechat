@@ -75,7 +75,7 @@
                 :placeholder="pwdPlaceholder[key]"
                 type="text"
                 autocomplete="new-password"
-                onfocus="this.type === 'password'"
+                onfocus="this.type = 'password'"
                 v-model="pwdSetting[key]"
               />
             </div>

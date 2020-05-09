@@ -35,21 +35,24 @@
       </el-form>
       <el-form class="register-form" v-if="!isLoginState">
         <div class="avatar" @click="setShowChooseAvatar(true)">
-          <el-avatar :size="100" :src="IMG_URL + registerInfo.avatar" />
+          <img :src="avatar" alt="" srcset="" width="100" height="100" style="border-radius: 50%">
+          <!-- <el-avatar :size="100" :src="avatar">
+            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+          </el-avatar> -->
           <span class="secondary-font" style="display: inline-block; margin-bottom: 5px">
             点击头像切换头像
           </span>
         </div>
         <el-form-item>
-          <el-input v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号" autocomplete="new-password"></el-input>
+          <el-input type="text" v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
           <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
         </el-form-item>
         <el-form-item>
-          <el-input type="password" v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码" autocomplete="new-password"></el-input>
+          <el-input type="text" autocomplete="new-password" onfocus="this.type = 'password'" v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
           <!-- <span class="password-errinfo">{{ registerErrInfo.password }}</span> -->
         </el-form-item>
         <el-form-item>
-          <el-input type="password" v-model="registerInfo.rePassword" prefix-icon="el-icon-lock" placeholder="请确认密码"></el-input>
+          <el-input type="text" autocomplete="new-password" onfocus="this.type = 'password'" v-model="registerInfo.rePassword" prefix-icon="el-icon-lock" placeholder="请确认密码"></el-input>
           <!-- <span class="password-errinfo">{{ errInfo.password }}</span> -->
         </el-form-item>
         <el-form-item class="cv-code">
@@ -107,6 +110,9 @@ export default {
   computed: {
     device() {
       return this.$store.state.device.deviceType
+    },
+    avatar() {
+      return this.IMG_URL + this.registerInfo.avatar
     }
   },
   methods: {
