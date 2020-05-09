@@ -42,8 +42,8 @@
             <span>{{item.content}}</span>
           </div>
           <div class="pictures">
-            <span class="picture-item" v-for="(imgSrc, index) in item.pictures" :key="index" @click="setCurrentImgUrl(imgSrc)">
-              <img class="img" :src="imgSrc" alt="" srcset="">
+            <span class="picture-item" v-for="imgItem in item.pictures" :key="imgItem.guid" @click="setCurrentImgUrl(imgSrc)">
+              <img class="img" :src="imgItem.url" alt="" srcset="">
             </span>
           </div>
         </div>

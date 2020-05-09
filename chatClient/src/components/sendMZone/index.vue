@@ -140,7 +140,7 @@ export default {
       if (res.status === uploadImgStatusMap.complete) {
         const IMG_URL = qiniu_URL + res.data.key
         const guid = res.guid
-        const pictures = this.pictures || []
+        const pictures = JSON.parse(JSON.stringify(this.pictures)) || []
         pictures.forEach(item => {
           if (item.guid === guid) {
             item.url = IMG_URL
