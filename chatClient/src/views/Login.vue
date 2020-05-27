@@ -44,7 +44,7 @@
           </span>
         </div>
         <el-form-item>
-          <el-input type="text" v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
+          <el-input type="text" autocomplete="new-password" v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
           <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
         </el-form-item>
         <el-form-item>
@@ -71,10 +71,7 @@
 
 
 <script>
-import bgUrl1 from './../../static/image/zw1.jpg'
-import bgUrl2 from './../../static/image/zw2.jpg'
 import ocean1 from './../../static/image/ocean1.jpg'
-// import ocean1 from './../../static/image/4.jpg'
 import {createCanvas} from '@/utils/cvcode'
 import canvasImg from './../../static/image/canvas2.jpg'
 import { accountReg, passwordReg } from '@/utils/index'
