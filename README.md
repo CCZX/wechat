@@ -2,6 +2,11 @@
 
 > 地址：http://co-messager.chenr.cn/#/index
 
+## 版本要求
+
+1. node>=12.14.0
+2. npm>=6.4.1
+
 ## 相关文章地址
 
 - [掘金](https://juejin.im/post/5e8dd45cf265da47e34bf94d)
