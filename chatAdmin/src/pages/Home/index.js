@@ -27,7 +27,7 @@ function Home() {
           <DashBoard source={systemInfo.MemUsage} font="内存使用率" />
         </div>
       </div>
-      <Carousel autoplay>
+      {/* <Carousel autoplay>
         <div>
           <h3>1</h3>
         </div>
@@ -40,7 +40,7 @@ function Home() {
         <div>
           <h3>4</h3>
         </div>
-      </Carousel>
+      </Carousel> */}
     </div>
 
   )

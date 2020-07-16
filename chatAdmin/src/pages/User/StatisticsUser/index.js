@@ -115,11 +115,11 @@ class StatisticsUser extends Component {
               <PieChar data={browserPieChartData} scale={pieChartCols} />
             </Card>
           </Col>
-          <Col span={12}>
+          {/* <Col span={12}>
             <Card title="用户年龄分布图" className="card-item">
               <Histogram data={ageData} scale={histogramCols} />
             </Card>
-          </Col>
+          </Col> */}
         </Row>
         <Row gutter={10}>
           <Col span={24}>
@@ -135,13 +135,13 @@ class StatisticsUser extends Component {
             </Card>
           </Col>
         </Row>
-        <Row gutter={10}>
+        {/* <Row gutter={10}>
           <Col span={12}>
             <Card title="用户地图分布" className="card-item">
               <MapGeo></MapGeo>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </div>
     )
   }

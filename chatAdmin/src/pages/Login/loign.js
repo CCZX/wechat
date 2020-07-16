@@ -48,10 +48,10 @@ class LoginForm extends Component {
         <div className="form-item">
           <Input.Password autoComplete="new-password" onChange={this.handlerPwdChange} prefix={<Icon type="lock" />} />
         </div>
-        <div className="form-item cvcode">
+        {/* <div className="form-item cvcode">
           <Input prefix={<Icon type="lock" />} />
           <div>验证码</div>
-        </div>
+        </div> */}
         <div className="form-item">
           <Button onClick={this.login} type="primary" block>登录</Button>
         </div>
