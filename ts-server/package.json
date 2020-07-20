@@ -18,7 +18,7 @@
     "@types/mongoose": "^5.7.8",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mongoose": "^5.9.7",
     "nodemon": "^2.0.2",
     "ts-node": "^8.8.1",
