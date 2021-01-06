@@ -43,6 +43,8 @@
 
 ## 项目截图
 
+**github上如果没有科学上网容易裂图，推荐在掘金上看：**https://juejin.im/post/5e8dd45cf265da47e34bf94d
+
 ### 1、主页
 ![主页](./document/screenshots/p-home.png)
 
