@@ -1,3 +1,5 @@
+本项目不再维护，如在阅读**文档**、观看**视频**后任有问题可以加群或者本人 `QQ` 和微信咨询。
+
 # Co-messager
 
 > 地址：http://co-messager.chenr.cn/#/index
@@ -7,9 +9,11 @@
 1. node>=12.14.0
 2. npm>=6.4.1
 
-## 相关文章地址
+## 相关地址
 
-- [掘金](https://juejin.im/post/5e8dd45cf265da47e34bf94d)
+- [掘金-文章](https://juejin.im/post/5e8dd45cf265da47e34bf94d)
+- [功能介绍-视频](https://www.bilibili.com/video/BV1aX4y1K7EF?p=1)
+- [项目运行-视频](https://www.bilibili.com/video/BV1aX4y1K7EF?p=2)
 
 ## 功能
 - [x] 登陆注册
@@ -108,7 +112,7 @@
 - 管理员端使用`React`、`antd`等技术栈；
 - 后端使用的是`node.js`；
 - 数据库使用的是`MongoDB`；
-- 在实现聊天的全双工数据通信使用的是`WebSocket`。
+- 在实现聊天的全双工数据通信使用的是`WebSocket`、`socket.io`。
 
 ## 启动项目
 
@@ -158,14 +162,9 @@ npm start
 
 ![qq](./document/resources/qqgroup.jpg)
 
-大家今天学习到了什么知识、有什么好的学习方法、学习技巧或者什么摸鱼的方法都可以一起交流哟。
-
-目前本人在使用react+Typescript搭建一个UI框架，基本架子已经搭建好，到时候会上传至GitHub，到时候欢迎大家一起讨论。
-
-## 联系
-
 - `E-mail`：`ccdebuging@gmail.com`、`cAuth1218@163.com`
 - `QQ`：`1831058205`
+- 微信：`cAutg9248`
 
 ## 参考项目
 
