@@ -166,8 +166,8 @@ const register = (req, res) => {
           }).then(doc2 => {
             console.log(doc2)
             if (doc2['_id']) {
-              addFriend({userM: officialID, userY: doc2['_id']})
-              addNewGroupUser({userId: doc2['_id'], groupId: officialGroupID, userName: doc2.name})
+              // addFriend({userM: officialID, userY: doc2['_id']})
+              // addNewGroupUser({userId: doc2['_id'], groupId: officialGroupID, userName: doc2.name})
               return res.json({
                 status: 1005,
                 data: doc1.code,
