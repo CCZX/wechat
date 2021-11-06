@@ -1,13 +1,12 @@
-本项目不再维护，如在阅读**文档**、观看**视频**后任有问题可以加群或者本人 `QQ` 和微信咨询。
-
 # Co-messager
 
-> 地址：http://co-messager.chenr.cn/#/index
+> 本项目不再维护，如在阅读**文档**、观看**视频**后任有问题可以加群或者本人 `QQ` 和微信。
 
-## 版本要求
+## 相关工具版本
 
-1. node>=12.14.0
-2. npm>=6.4.1
+1. node: 12.14.0
+2. npm: 6.4.1
+3. MongoDB: 5.0.3
 
 ## 相关地址
 
@@ -41,9 +40,62 @@
 - [x] 朋友圈动态回复评论
 - [x] 日程设置
 
-## 概要
+## 启动项目
 
-本系统分为`Client`，`Server`，`Admin`三个端：其中`Client`为客户端，`Server`为服务器端，`Admin`为管理员端。
+### 1、克隆项目
+
+```bash
+git clone git@github.com:CCZX/wechat.git
+```
+
+或者下载压缩包解压也可以。
+
+### 2、删除相关代码
+
+> 这部分代码是在我的数据库里，所以你需要删除或者替换相关代码以防报错
+
+![removed code](./document/clean.png)
+
+**需要注意的是这一步需要在启动服务端之前执行。不然会出现不可预料的错误**
+
+### 2、启动MongoDB数据库
+
+如果不会可以参考下面文章：
+- [mongoDB - 菜鸟教程](https://www.runoob.com/mongodb/mongodb-tutorial.html)
+- [mongoDB的安装和启动](https://juejin.cn/post/6844903958826188808)
+
+### 3、启动服务器
+
+```bash
+cd chatServer
+npm install
+# 初始化数据库，初始化成功后可以看到自动创建了chat数据库
+node init.js
+node app.js
+```
+
+### 4、启动客户端
+```bash
+cd chatClient
+npm install
+npm run dev
+```
+
+启动成功后访问[127.0.0.1:8080](127.0.0.1:8080)即可访问。
+
+### 5、启动管理员端（3000端口）
+```bash
+cd chatAdmin
+npm install
+npm start
+```
+
+启动成功后访问[127.0.0.1:3000](127.0.0.1:3000)即可访问。
+
+### 6、Q&A
+
+按照上述步骤启动一般是不会出问题，有问题请首先排查是否**执行顺序**不一致，以及数据库是否启动。
+
 
 ## 项目截图
 
@@ -106,62 +158,13 @@
 
 ## 技术路线
 
-> 本项目为前后端分离的开发模式
+> 本系统分为`Client`，`Server`，`Admin`三个端：其中`Client`为客户端，`Server`为服务器端，`Admin`为管理员端。使用前后端分离的开发模式
 
-- 客户端使用`Vue`、`VueX`、`Vue-Router`等；
-- 管理员端使用`React`、`antd`等技术栈；
+- 客户端使用`Vue`、`VueX`、`Vue-Router`；
+- 管理员端使用`React`、`antd`；
 - 后端使用的是`node.js`；
 - 数据库使用的是`MongoDB`；
 - 在实现聊天的全双工数据通信使用的是`WebSocket`、`socket.io`。
-
-## 启动项目
-
-### 1、克隆项目
-
-`git clone git@github.com:CCZX/wechat.git`
-
-### 2、删除相关代码
-
-> 这部分代码是在我的数据库里，所以你需要删除或者替换相关代码以防报错
-
-![普通用户功能设计0404](./document/clean.png)
-
-**需要注意的是这一步需要在启动服务端之前执行。**
-
-### 2、启动MongoDB数据库
-
-如果不会可以参考下面文章：
-- [mongoDB - 菜鸟教程](https://www.runoob.com/mongodb/mongodb-tutorial.html)
-- [mongoDB的安装和启动](https://juejin.cn/post/6844903958826188808)
-
-### 3、启动服务器（3333端口）
-
-```javascript
-cd chatServer
-npm install
-// 初始化数据库，初始化成功后可以看到自动创建了chat数据库
-node init.js
-// 启动服务端，127.0.0.1:3333
-node app.js
-```
-
-### 4、启动客户端（8080端口）
-```javascript
-cd chatClient
-npm install
-npm run dev
-```
-
-启动成功后访问[127.0.0.1:8080](127.0.0.1:8080)即可。
-
-### 5、启动管理员端（3000端口）
-```javascript
-cd chatAdmin
-npm install
-npm start
-```
-
-启动完成后流群访问`localhost:8080`以及`localhost:3000`可以分别访问客户端以及管理员端。
 
 ## 项目打包
 
@@ -181,5 +184,3 @@ npm start
 ## 参考项目
 
 - https://github.com/wuyawei
-
-
