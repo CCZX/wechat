@@ -175,7 +175,7 @@ export default {
           status === 1002 ? this.getCVCode() : ''
         } else if (status === 1005) {
           this.$alert(`这是你的chat账号:${data}，你可以以此账号登录系统`, '注册成功')
-          this.isLoginState = true
+          this.changeState(true)
         }
       })
     },

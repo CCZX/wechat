@@ -116,33 +116,45 @@
 
 ## 启动项目
 
-- 克隆项目
+### 1、克隆项目
 
 `git clone git@github.com:CCZX/wechat.git`
 
-- 删除相关代码
+### 2、删除相关代码
 
 > 这部分代码是在我的数据库里，所以你需要删除或者替换相关代码以防报错
 
 ![普通用户功能设计0404](./document/clean.png)
 
-- 启动服务器（3333端口）
+**需要注意的是这一步需要在启动服务端之前执行。**
+
+### 2、启动MongoDB数据库
+
+如果不会可以参考下面文章：
+- [mongoDB - 菜鸟教程](https://www.runoob.com/mongodb/mongodb-tutorial.html)
+- [mongoDB的安装和启动](https://juejin.cn/post/6844903958826188808)
+
+### 3、启动服务器（3333端口）
 
 ```javascript
 cd chatServer
 npm install
-node init.js // 初始化数据库
+// 初始化数据库，初始化成功后可以看到自动创建了chat数据库
+node init.js
+// 启动服务端，127.0.0.1:3333
 node app.js
 ```
 
-- 启动客户端（8080端口）
+### 4、启动客户端（8080端口）
 ```javascript
 cd chatClient
 npm install
 npm run dev
 ```
 
-- 启动管理员端（3000端口）
+启动成功后访问[127.0.0.1:8080](127.0.0.1:8080)即可。
+
+### 5、启动管理员端（3000端口）
 ```javascript
 cd chatAdmin
 npm install
