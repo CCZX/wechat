@@ -60,7 +60,11 @@ git clone git@github.com:CCZX/wechat.git
 
 ### 2、启动MongoDB数据库
 
-如果不会可以参考下面文章：
+```bash
+mongo
+```
+
+如果还没有安装MongoDB可以参考下面文章：
 - [mongoDB - 菜鸟教程](https://www.runoob.com/mongodb/mongodb-tutorial.html)
 - [mongoDB的安装和启动](https://juejin.cn/post/6844903958826188808)
 
