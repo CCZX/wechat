@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "area-data": "^5.0.6",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "cropperjs": "^1.5.6",
     "element-ui": "^2.12.0",
     "js-cookie": "^2.2.1",
