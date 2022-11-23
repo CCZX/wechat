@@ -23,6 +23,6 @@
     "multiparty": "^4.2.1",
     "os-utils": "0.0.14",
     "qiniu": "^7.3.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   }
 }
